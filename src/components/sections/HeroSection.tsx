@@ -79,26 +79,27 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
       >
         <motion.div variants={up} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/40 bg-green-500/10 text-green-300 text-sm font-semibold mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-          Now with AI-powered signal generation
+          80%+ Verified Win Rate — Live on Every Session
         </motion.div>
 
         <motion.h1
           variants={up}
           className="font-display text-5xl sm:text-6xl lg:text-[5.25rem] font-extrabold tracking-tightest leading-[1.04] text-white mb-7"
         >
-          Start trading like
+          Your trades. Executed
           <br />
           <span
             className="bg-clip-text text-transparent"
             style={{ backgroundImage: "linear-gradient(90deg, #22C55E 0%, #16A34A 50%, #22C55E 100%)" }}
           >
-            smart money
+            perfectly. Every time.
           </span>
         </motion.h1>
 
         <motion.p variants={up} className="text-xl sm:text-2xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-12 font-light">
-          The AI platform to build &amp; deploy your own edge, powered by legendary tools used by{" "}
-          <strong className="text-white font-semibold">11,000+ traders</strong>.
+          Trinity connects to your broker and fires trades at machine speed the instant a signal appears —
+          with <strong className="text-white font-semibold">80%+ accuracy</strong> and zero emotional interference.
+          You press START. Trinity does the rest.
         </motion.p>
 
         <motion.div variants={up} className="flex flex-wrap items-center justify-center gap-3">
@@ -106,16 +107,16 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
             href="#pricing"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/50 text-white font-semibold text-base bg-white/5 backdrop-blur-sm hover:bg-white/15 hover:border-white/80 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
-            Get 30 Days Risk Free
+            Activate Risk-Free Access
             <ArrowRightIcon className="w-5 h-5" />
           </a>
         </motion.div>
 
         <motion.div variants={up} className="mt-8 flex flex-wrap items-center justify-center gap-5 text-sm text-gray-400">
           {([
-            { Icon: LockClosedIcon,     text: "SSL secured"       },
-            { Icon: ArrowUturnLeftIcon, text: "30-day money-back" },
-            { Icon: BoltFilledIcon,     text: "Instant access"    },
+            { Icon: LockClosedIcon,     text: "Licensed & secured"    },
+            { Icon: ArrowUturnLeftIcon, text: "30-day money-back"      },
+            { Icon: BoltFilledIcon,     text: "Windows 10/11 — instant setup" },
           ] as const).map(({ Icon, text }) => (
             <div key={text} className="flex items-center gap-1.5">
               <Icon className="w-4 h-4" />
@@ -151,10 +152,10 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
           </div>
           <div className="grid grid-cols-4 gap-px bg-white/[0.05]">
             {[
-              { label: "Win Rate",    value: "89.7%",  color: "#22c55e" },
-              { label: "Total Calls", value: "1,284",  color: "#16a34a" },
-              { label: "Avg Return",  value: "+12.4%", color: "#10b981" },
-              { label: "Members",     value: "11K+",   color: "#f59e0b" },
+              { label: "Win Rate",       value: "80%+",   color: "#22c55e" },
+              { label: "Execution",     value: "<50ms",  color: "#16a34a" },
+              { label: "Strategies",    value: "3x",     color: "#10b981" },
+              { label: "Active Users",  value: "11K+",   color: "#f59e0b" },
             ].map(({ label, value, color }) => (
               <div key={label} className="bg-[#050d1e] px-5 py-5 text-center">
                 <p className="text-2xl font-black tabular-nums" style={{ color }}>{value}</p>

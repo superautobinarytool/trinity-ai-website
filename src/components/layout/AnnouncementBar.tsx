@@ -92,19 +92,19 @@ export default function AnnouncementBar({ onHeightChange }: { onHeightChange?: (
               <TrendingUpIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-200 flex-shrink-0" />
               {/* Desktop */}
               <span className="hidden md:inline text-sm font-semibold tracking-tight">
-                <strong className="font-extrabold text-white">Titan Algo is LIVE!</strong>
+                <strong className="font-extrabold text-white">Trinity is LIVE!</strong>
                 <span className="text-green-100/90 mx-2">—</span>
-                <span className="text-white/85">Start your edge with 30 Days Risk-Free at a limited discount</span>
+                <span className="text-white/85">80%+ Win Rate · Machine-Speed Execution · 30 Days Risk-Free</span>
               </span>
               {/* Tablet */}
               <span className="hidden sm:inline md:hidden text-sm font-semibold">
-                <strong className="font-extrabold">Titan Algo LIVE</strong>
+                <strong className="font-extrabold">Trinity Trading Tool</strong>
                 <span className="text-green-100/80 mx-1.5">—</span>
-                <span className="text-white/85">30 Days Risk-Free</span>
+                <span className="text-white/85">80%+ Win Rate · Risk-Free</span>
               </span>
               {/* Mobile */}
               <span className="sm:hidden text-xs font-bold tracking-tight">
-                Titan Algo — 30 Days Free
+                Trinity — 80% Win Rate · 30 Days Free
               </span>
               <ArrowRightIcon className="w-3 h-3 text-white/60 group-hover:translate-x-0.5 transition-transform flex-shrink-0" />
             </a>

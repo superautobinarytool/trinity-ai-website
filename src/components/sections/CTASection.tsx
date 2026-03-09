@@ -33,21 +33,21 @@ export default function CTASection() {
           className="max-w-3xl mx-auto"
         >
           <h2 className="font-display text-5xl sm:text-6xl lg:text-[5.25rem] font-extrabold tracking-tightest text-white leading-[1.04] mb-7">
-            Start trading like{" "}
-            <span className="gradient-text">smart money</span>
+            Your competition is already{" "}
+            <span className="gradient-text">automating.</span>
           </h2>
           <p className="text-xl text-gray-400 leading-relaxed mb-10 max-w-2xl mx-auto">
-            Join 11,000+ traders who use Project Trinity to generate consistent profits
-            with AI-powered signals, automation, and institutional analytics.
+            Every signal missed by hand is money someone else made. Trinity fires them all —
+            at machine speed, 80%+ accuracy, while you sleep. 11,000+ traders can&apos;t be wrong.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
             <Button variant="primary" size="lg" href="#pricing">
-              Get Started — 30 Days Free
+              Start 30-Day Risk-Free Trial
               <ArrowRightIcon className="w-5 h-5" />
             </Button>
             <Button variant="secondary" size="lg" href="https://discord.gg/6WrP7CXnHd">
-              Join Discord Community
+              Join the Community
             </Button>
           </div>
 

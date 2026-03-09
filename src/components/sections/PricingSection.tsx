@@ -58,49 +58,49 @@ function GreenCheck() {
 const PLANS = [
   {
     id: "pro",
-    name: "Pro",
-    badge: "20% Off",
+    name: "Starter",
+    badge: "Most Accessible",
     popular: false,
     originalPrice: "$67",
     price: "$54",
     cents: ".39",
     period: "/ mo",
-    sub: "$54.39 once, then $67.99 / mo",
+    sub: "$54.39 first month, then $67.99 / mo",
     gem: <BlueDiamond />,
-    cta: "Subscribe",
+    cta: "Get Started Now",
     ctaHref: "https://discord.gg/titansalgo",
-    featuresLabel: "All Pro features:",
+    featuresLabel: "Everything included:",
     features: [
-      "Live AI signals (stocks, crypto, forex)",
-      "Real-time Discord alerts",
-      "Weekly market analysis",
-      "Strategy builder access",
-      "Basic back-testing tools",
-      "Community support",
+      "Trinity software license (Windows 10/11)",
+      "MT5 auto-execution to your broker",
+      "Live TradingView charts — 25+ pairs",
+      "Linear & Compounding strategies",
+      "Real-time session profit graph",
+      "Full trade history & analytics",
     ],
     light: false,
   },
   {
     id: "ultimate",
-    name: "Ultimate",
-    badge: "30% Off",
+    name: "Pro",
+    badge: "Best Results",
     popular: true,
     originalPrice: "$97",
     price: "$67",
     cents: ".99",
     period: "/ mo",
-    sub: "$67.99 once, then $97.99 / mo",
+    sub: "$67.99 first month, then $97.99 / mo",
     gem: <PurpleCrystal />,
-    cta: "Subscribe",
+    cta: "Activate Pro Access",
     ctaHref: "https://discord.gg/titansalgo",
-    featuresLabel: "Everything in Pro, plus:",
+    featuresLabel: "Everything in Starter, plus:",
     features: [
-      "Priority high-conviction signals",
-      "AI portfolio optimizer",
-      "1-on-1 onboarding call",
-      "Advanced back-testing suite",
-      "Exclusive quant strategies",
-      "Early access to new tools",
+      "Martingale strategy unlocked",
+      "Priority signal feed",
+      "1-on-1 onboarding & setup call",
+      "Advanced session configuration",
+      "Exclusive pro-only settings",
+      "Early access to every new feature",
     ],
     light: true,
   },
@@ -121,12 +121,14 @@ export default function PricingSection() {
           className="text-center mb-14"
         >
           <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white">
-            Simple,{" "}
+            One tool.{" "}
             <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#22c55e,#16a34a)" }}>
-              transparent pricing
+              Unlimited upside.
             </span>
           </h2>
-          <p className="mt-4 text-gray-400 text-lg sm:text-xl font-light">No hidden fees. Cancel anytime.</p>
+          <p className="mt-4 text-gray-400 text-lg sm:text-xl font-light max-w-xl mx-auto">
+            10 trades at 80% win rate with a $100 stake — <strong className="text-white">$440 net profit</strong>. Trinity pays for itself in the first session.
+          </p>
         </motion.div>
 
         {/* Cards */}

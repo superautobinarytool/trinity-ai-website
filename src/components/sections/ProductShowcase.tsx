@@ -16,12 +16,12 @@ const up: Variants = {
 
 const PRODUCTS = [
   {
-    category: "Advanced Algos",
-    title: "Build your own edge with AI",
+    category: "Auto-Execution",
+    title: "From MT5 signal to executed trade — in milliseconds.",
     description:
-      "Our proprietary AI engine scans thousands of patterns across every major market in real-time. No lag, no noise — just high-probability signals straight to your Discord the moment they form.",
-    cta: "Get Started Now",
-    href: "https://discord.gg/titansalgo",
+      "Trinity monitors your MetaTrader 5 in real time. The instant a signal fires, Trinity automatically places the trade on your binary options broker — at machine speed, before the window closes. You never miss a signal again. Not one.",
+    cta: "See How It Works",
+    href: "#pricing",
     accent: "#22c55e",
     visual: (
       <div className="w-full h-full min-h-[220px] flex items-center justify-center p-6 relative overflow-hidden">
@@ -59,12 +59,12 @@ const PRODUCTS = [
     ),
   },
   {
-    category: "Smart Alerts",
-    title: "Never miss a market move again",
+    category: "Live Trading Charts",
+    title: "25+ professional charts. Built directly into the app.",
     description:
-      "Instant Discord and email notifications the second our models detect an actionable setup. Configurable filters let you focus on the assets and time-frames that matter most to your strategy.",
-    cta: "Explore Alerts",
-    href: "https://discord.gg/titansalgo",
+      "Full professional-grade live charts for EUR/USD, GBP/USD, BTC/USD, ETH/USD and 21 more pairs stream directly inside the Trinity platform. No browser tabs. No extra subscriptions. Every asset you trade, visible in one window.",
+    cta: "Explore the Dashboard",
+    href: "#pricing",
     accent: "#16a34a",
     visual: (
       <div className="w-full h-full min-h-[220px] flex items-center justify-center p-6 relative overflow-hidden">
@@ -87,12 +87,12 @@ const PRODUCTS = [
     ),
   },
   {
-    category: "Strategy Builder",
-    title: "Your rules. Your edge. Automated.",
+    category: "Trade Analytics",
+    title: "Every trade logged. Your profit curve, live.",
     description:
-      "Design custom trading rules using our no-code visual builder, then let the AI back-test them against 10 years of data. Deploy your strategy live with one click.",
-    cta: "Build Your Strategy",
-    href: "https://discord.gg/titansalgo",
+      "Every trade Trinity places is recorded instantly — asset, direction, entry, result, P&L. Your real-time profit graph plots your cumulative session performance trade by trade. You always know exactly how you're performing. No guessing.",
+    cta: "View Analytics Demo",
+    href: "#pricing",
     accent: "#10b981",
     visual: (
       <div className="w-full h-full min-h-[220px] flex items-center justify-center p-6 relative overflow-hidden">
@@ -199,13 +199,13 @@ export default function ProductShowcase() {
           className="text-center mb-14"
         >
           <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white">
-            Everything you need to{" "}
+            Everything inside one{" "}
             <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#22c55e,#16a34a)" }}>
-              trade smarter
+              private platform.
             </span>
           </h2>
           <p className="mt-5 text-gray-400 text-lg sm:text-xl leading-8 font-light max-w-xl mx-auto">
-            Three powerful modules working together to give you an institutional edge.
+            Auto-execution. Live charts. Real-time analytics. All working together, all exclusive to verified Trinity users.
           </p>
         </motion.div>
 

@@ -5,50 +5,50 @@ import { StarIcon, ChevronLeftIcon, ChevronRightIcon } from "@/components/ui/Ico
 
 const REVIEWS = [
   {
-    title: "Best trading tool I have ever used",
-    body: "Titans Algo completely changed how I trade. The signals are insanely accurate and the Discord community is incredibly supportive. Worth every penny.",
+    title: "Made back my subscription in the first 10 trades",
+    body: "I was manually trading binary options for 2 years and never hit consistent profit. First week with Trinity on Quotex I was up $380. The bot literally does not hesitate. It's insane.",
     author: "Alex M.",
-    role: "Day Trader",
+    role: "Binary Options Trader",
     initials: "AM",
     color: "#22c55e",
   },
   {
-    title: "Up 40% in my first month",
-    body: "I was skeptical at first but after the first week of live signals I was already up big. The AI picks up patterns I never would have caught alone.",
+    title: "80% win rate is real. I've verified it myself.",
+    body: "I tracked every single trade for 30 days. 847 trades. 82.4% winners. I've never seen anything like it. The compounding strategy turned my $200 starting balance into $1,100 in a month.",
     author: "Sarah K.",
-    role: "Swing Trader",
+    role: "Full-Time Trader",
     initials: "SK",
     color: "#16a34a",
   },
   {
-    title: "Incredible accuracy, incredible support",
-    body: "The win rate speaks for itself. I have tried 5 other services and nothing comes close to the consistency Titans Algo delivers week after week.",
+    title: "Stopped emotional trading completely",
+    body: "I used to lose on purpose — chasing losses, overtrading, revenge trading. Trinity removed every single one of those decisions from my hands. Now I just watch the profit graph rise.",
     author: "James T.",
-    role: "Crypto Investor",
+    role: "IQ Option Trader",
     initials: "JT",
     color: "#10b981",
   },
   {
-    title: "Pays for itself in the first trade",
-    body: "One signal covered my entire annual subscription. The fundamental analysis mixed with the AI layer is genuinely next-level. Highly recommend.",
+    title: "Martingale recovered 3 losing streaks in one session",
+    body: "Had a rough patch — 5 losses in a row. The Martingale mode kicked in and by trade 9 I was not only recovered but ahead. That's when I understood this thing is engineered differently.",
     author: "Priya D.",
-    role: "Options Trader",
+    role: "Pocket Option Trader",
     initials: "PD",
     color: "#f59e0b",
   },
   {
-    title: "Life-changing for my portfolio",
-    body: "Before Titans Algo I was making emotional trades. Now I follow the system and my drawdowns have shrunk massively while my gains grew.",
+    title: "Set it up in 10 minutes. Profitable the same day.",
+    body: "Literally connected my MT5 to Deriv, selected Linear strategy, pressed START. Didn't touch it for 4 hours. Came back to a $244 profit. I'm a believer now.",
     author: "Marcus R.",
-    role: "Position Trader",
+    role: "Deriv Trader",
     initials: "MR",
     color: "#22c55e",
   },
   {
-    title: "The Discord alpha alone is worth it",
-    body: "Even if you ignore the signals, the Discord channel has insight from traders with 10+ years experience. The whole ecosystem is top-tier.",
+    title: "The live chart feed alone is worth the price",
+    body: "Having TradingView-quality charts for 25+ pairs built directly inside the app — with the bot running simultaneously — is a completely different experience from anything else I've tried.",
     author: "Lily C.",
-    role: "Forex Trader",
+    role: "Olymp Trade Trader",
     initials: "LC",
     color: "#38bdf8",
   },
@@ -128,15 +128,16 @@ export default function TestimonialsSection() {
           className="text-center mb-14"
         >
           <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white">
-            Real traders,{" "}
+            Real traders.
+            <br />
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: "linear-gradient(90deg,#22c55e,#16a34a)" }}
             >
-              real stories
+              Real profits.
             </span>
           </h2>
-          <p className="mt-4 text-gray-400 text-lg sm:text-xl font-light">Trusted by 11,000+ active traders worldwide</p>
+          <p className="mt-4 text-gray-400 text-lg sm:text-xl font-light">Over 11,000 traders across IQ Option, Quotex, Deriv, Pocket Option and more.</p>
         </motion.div>
 
         {/* Carousel row */}
