@@ -331,7 +331,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               >
                 {/* Price axis - right */}
                 <div className="absolute right-0 top-0 bottom-4 w-14 flex flex-col justify-between py-1 border-l border-white/[0.06] z-10" style={{ background: "#0a0a0a" }}>
-                  {["1.1598","1.1590","1.1582","1.1574","1.1566","1.1558","1.1550","1.1542","1.1534","1.1526","1.1518"].map((p,i) => (
+                  {["1.1600","1.1595","1.1590","1.1585","1.1580","1.1575","1.1570","1.1565","1.1560","1.1555"].map((p,i) => (
                     <span key={p} className={`pr-1.5 text-right text-[8.5px] font-mono ${i===3?"font-bold":""}`}
                       style={{ color: i===3 ? "#00e5be" : "#666" }}>{p}</span>
                   ))}
@@ -339,30 +339,16 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
 
                 {/* SVG chart — realistic OHLC candles on a proper price scale */}
                 {(() => {
-                  // Price scale: 1.1518 (bottom) to 1.1598 (top) = 80 pip range
-                  // SVG viewport: w=820, h=302 (leaves 20px for time axis, 56px for price axis)
+                  // Zoomed price scale: 1.1552 (bottom) to 1.1602 (top) = 50 pip range
+                  // Action zone (1.1565–1.1598) sits in the vertical middle of the chart
                   const W = 820, H = 302;
-                  const priceMin = 1.1518, priceMax = 1.1598;
+                  const priceMin = 1.1552, priceMax = 1.1602;
                   const pxPerPip = H / (priceMax - priceMin);
                   const toY = (p: number) => H - (p - priceMin) * pxPerPip;
 
                   // Realistic OHLC chain — chained open=prev_close, realistic wicks
                   type C = { o:number; h:number; l:number; c:number };
                   const raw: C[] = [
-                    // Choppy bottom — indecision zone
-                    {o:1.1528,h:1.1535,l:1.1522,c:1.1531},
-                    {o:1.1531,h:1.1538,l:1.1524,c:1.1525},
-                    {o:1.1525,h:1.1533,l:1.1520,c:1.1530},
-                    {o:1.1530,h:1.1534,l:1.1521,c:1.1523},
-                    {o:1.1523,h:1.1531,l:1.1518,c:1.1529},
-                    {o:1.1529,h:1.1536,l:1.1524,c:1.1526},
-                    // Hammer + first momentum
-                    {o:1.1526,h:1.1534,l:1.1519,c:1.1534},
-                    {o:1.1534,h:1.1542,l:1.1528,c:1.1541},
-                    {o:1.1541,h:1.1548,l:1.1535,c:1.1546},
-                    {o:1.1546,h:1.1549,l:1.1537,c:1.1539},// small pullback
-                    {o:1.1539,h:1.1551,l:1.1535,c:1.1550},
-                    {o:1.1550,h:1.1558,l:1.1543,c:1.1556},
                     // Acceleration — marubozu-style, tight wicks
                     {o:1.1556,h:1.1564,l:1.1552,c:1.1563},
                     {o:1.1563,h:1.1566,l:1.1554,c:1.1557},// pullback
@@ -383,9 +369,9 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                     {o:1.1590,h:1.1598,l:1.1584,c:1.1597},
                   ];
                   const candleCount = raw.length;
-                  // Pack all candles into the left half — live candle lands at chart center
-                  const GAP = (W * 0.50) / candleCount;
-                  const BW  = GAP * 0.70;
+                  // 14 candles in the left half — live candle at chart center, wider bodies
+                  const GAP = (W * 0.52) / candleCount;
+                  const BW  = GAP * 0.78;
 
                   // Last candle forms live — c interpolates from o toward target
                   const liveCandle = raw[candleCount - 1];
@@ -407,7 +393,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                       ))}
 
                       {/* Horizontal price level lines */}
-                      {[1.1540,1.1560,1.1580].map(p => (
+                      {[1.1560,1.1575,1.1590].map(p => (
                         <line key={p} x1={0} y1={toY(p)} x2={W} y2={toY(p)}
                           stroke="rgba(255,255,255,0.06)" strokeWidth={1} strokeDasharray="3 5" />
                       ))}
