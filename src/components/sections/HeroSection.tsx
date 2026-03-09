@@ -127,7 +127,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         </motion.div>
       </motion.div>
 
-      {/* Dashboard peek */}
+      {/* Live TradingView Software Window */}
       <motion.div
         initial={{ opacity: 0, y: 60 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -135,48 +135,75 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         className="relative z-10 mt-20 w-full max-w-5xl mx-auto px-6"
         aria-hidden="true"
       >
-        <div className="absolute inset-x-10 -bottom-4 h-24 bg-[#22C55E]/15 blur-2xl rounded-full" />
+        {/* Glow beneath */}
+        <div className="absolute inset-x-20 -bottom-6 h-28 bg-[#22C55E]/20 blur-3xl rounded-full" />
+        <div className="absolute inset-x-40 -bottom-2 h-16 bg-emerald-400/10 blur-2xl rounded-full" />
+
+        {/* App window chrome */}
         <div
-          className="relative rounded-2xl overflow-hidden border border-white/[0.1] shadow-[0_40px_120px_rgba(0,0,0,0.7)]"
-          style={{ background: "rgba(8,18,38,0.9)", backdropFilter: "blur(20px)" }}
+          className="relative rounded-2xl overflow-hidden border border-white/[0.12] shadow-[0_50px_140px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.04)]"
         >
-          <div className="flex items-center gap-2 px-5 py-3 border-b border-white/[0.07]">
-            <div className="flex gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-red-500/70" />
-              <span className="w-3 h-3 rounded-full bg-yellow-500/70" />
-              <span className="w-3 h-3 rounded-full bg-green-500/70" />
+          {/* Title bar */}
+          <div
+            className="flex items-center gap-3 px-5 py-3 border-b border-white/[0.07]"
+            style={{ background: "rgba(10,14,28,0.98)" }}
+          >
+            <div className="flex gap-1.5 shrink-0">
+              <span className="w-3 h-3 rounded-full bg-red-500/80" />
+              <span className="w-3 h-3 rounded-full bg-yellow-400/80" />
+              <span className="w-3 h-3 rounded-full bg-green-500/80" />
             </div>
-            <div className="mx-auto flex items-center gap-2 px-4 py-1 rounded-full bg-white/[0.06] border border-white/[0.08] text-xs text-gray-400 font-mono">
+            {/* Mini stat pills */}
+            <div className="flex items-center gap-2 ml-3">
+              <span className="px-2.5 py-0.5 rounded-full bg-green-500/15 border border-green-500/30 text-green-400 text-[10px] font-bold tracking-wide">● LIVE</span>
+              <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-gray-400 text-[10px] font-mono">EUR/USD · 1M</span>
+              <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-gray-400 text-[10px] font-mono">WIN RATE 80%+</span>
+            </div>
+            <div className="ml-auto flex items-center gap-1.5 text-[10px] text-gray-500 font-mono">
               <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-              trinity-dashboard · live signals
+              trinity · auto-trading
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-px bg-white/[0.05]">
+
+          {/* Stats bar */}
+          <div
+            className="grid grid-cols-4 divide-x divide-white/[0.06] border-b border-white/[0.06]"
+            style={{ background: "rgba(8,12,24,0.98)" }}
+          >
             {[
-              { label: "Win Rate",       value: "80%+",   color: "#22c55e" },
-              { label: "Execution",     value: "<50ms",  color: "#16a34a" },
-              { label: "Strategies",    value: "3x",     color: "#10b981" },
-              { label: "Active Users",  value: "11K+",   color: "#f59e0b" },
+              { label: "Win Rate",     value: "80%+",  color: "#22c55e" },
+              { label: "Execution",   value: "<50ms", color: "#34d399" },
+              { label: "Strategies",  value: "3",     color: "#a78bfa" },
+              { label: "Active Users",value: "11K+",  color: "#f59e0b" },
             ].map(({ label, value, color }) => (
-              <div key={label} className="bg-[#050d1e] px-5 py-5 text-center">
-                <p className="text-2xl font-black tabular-nums" style={{ color }}>{value}</p>
-                <p className="text-sm font-semibold text-white mt-0.5">{label}</p>
+              <div key={label} className="px-5 py-3 text-center">
+                <p className="text-lg font-black tabular-nums leading-tight" style={{ color }}>{value}</p>
+                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest mt-0.5">{label}</p>
               </div>
             ))}
           </div>
-          <div className="px-6 py-5 flex items-end gap-1.5 h-24 bg-[#050d1e]">
-            {[30,52,44,68,59,78,65,84,72,90,76,95].map((h, i) => (
-              <motion.div
-                key={i}
-                initial={{ height: 0 }}
-                animate={inView ? { height: `${h}%` } : {}}
-                transition={{ delay: 0.7 + i * 0.04, duration: 0.5, ease: "easeOut" }}
-                className="flex-1 rounded-t-sm"
-                style={{ background: i === 11 ? "linear-gradient(to top,#00b5e2,#38d9f5)" : "rgba(0,181,226,0.25)", minHeight: "4px" }}
-              />
-            ))}
+
+          {/* Live TradingView chart */}
+          <div className="relative" style={{ height: "420px", background: "#0b1120" }}>
+            <iframe
+              src="https://s.tradingview.com/widgetembed/?frameElementId=tv_trinity&symbol=EURUSD&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=0b1120&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&showpopupbutton=0&locale=en&hide_top_toolbar=0&allow_symbol_change=0&watchlist=%5B%22EURUSD%22%2C%22GBPUSD%22%2C%22USDJPY%22%5D"
+              title="Trinity Live Trading Chart"
+              className="absolute inset-0 w-full h-full border-0"
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+            />
+            {/* Corner watermark badge */}
+            <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/60 border border-green-500/30 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-[11px] font-bold text-green-400 tracking-wide">TRINITY AI ACTIVE</span>
+            </div>
           </div>
         </div>
+
+        {/* Caption */}
+        <p className="mt-4 text-center text-xs text-gray-500 font-mono tracking-wider">
+          LIVE EUR/USD · Trinity is scanning signals right now
+        </p>
       </motion.div>
     </section>
   );
