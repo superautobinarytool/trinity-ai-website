@@ -758,6 +758,86 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                   <span className="text-[10px] font-black" style={{ color:"#f23645" }}>2 PUT</span>
                 </div>
               </div>
+
+              {/* ── SESSION OVERVIEW + TRADE LOG ── */}
+              <div className="flex-1 rounded-sm border border-white/[0.06] flex flex-col" style={{ background: "#252525", minHeight: 0 }}>
+                {/* Header */}
+                <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.05]">
+                  <div className="w-3 h-3 rounded-sm" style={{ background: "#7c3aed" }} />
+                  <span className="text-[10px] font-black text-white tracking-widest">SESSION OVERVIEW</span>
+                  <span className="ml-auto text-[9px] font-mono" style={{ color: "#444" }}>live · auto-updated</span>
+                </div>
+
+                {/* 4 stat chips */}
+                <div className="grid grid-cols-4 border-b border-white/[0.05]" style={{ borderRight: "none" }}>
+                  {([
+                    { label: "TRADES",    value: "12",      color: "#60a5fa" },
+                    { label: "WIN RATE",  value: "83.3%",   color: "#00e5be" },
+                    { label: "SESSION P&L", value: "+$68",  color: "#22c55e" },
+                    { label: "WIN STREAK", value: "3×",     color: "#fbbf24" },
+                  ] as const).map(({ label, value, color }, ci) => (
+                    <motion.div
+                      key={label}
+                      className="flex flex-col items-center justify-center py-2.5 gap-0.5"
+                      style={{ borderRight: ci < 3 ? "1px solid rgba(255,255,255,0.05)" : undefined }}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={inView ? { opacity: 1, y: 0 } : {}}
+                      transition={{ delay: 1.3 + ci * 0.07, duration: 0.35, ease: "easeOut" }}
+                    >
+                      <span className="text-[7.5px] font-black tracking-widest" style={{ color: "#555" }}>{label}</span>
+                      <span className="text-[13px] font-black tabular-nums" style={{ color }}>{value}</span>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Trade log */}
+                <div className="flex-1 overflow-hidden">
+                  {/* Column headers */}
+                  <div className="grid px-3 py-1.5 border-b border-white/[0.04]" style={{ gridTemplateColumns: "56px 1fr 68px 52px 60px" }}>
+                    {["TIME", "PAIR", "DIRECTION", "RESULT", "P/L"].map(h => (
+                      <span key={h} className="text-[7px] font-black tracking-widest" style={{ color: "#3a3a3a" }}>{h}</span>
+                    ))}
+                  </div>
+                  {/* Rows */}
+                  {([
+                    { time: "13:44", pair: "EUR/USD", dir: "CALL",  win: true  },
+                    { time: "13:31", pair: "EUR/USD", dir: "CALL",  win: true  },
+                    { time: "13:18", pair: "EUR/USD", dir: "PUT",   win: false },
+                    { time: "13:05", pair: "EUR/USD", dir: "CALL",  win: true  },
+                    { time: "12:52", pair: "GBP/USD", dir: "CALL",  win: true  },
+                  ] as const).map((row, ri) => (
+                    <motion.div
+                      key={ri}
+                      className="grid px-3 py-1.5 items-center"
+                      style={{
+                        gridTemplateColumns: "56px 1fr 68px 52px 60px",
+                        background: ri % 2 === 1 ? "rgba(255,255,255,0.018)" : "transparent",
+                        borderBottom: "1px solid rgba(255,255,255,0.025)",
+                      }}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={inView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ delay: 1.45 + ri * 0.07, duration: 0.3, ease: "easeOut" }}
+                    >
+                      <span className="text-[8.5px] font-mono" style={{ color: "#555" }}>{row.time}</span>
+                      <span className="text-[8.5px] font-bold text-white">{row.pair}</span>
+                      <span className="text-[8.5px] font-black" style={{ color: row.dir === "CALL" ? "#00e5be" : "#f23645" }}>
+                        {row.dir === "CALL" ? "▲" : "▼"}&nbsp;{row.dir}
+                      </span>
+                      <span
+                        className="text-[8px] font-black px-1.5 py-0.5 rounded text-center"
+                        style={{
+                          background: row.win ? "rgba(0,229,190,0.12)" : "rgba(242,54,69,0.12)",
+                          color: row.win ? "#00e5be" : "#f23645",
+                          border: `1px solid ${row.win ? "rgba(0,229,190,0.25)" : "rgba(242,54,69,0.25)"}`,
+                        }}
+                      >{row.win ? "WIN" : "LOSS"}</span>
+                      <span className="text-[8.5px] font-black" style={{ color: row.win ? "#22c55e" : "#f23645" }}>
+                        {row.win ? "+$8.50" : "-$10.00"}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* ── RIGHT CONTROL PANEL ── */}
@@ -933,6 +1013,27 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                   </div>
                 </div>
                 <p className="text-[9px] mt-1.5" style={{ color: "#555" }}>0 = Unlimited steps</p>
+              </div>
+
+              {/* MAX DAILY LOSS */}
+              <div className="px-4 py-3 border-b border-white/[0.06]">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.18em]">Max Daily Loss</p>
+                  <div className="flex items-center gap-1">
+                    <div className="w-7 h-3.5 rounded-full relative flex items-center" style={{ background: "#1a6bb0" }}>
+                      <div className="absolute right-0.5 w-2.5 h-2.5 rounded-full bg-white shadow-sm" />
+                    </div>
+                    <span className="text-[8px] font-black" style={{ color: "#60a5fa" }}>ON</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1]" style={{ background: "#3a3a3a" }}>
+                  <span className="text-[13px] font-bold text-white tabular-nums">50</span>
+                  <div className="flex flex-col gap-px">
+                    <button className="text-gray-500 hover:text-gray-200"><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7"/></svg></button>
+                    <button className="text-gray-500 hover:text-gray-200"><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7"/></svg></button>
+                  </div>
+                </div>
+                <p className="text-[9px] mt-1.5" style={{ color: "#555" }}>Stop bot if daily loss &gt; $50</p>
               </div>
 
               {/* BROKER PROFIT % */}
