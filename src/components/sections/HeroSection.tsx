@@ -58,12 +58,35 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
   // ── Trade animation loop ─────────────────────────────────
   const [animPhase, setAnimPhase] = useState<0|1|2|3|4>(0);
   const [profitVal, setProfitVal] = useState(511.04);
+  // Live candle forming progress 0→1
+  const [liveProgress, setLiveProgress] = useState(0);
   const phaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const liveRafRef = useRef<number | null>(null);
   const loopStartedRef = useRef(false);
+
+  // Animate live candle growing smoothly
+  useEffect(() => {
+    let start: number | null = null;
+    const DURATION = 3800;
+    const frame = (ts: number) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / DURATION, 1);
+      setLiveProgress(p);
+      if (p < 1) liveRafRef.current = requestAnimationFrame(frame);
+      else {
+        start = null;
+        liveRafRef.current = requestAnimationFrame(frame);
+      }
+    };
+    if (inView) liveRafRef.current = requestAnimationFrame(frame);
+    return () => { if (liveRafRef.current) cancelAnimationFrame(liveRafRef.current); };
+  }, [inView]);
+
   useEffect(() => {
     if (!inView || loopStartedRef.current) return;
     loopStartedRef.current = true;
-    const DURS = [2200, 450, 1100, 750, 2000];
+    // Phase durations: idle, click, scan+signal, executing, win celebration
+    const DURS = [3200, 320, 1800, 900, 2600];
     let currentPhase = 0;
     const tick = () => {
       const next = ((currentPhase + 1) % 5) as 0|1|2|3|4;
@@ -72,7 +95,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
       if (next === 4) setProfitVal(v => parseFloat((v + 8.50).toFixed(2)));
       phaseTimerRef.current = setTimeout(tick, DURS[next]);
     };
-    phaseTimerRef.current = setTimeout(tick, DURS[0] + 3000);
+    phaseTimerRef.current = setTimeout(tick, 3800);
     return () => { if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current); };
   }, [inView]);
 
@@ -261,154 +284,257 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
             {/* ── MAIN CONTENT AREA ── */}
             <div className="flex-1 flex flex-col min-w-0 p-2 gap-2">
 
-              {/* ── CANDLESTICK CHART ── black bg, blue border */}
+              {/* ── CANDLESTICK CHART ── */}
               <div
                 className="relative rounded-sm overflow-hidden"
                 style={{ background: "#000", border: "2px solid #1a6bb0", height: "340px" }}
               >
                 {/* Price axis - right */}
-                <div className="absolute right-0 top-0 bottom-4 w-14 flex flex-col justify-between py-2 border-l border-white/[0.06]" style={{ background: "#0a0a0a" }}>
-                  {["1.1590","1.1585","1.1580","1.1576","1.1570","1.1565","1.1560","1.1555","1.1550","1.1545"].map(p => (
-                    <span key={p} className="pr-1.5 text-right text-[9px] font-mono" style={{ color: "#888" }}>{p}</span>
+                <div className="absolute right-0 top-0 bottom-4 w-14 flex flex-col justify-between py-1 border-l border-white/[0.06] z-10" style={{ background: "#0a0a0a" }}>
+                  {["1.1598","1.1590","1.1582","1.1574","1.1566","1.1558","1.1550","1.1542","1.1534","1.1526","1.1518"].map((p,i) => (
+                    <span key={p} className={`pr-1.5 text-right text-[8.5px] font-mono ${i===3?"font-bold":""}`}
+                      style={{ color: i===3 ? "#00e5be" : "#666" }}>{p}</span>
                   ))}
                 </div>
 
-                {/* Current price label — teal chip */}
-                <div
+                {/* SVG chart — realistic OHLC candles on a proper price scale */}
+                {(() => {
+                  // Price scale: 1.1518 (bottom) to 1.1598 (top) = 80 pip range
+                  // SVG viewport: w=820, h=302 (leaves 20px for time axis, 56px for price axis)
+                  const W = 820, H = 302;
+                  const priceMin = 1.1518, priceMax = 1.1598;
+                  const pxPerPip = H / (priceMax - priceMin);
+                  const toY = (p: number) => H - (p - priceMin) * pxPerPip;
+
+                  // Realistic OHLC chain — chained open=prev_close, realistic wicks
+                  type C = { o:number; h:number; l:number; c:number };
+                  const raw: C[] = [
+                    // Choppy bottom — indecision zone
+                    {o:1.1528,h:1.1535,l:1.1522,c:1.1531},
+                    {o:1.1531,h:1.1538,l:1.1524,c:1.1525},
+                    {o:1.1525,h:1.1533,l:1.1520,c:1.1530},
+                    {o:1.1530,h:1.1534,l:1.1521,c:1.1523},
+                    {o:1.1523,h:1.1531,l:1.1518,c:1.1529},
+                    {o:1.1529,h:1.1536,l:1.1524,c:1.1526},
+                    // Hammer + first momentum
+                    {o:1.1526,h:1.1534,l:1.1519,c:1.1534},
+                    {o:1.1534,h:1.1542,l:1.1528,c:1.1541},
+                    {o:1.1541,h:1.1548,l:1.1535,c:1.1546},
+                    {o:1.1546,h:1.1549,l:1.1537,c:1.1539},// small pullback
+                    {o:1.1539,h:1.1551,l:1.1535,c:1.1550},
+                    {o:1.1550,h:1.1558,l:1.1543,c:1.1556},
+                    // Acceleration — marubozu-style, tight wicks
+                    {o:1.1556,h:1.1564,l:1.1552,c:1.1563},
+                    {o:1.1563,h:1.1566,l:1.1554,c:1.1557},// pullback
+                    {o:1.1557,h:1.1569,l:1.1553,c:1.1568},
+                    {o:1.1568,h:1.1575,l:1.1562,c:1.1574},
+                    {o:1.1574,h:1.1579,l:1.1566,c:1.1570},// doji
+                    {o:1.1570,h:1.1580,l:1.1566,c:1.1579},
+                    // Climax — shooting stars, long wicks
+                    {o:1.1579,h:1.1592,l:1.1574,c:1.1582},
+                    {o:1.1582,h:1.1596,l:1.1576,c:1.1579},// shooting star
+                    {o:1.1579,h:1.1588,l:1.1572,c:1.1585},
+                    {o:1.1585,h:1.1590,l:1.1578,c:1.1580},
+                    // Breakout continuation
+                    {o:1.1580,h:1.1592,l:1.1577,c:1.1590},
+                    {o:1.1590,h:1.1596,l:1.1584,c:1.1594},
+                    {o:1.1594,h:1.1598,l:1.1586,c:1.1590},
+                    // Current (live) — bullish, forming
+                    {o:1.1590,h:1.1597,l:1.1585,c:1.1576},
+                  ];
+                  const candleCount = raw.length;
+                  const GAP = W / (candleCount + 1);
+                  const BW  = GAP * 0.55;
+
+                  // Last candle forms live — c interpolates from o toward target
+                  const liveCandle = raw[candleCount - 1];
+                  const liveC = liveCandle.o + (liveCandle.c - liveCandle.o) * liveProgress;
+                  const liveH = liveCandle.o + (liveCandle.h - liveCandle.o) * Math.min(liveProgress * 1.4, 1);
+                  const liveL = liveCandle.o - (liveCandle.o - liveCandle.l) * Math.min(liveProgress * 1.2, 1);
+
+                  return (
+                    <svg
+                      className="absolute"
+                      style={{ left: 0, top: 0, bottom: "20px", width: "calc(100% - 56px)", height: "calc(100% - 20px)" }}
+                      viewBox={`0 0 ${W} ${H}`}
+                      preserveAspectRatio="xMidYMid meet"
+                    >
+                      {/* Grid lines */}
+                      {[0.2,0.35,0.5,0.65,0.8].map(r => (
+                        <line key={r} x1={0} y1={H*r} x2={W} y2={H*r}
+                          stroke="rgba(255,255,255,0.035)" strokeWidth={1} />
+                      ))}
+
+                      {/* Horizontal price level lines */}
+                      {[1.1540,1.1560,1.1580].map(p => (
+                        <line key={p} x1={0} y1={toY(p)} x2={W} y2={toY(p)}
+                          stroke="rgba(255,255,255,0.06)" strokeWidth={1} strokeDasharray="3 5" />
+                      ))}
+
+                      {/* Historical candles */}
+                      {raw.slice(0, candleCount - 1).map((c, i) => {
+                        const x  = GAP * (i + 1);
+                        const up = c.c >= c.o;
+                        const col = up ? "#00e5be" : "#f23645";
+                        const yO = toY(c.o), yC = toY(c.c), yH = toY(c.h), yL = toY(c.l);
+                        const bodyTop = Math.min(yO, yC);
+                        const bodyH   = Math.max(Math.abs(yC - yO), 1.5);
+                        return (
+                          <g key={i}>
+                            {/* Wick */}
+                            <line x1={x} y1={yH} x2={x} y2={yL}
+                              stroke={col} strokeWidth={1} opacity={0.75} />
+                            {/* Body */}
+                            <motion.rect
+                              x={x - BW/2} width={BW}
+                              y={bodyTop} height={bodyH}
+                              fill={col}
+                              initial={{ scaleY: 0, originY: yO }}
+                              animate={inView ? { scaleY: 1 } : {}}
+                              style={{ transformOrigin: `${x}px ${yO}px` }}
+                              transition={{ delay: 0.3 + i * 0.028, duration: 0.25, ease: "easeOut" }}
+                            />
+                          </g>
+                        );
+                      })}
+
+                      {/* LIVE forming candle */}
+                      {(() => {
+                        const i = candleCount - 1;
+                        const x = GAP * (i + 1);
+                        const up = liveC >= liveCandle.o;
+                        const col = up ? "#00e5be" : "#f23645";
+                        const yO = toY(liveCandle.o);
+                        const yC = toY(liveC);
+                        const yH = toY(liveH);
+                        const yL = toY(liveL);
+                        const bodyTop = Math.min(yO, yC);
+                        const bodyH   = Math.max(Math.abs(yC - yO), 1.5);
+                        return (
+                          <g>
+                            <line x1={x} y1={yH} x2={x} y2={yL} stroke={col} strokeWidth={1} opacity={0.8} />
+                            <rect x={x - BW/2} width={BW} y={bodyTop} height={bodyH} fill={col} opacity={0.95} />
+                            {/* Blinking top wick tip */}
+                            <motion.circle cx={x} cy={yH} r={2} fill={col}
+                              animate={{ opacity: [1, 0.2, 1] }}
+                              transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }} />
+                          </g>
+                        );
+                      })()}
+
+                      {/* Signal arrow overlay — phase 2 */}
+                      {animPhase === 2 && (
+                        <g>
+                          <motion.g
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.35, ease: [0.22,1,0.36,1] }}
+                          >
+                            {/* Arrow pointing up at the live candle */}
+                            <polygon
+                              points={`${GAP*candleCount},${toY(1.1582)} ${GAP*candleCount-7},${toY(1.1576)} ${GAP*candleCount+7},${toY(1.1576)}`}
+                              fill="#00e5be"
+                              style={{ filter: "drop-shadow(0 0 6px #00e5be)" }}
+                            />
+                            {/* Horizontal scan line */}
+                            <motion.line
+                              x1={0} y1={toY(1.1582)} x2={W} y2={toY(1.1582)}
+                              stroke="rgba(0,229,190,0.2)" strokeWidth={1} strokeDasharray="4 3"
+                              initial={{ pathLength: 0 }}
+                              animate={{ pathLength: 1 }}
+                              transition={{ duration: 0.9, ease: "linear" }}
+                            />
+                          </motion.g>
+                        </g>
+                      )}
+                    </svg>
+                  );
+                })()}
+
+                {/* Current price chip — animate position subtly */}
+                <motion.div
                   className="absolute z-10 px-1.5 py-0.5 text-[9px] font-bold text-black font-mono rounded-sm"
-                  style={{ background: "#00e5be", right: "56px", top: "44%" }}
+                  style={{ background: "#00e5be", right: "58px", top: `${32 + Math.sin(liveProgress * Math.PI * 2) * 1.5}%` }}
                 >
-                  1.15763
-                </div>
+                  {(1.1590 + (liveProgress * 0.0006 - 0.0003)).toFixed(5)}
+                </motion.div>
 
-                {/* Chart canvas area */}
-                <div className="absolute inset-0" style={{ right: "56px", bottom: "18px" }}>
-                  {/* Horizontal grid lines */}
-                  {[0.15,0.3,0.45,0.6,0.75,0.9].map(p => (
-                    <div key={p} className="absolute inset-x-0 border-t" style={{ top: `${p*100}%`, borderColor: "rgba(255,255,255,0.04)" }} />
-                  ))}
-
-                  {/* Candles — fat, tall, exactly matching screenshot pattern */}
-                  {(() => {
-                    // Each candle: [wick_lo%, wick_hi%, open%, close%] — % from bottom
-                    // Variety: chop → first push → acceleration → climax/dojis → new highs
-                    const candles: [number,number,number,number][] = [
-                      // Choppy low range — hammers, dojis, spinning tops
-                      [15,45,22,38],[18,42,38,22],[20,44,24,37],[16,38,34,20],
-                      [12,38,16,34],[14,40,36,18],[10,36,14,30],[16,42,34,20],
-                      // First push — momentum picks up
-                      [18,52,24,48],[20,50,46,24],[18,56,22,52],[22,58,52,28],
-                      [20,62,26,58],[24,65,58,30],[22,68,28,64],[28,70,64,34],
-                      // Strong trend — thick bullish bodies, shallow pullbacks
-                      [30,78,36,74],[34,76,72,38],[28,80,34,76],[36,82,78,42],
-                      [38,84,44,80],[42,82,78,46],[40,86,46,82],[44,84,80,50],
-                      // Climax zone — shooting stars, bearish engulf attempts
-                      [42,88,48,84],[46,90,86,52],[44,88,50,84],[50,90,85,56],
-                      // Final push — new highs, one doji reversal signal
-                      [48,92,54,88],[52,90,86,58],[50,92,56,88],[54,92,88,60],
-                      [52,90,58,86],[56,92,64,88],[54,90,86,60],[58,92,64,88],
-                    ];
-                    return candles.map(([lo,hi,op,cl], i) => {
-                      const up = cl > op;
-                      const bodyLo = Math.min(op,cl), bodyHi = Math.max(op,cl);
-                      const color = up ? "#00e5be" : "#f23645";
-                      return (
-                        <div key={i} className="absolute flex flex-col items-center" style={{
-                          left: `${1 + i * (98/candles.length)}%`,
-                          width: `${(98/candles.length)*0.65}%`,
-                          top: 0, bottom: 0,
-                        }}>
-                          {/* Wick */}
-                          <div className="absolute w-px" style={{ bottom:`${lo}%`, height:`${hi-lo}%`, background: color, opacity:0.7, left:"50%", transform:"translateX(-50%)" }}/>
-                          {/* Body */}
-                          <motion.div
-                            initial={{ scaleY: 0 }}
-                            animate={inView ? { scaleY: 1 } : {}}
-                            transition={{ delay: 0.5 + i * 0.022, duration: 0.3, ease: "easeOut" }}
-                            className="absolute w-full rounded-[1px]"
-                            style={{ bottom:`${bodyLo}%`, height:`${Math.max(bodyHi-bodyLo,2.5)}%`, background: color, transformOrigin:"bottom" }}
-                          />
-                        </div>
-                      );
-                    });
-                  })()}
-                </div>
-
-                {/* ── Scan line sweep — phases 1 & 2 ── */}
+                {/* ── Glow radial when signal fires — phase 2 ── */}
                 <AnimatePresence>
-                  {(animPhase === 1 || animPhase === 2) && (
+                  {animPhase === 2 && (
                     <motion.div
-                      key={`scan-${animPhase}`}
-                      className="absolute inset-y-0 z-10 pointer-events-none"
-                      style={{ width: "80px", background: "linear-gradient(90deg, transparent, rgba(0,229,190,0.16), transparent)" }}
-                      initial={{ left: "-80px" }}
-                      animate={{ left: "calc(100% + 80px)" }}
-                      transition={{ duration: 0.9, ease: "linear" }}
+                      key="signalglow"
+                      className="absolute inset-0 pointer-events-none z-5"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: [0, 0.18, 0.08, 0.18, 0] }}
+                      transition={{ duration: 1.8, times: [0,0.15,0.5,0.75,1] }}
+                      style={{ background: "radial-gradient(ellipse 60% 50% at 70% 45%, rgba(0,229,190,0.35) 0%, transparent 70%)" }}
                     />
                   )}
                 </AnimatePresence>
 
-                {/* ── CALL signal badge — phase 2 ── */}
+                {/* ── WIN flash — phase 4 ── */}
                 <AnimatePresence>
-                  {animPhase === 2 && (
+                  {animPhase === 4 && (
                     <motion.div
-                      key="callbadge"
-                      className="absolute z-20"
-                      style={{ right: "68px", top: "34%" }}
-                      initial={{ opacity: 0, x: 22, scale: 0.75 }}
-                      animate={{ opacity: 1, x: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -14, scale: 0.9 }}
-                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      <div
-                        className="px-2.5 py-1 rounded text-[11px] font-black text-black tracking-widest"
-                        style={{ background: "#00e5be", boxShadow: "0 0 18px rgba(0,229,190,0.8), 0 0 40px rgba(0,229,190,0.3)" }}
-                      >▲ CALL</div>
-                      <div className="absolute left-1/2 top-full w-px" style={{ height: "55px", background: "rgba(0,229,190,0.45)", transform: "translateX(-50%)" }} />
-                    </motion.div>
+                      key={`winflash-${profitVal}`}
+                      className="absolute inset-0 pointer-events-none z-20"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: [0, 0.22, 0] }}
+                      transition={{ duration: 0.55, ease: "easeOut" }}
+                      style={{ background: "rgba(0,229,190,0.18)" }}
+                    />
                   )}
                 </AnimatePresence>
 
-                {/* ── Floating WIN toast — phase 4 ── */}
+                {/* ── WIN profit toast — phase 4 ── */}
                 <AnimatePresence>
                   {animPhase === 4 && (
                     <motion.div
                       key={`wintoast-${profitVal}`}
-                      className="absolute z-30 pointer-events-none select-none"
-                      style={{ left: "40%", top: "42%" }}
-                      initial={{ opacity: 0, y: 0, scale: 0.75 }}
-                      animate={{ opacity: [0, 1, 1, 0], y: [0, -22, -62, -90], scale: [0.75, 1.12, 1, 1] }}
-                      transition={{ duration: 2.0, times: [0, 0.18, 0.72, 1], ease: "easeOut" }}
+                      className="absolute z-30 pointer-events-none select-none flex items-center gap-1.5"
+                      style={{ left: "52%", top: "30%" }}
+                      initial={{ opacity: 0, y: 8, scale: 0.8 }}
+                      animate={{ opacity: [0,1,1,1,0], y:[8,0,-8,-28,-52], scale:[0.8,1.1,1.05,1,0.9] }}
+                      transition={{ duration: 2.4, times:[0,0.12,0.35,0.75,1], ease:"easeOut" }}
                     >
-                      <span className="font-black text-[18px] font-mono" style={{ color: "#00e5be", textShadow: "0 0 18px rgba(0,229,190,0.9)" }}>+$8.50</span>
-                      <span className="text-[15px] ml-1.5 font-black" style={{ color: "#22c55e" }}>✓</span>
+                      <span className="text-[11px] font-black rounded px-1.5 py-0.5"
+                        style={{ background:"rgba(0,229,190,0.18)", color:"#00e5be", border:"1px solid rgba(0,229,190,0.4)", textShadow:"0 0 12px rgba(0,229,190,0.8)" }}>
+                        +$8.50 WIN
+                      </span>
+                      <motion.span
+                        animate={{ rotate: [0,15,-10,8,0] }}
+                        transition={{ duration:0.6, delay:0.1 }}
+                        style={{ fontSize:"14px" }}>💰</motion.span>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                {/* ── Dollar particles — phase 4 ── */}
-                {animPhase === 4 && [0, 1, 2, 3].map(i => (
+                {/* ── Floating $ coins — phase 4 ── */}
+                {animPhase === 4 && [0,1,2,3,4].map(i => (
                   <motion.span
                     key={`coin-${i}-${profitVal}`}
-                    className="absolute pointer-events-none font-black"
-                    style={{ left: `${29 + i * 7}%`, top: "50%", color: "#ffd700", fontSize: "11px", zIndex: 30, textShadow: "0 0 8px rgba(255,215,0,0.8)" }}
-                    initial={{ opacity: 0, y: 0, x: 0 }}
-                    animate={{ opacity: [0, 1, 0], y: -(26 + i * 11), x: (i - 1.5) * 15 }}
-                    transition={{ delay: i * 0.1, duration: 1.3, ease: "easeOut" }}
+                    className="absolute pointer-events-none font-black z-30 select-none"
+                    style={{ left:`${38 + i*6}%`, top:"52%", color:"#ffd700", fontSize:"12px",
+                      textShadow:"0 0 10px rgba(255,215,0,0.9)", filter:"drop-shadow(0 0 4px gold)" }}
+                    initial={{ opacity:0, y:0, x:0, scale:0.5 }}
+                    animate={{ opacity:[0,1,1,0], y:[0,-(20+i*14)], x:[(i-2)*8,(i-2)*18], scale:[0.5,1.1,0.9,0.7] }}
+                    transition={{ delay:i*0.08, duration:1.5, ease:"easeOut" }}
                   >$</motion.span>
                 ))}
 
                 {/* Time axis */}
-                <div className="absolute bottom-0 inset-x-0 h-[18px] flex items-center border-t border-white/[0.06]" style={{ paddingRight: "56px", background: "#0a0a0a" }}>
-                  <div className="flex justify-between w-full px-1">
+                <div className="absolute bottom-0 inset-x-0 h-[20px] flex items-center border-t border-white/[0.06]" style={{ paddingRight: "56px", background: "#050505" }}>
+                  <div className="flex justify-between w-full px-2">
                     {["9:45","10:00","10:15","10:30","10:45","11:00","11:15","11:30","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45"].map(t=>(
-                      <span key={t} className="text-[7.5px] font-mono" style={{ color:"#555" }}>{t}</span>
+                      <span key={t} className="text-[7.5px] font-mono" style={{ color:"#444" }}>{t}</span>
                     ))}
                   </div>
                 </div>
 
-                {/* TV logo watermark */}
-                <div className="absolute bottom-5 left-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ background:"#2a2a2a" }}>
+                {/* TV watermark */}
+                <div className="absolute bottom-6 left-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ background:"#2a2a2a", opacity:0.7 }}>
                   <span className="text-[9px] font-black text-white">TV</span>
                 </div>
               </div>
@@ -550,39 +676,80 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                     </motion.div>
                   )}
                   {animPhase === 1 && (
-                    <motion.div key="processing" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}
-                      className="flex flex-col items-center justify-center py-5">
-                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.65, repeat: Infinity, ease: "linear" }}
-                        className="w-5 h-5 rounded-full border-2 border-t-transparent mb-2" style={{ borderColor: "#60a5fa transparent #60a5fa #60a5fa" }} />
-                      <p className="text-[11px] font-black tracking-widest" style={{ color: "#60a5fa" }}>PROCESSING...</p>
+                    <motion.div key="processing" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.25 }}
+                      className="flex flex-col items-center justify-center py-5 gap-2">
+                      <div className="flex items-center gap-2">
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.55, repeat: Infinity, ease: "linear" }}
+                          className="w-4 h-4 rounded-full border-2" style={{ borderColor: "#60a5fa", borderTopColor: "transparent" }} />
+                        <p className="text-[11px] font-black tracking-widest" style={{ color: "#60a5fa" }}>SCANNING...</p>
+                      </div>
+                      <motion.div className="flex gap-0.5"
+                        initial="hidden" animate="show"
+                        variants={{ hidden:{}, show:{ transition:{ staggerChildren:0.06 } } }}
+                      >
+                        {[1,1,0,1,0,1,1,1].map((v,i) => (
+                          <motion.div key={i}
+                            variants={{ hidden:{ scaleY:0.2, opacity:0.3 }, show:{ scaleY:[0.2,1,0.5,0.9,0.3], opacity:1 } }}
+                            transition={{ duration:0.5, repeat:Infinity, repeatType:"mirror", delay:i*0.05 }}
+                            className="w-[3px] rounded-full"
+                            style={{ height:"14px", background: v ? "#60a5fa" : "#3b5fc0", transformOrigin:"bottom" }}
+                          />
+                        ))}
+                      </motion.div>
                     </motion.div>
                   )}
                   {animPhase === 2 && (
-                    <motion.div key="signal" initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22 }}
-                      className="flex flex-col items-center justify-center py-5">
-                      <motion.div animate={{ scale: [1, 1.28, 1] }} transition={{ duration: 0.38, repeat: 2 }}
-                        className="text-[22px] mb-1" style={{ color: "#00e5be" }}>▲</motion.div>
-                      <p className="text-[11px] font-black tracking-widest" style={{ color: "#00e5be" }}>CALL SIGNAL</p>
-                      <p className="text-[9px] mt-0.5" style={{ color: "rgba(0,229,190,0.65)" }}>EUR/USD · 1 Min · High conf.</p>
+                    <motion.div key="signal" initial={{ opacity: 0, scale: 0.88 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.92 }} transition={{ duration: 0.25, ease:[0.22,1,0.36,1] }}
+                      className="flex flex-col items-center justify-center py-5 gap-1">
+                      {/* Pulsing ring */}
+                      <div className="relative mb-1">
+                        <motion.div className="absolute inset-0 rounded-full"
+                          animate={{ scale:[1,2.2], opacity:[0.6,0] }}
+                          transition={{ duration:1.1, repeat:Infinity, ease:"easeOut" }}
+                          style={{ background:"rgba(0,229,190,0.35)" }} />
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center"
+                          style={{ background:"rgba(0,229,190,0.15)", border:"1.5px solid rgba(0,229,190,0.6)" }}>
+                          <span style={{ color:"#00e5be", fontSize:"14px", fontWeight:900 }}>▲</span>
+                        </div>
+                      </div>
+                      <p className="text-[12px] font-black tracking-widest" style={{ color: "#00e5be" }}>CALL SIGNAL</p>
+                      <p className="text-[9px]" style={{ color: "rgba(0,229,190,0.55)" }}>EUR/USD · 1 Min · 94% conf.</p>
                     </motion.div>
                   )}
                   {animPhase === 3 && (
-                    <motion.div key="executing" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}
-                      className="flex flex-col items-center justify-center py-5">
-                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.48, repeat: Infinity, ease: "linear" }}
-                        className="w-5 h-5 rounded-full border-2 border-t-transparent mb-2" style={{ borderColor: "#fbbf24 transparent #fbbf24 #fbbf24" }} />
-                      <p className="text-[11px] font-black tracking-widest" style={{ color: "#fbbf24" }}>⚡ EXECUTING...</p>
-                      <p className="text-[9px] mt-0.5" style={{ color: "#666" }}>Placing trade on broker</p>
+                    <motion.div key="executing" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.22 }}
+                      className="flex flex-col items-center justify-center py-5 gap-1.5">
+                      {/* Progress bar */}
+                      <div className="w-[80%] h-1 rounded-full mb-1" style={{ background:"#2a2a2a" }}>
+                        <motion.div className="h-full rounded-full"
+                          initial={{ width:"0%" }} animate={{ width:"100%" }}
+                          transition={{ duration:0.85, ease:"linear" }}
+                          style={{ background:"linear-gradient(90deg,#fbbf24,#f97316)" }} />
+                      </div>
+                      <p className="text-[11px] font-black tracking-widest" style={{ color: "#fbbf24" }}>⚡ EXECUTING</p>
+                      <p className="text-[9px]" style={{ color: "#666" }}>Placing trade on broker...</p>
                     </motion.div>
                   )}
                   {animPhase === 4 && (
-                    <motion.div key="win" initial={{ opacity: 0, scale: 0.75 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.1 }}
-                      transition={{ duration: 0.28, type: "spring", stiffness: 340, damping: 22 }}
-                      className="flex flex-col items-center justify-center py-5">
-                      <motion.div animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 0.4 }}
-                        className="text-[20px] mb-1" style={{ color: "#22c55e" }}>✓</motion.div>
-                      <p className="text-[12px] font-black tracking-widest" style={{ color: "#22c55e" }}>WIN +$8.50</p>
-                      <p className="text-[9px] mt-0.5" style={{ color: "rgba(34,197,94,0.65)" }}>Trade completed successfully</p>
+                    <motion.div key="win" initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }}
+                      transition={{ duration: 0.32, type: "spring", stiffness: 360, damping: 20 }}
+                      className="flex flex-col items-center justify-center py-5 gap-1">
+                      {/* Checkmark with burst */}
+                      <div className="relative mb-1">
+                        <motion.div className="absolute inset-0 rounded-full"
+                          initial={{ scale:0.5, opacity:0.8 }} animate={{ scale:2.5, opacity:0 }}
+                          transition={{ duration:0.6, ease:"easeOut" }}
+                          style={{ background:"rgba(34,197,94,0.4)" }} />
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center"
+                          style={{ background:"rgba(34,197,94,0.2)", border:"2px solid rgba(34,197,94,0.7)" }}>
+                          <motion.span initial={{ scale:0 }} animate={{ scale:1 }} transition={{ delay:0.1, type:"spring", stiffness:400, damping:18 }}
+                            style={{ color:"#22c55e", fontSize:"18px", fontWeight:900, lineHeight:1 }}>✓</motion.span>
+                        </div>
+                      </div>
+                      <motion.p
+                        initial={{ opacity:0, y:4 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.18 }}
+                        className="text-[13px] font-black tracking-widest" style={{ color: "#22c55e" }}>WIN +$8.50</motion.p>
+                      <p className="text-[9px]" style={{ color: "rgba(34,197,94,0.55)" }}>Trade completed</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
