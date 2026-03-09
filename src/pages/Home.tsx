@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -27,15 +28,17 @@ import CTASection from "@/components/sections/CTASection";
  * 11. Footer          — links, legal, socials
  */
 export default function Home() {
+  const [barHeight, setBarHeight] = useState(0);
+  const onBarHeight = useCallback((h: number) => setBarHeight(h), []);
+
   return (
     <>
-      {/* Fixed overlays */}
-      <AnnouncementBar />
-      <Navbar />
+      <AnnouncementBar onHeightChange={onBarHeight} />
+      <Navbar topOffset={barHeight} />
 
-      {/* Page content */}
       <main id="main-content">
-        <HeroSection />
+        {/* barHeight = announcement bar, +64 = navbar h-16, +48 = breathing room */}
+        <HeroSection headerHeight={barHeight + 64} />
         <LogoBar />
         <FeaturesSection />
         <ProductShowcase />

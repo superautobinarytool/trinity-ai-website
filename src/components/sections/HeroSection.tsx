@@ -36,7 +36,7 @@ function Particles() {
   );
 }
 
-export default function HeroSection() {
+export default function HeroSection({ headerHeight = 110 }: { headerHeight?: number }) {
   const ref    = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
@@ -46,7 +46,7 @@ export default function HeroSection() {
       id="hero"
       aria-label="Start trading like smart money"
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-center"
-      style={{ paddingTop: "calc(36px + 80px)", paddingBottom: "6rem" }}
+      style={{ paddingTop: headerHeight + 48, paddingBottom: "6rem" }}
     >
       {/* Background */}
       <div className="absolute inset-0 bg-[#040d1a]" aria-hidden="true" />

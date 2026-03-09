@@ -14,7 +14,7 @@ const NAV_LINKS = [
 ];
 
 /** Fixed navigation bar — transparent at top, glass-blur on scroll. */
-export default function Navbar() {
+export default function Navbar({ topOffset = 0 }: { topOffset?: number }) {
   const [scrolled,     setScrolled]     = useState(false);
   const [mobileOpen,   setMobileOpen]   = useState(false);
 
@@ -40,12 +40,16 @@ export default function Navbar() {
   return (
     <header
       role="banner"
-      className={cn(
-        "fixed top-9 left-0 right-0 z-40 transition-all duration-300",
-        scrolled
-          ? "glass border-b border-white/[0.07] shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
-          : "bg-transparent"
-      )}
+      className="fixed inset-x-0 z-40"
+      style={{
+        top: topOffset,
+        background: scrolled ? "rgba(12,12,20,0.75)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.07)" : "1px solid transparent",
+        boxShadow: scrolled ? "0 8px 32px rgba(0,0,0,0.4)" : "none",
+        transition: "background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease",
+      }}
     >
       <nav
         aria-label="Main navigation"
