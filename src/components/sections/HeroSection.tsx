@@ -21,23 +21,23 @@ const AMBIENT_DOTS = [
   { id:5, cx:760, cy:160, delay:2.1,  dur:4.0 },
 ];
 
-// Win confetti pieces
+// Win confetti pieces — large cinematic sizes
 const CONFETTI = [
-  {s:"$",c:"#ffd700",l:26,d:0,    yd:100,xd:14,  fs:13},
-  {s:"✦",c:"#00e5be",l:33,d:0.06, yd:120,xd:-18, fs:11},
-  {s:"$",c:"#ffd700",l:40,d:0.10, yd:105,xd:9,   fs:14},
-  {s:"★",c:"#22c55e",l:46,d:0.15, yd:135,xd:22,  fs:10},
-  {s:"$",c:"#ffd700",l:52,d:0.04, yd:110,xd:-12, fs:13},
-  {s:"✦",c:"#fbbf24",l:58,d:0.09, yd:125,xd:17,  fs:11},
-  {s:"$",c:"#ffd700",l:64,d:0.14, yd:95, xd:-8,  fs:12},
-  {s:"●",c:"#00e5be",l:70,d:0.05, yd:115,xd:15,  fs:9},
-  {s:"$",c:"#d946ef",l:30,d:0.19, yd:90, xd:20,  fs:12},
-  {s:"★",c:"#ffd700",l:43,d:0.12, yd:130,xd:-16, fs:10},
-  {s:"$",c:"#22c55e",l:55,d:0.07, yd:100,xd:-22, fs:13},
-  {s:"✦",c:"#00e5be",l:67,d:0.16, yd:118,xd:11,  fs:11},
-  {s:"$",c:"#ffd700",l:37,d:0.22, yd:108,xd:8,   fs:14},
-  {s:"💰",c:"#ffd700",l:49,d:0.02, yd:140,xd:-5,  fs:14},
-  {s:"$",c:"#4ade80",l:61,d:0.18, yd:92, xd:18,  fs:11},
+  {s:"$",  c:"#ffd700", l:24, d:0,    yd:150, xd:20,  fs:52},
+  {s:"✦",  c:"#00e5be", l:32, d:0.06, yd:175, xd:-26, fs:36},
+  {s:"$",  c:"#ffd700", l:40, d:0.10, yd:140, xd:15,  fs:58},
+  {s:"★",  c:"#22c55e", l:46, d:0.15, yd:185, xd:32,  fs:42},
+  {s:"$",  c:"#ffd700", l:52, d:0.04, yd:155, xd:-18, fs:48},
+  {s:"✦",  c:"#fbbf24", l:58, d:0.09, yd:165, xd:24,  fs:34},
+  {s:"$",  c:"#4ade80", l:64, d:0.14, yd:130, xd:-12, fs:44},
+  {s:"💰", c:"#ffd700", l:70, d:0.05, yd:145, xd:18,  fs:38},
+  {s:"$",  c:"#d946ef", l:28, d:0.19, yd:120, xd:28,  fs:50},
+  {s:"★",  c:"#ffd700", l:44, d:0.12, yd:170, xd:-22, fs:40},
+  {s:"$",  c:"#22c55e", l:56, d:0.07, yd:138, xd:-30, fs:46},
+  {s:"💰", c:"#ffd700", l:62, d:0.16, yd:158, xd:16,  fs:34},
+  {s:"$",  c:"#ffd700", l:36, d:0.22, yd:148, xd:10,  fs:54},
+  {s:"✦",  c:"#00e5be", l:48, d:0.02, yd:180, xd:-8,  fs:30},
+  {s:"$",  c:"#fbbf24", l:68, d:0.18, yd:125, xd:22,  fs:42},
 ] as const;
 
 function Particles() {
@@ -379,12 +379,13 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                     {o:1.1580,h:1.1592,l:1.1577,c:1.1590},
                     {o:1.1590,h:1.1596,l:1.1584,c:1.1594},
                     {o:1.1594,h:1.1598,l:1.1586,c:1.1590},
-                    // Current (live) — bullish, forming
-                    {o:1.1590,h:1.1597,l:1.1585,c:1.1576},
+                    // Current (live) — strong bullish CALL candle forming
+                    {o:1.1590,h:1.1598,l:1.1584,c:1.1597},
                   ];
                   const candleCount = raw.length;
-                  const GAP = W / (candleCount + 1);
-                  const BW  = GAP * 0.55;
+                  // Pack all candles into the left half — live candle lands at chart center
+                  const GAP = (W * 0.50) / candleCount;
+                  const BW  = GAP * 0.70;
 
                   // Last candle forms live — c interpolates from o toward target
                   const liveCandle = raw[candleCount - 1];
@@ -586,6 +587,36 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                   )}
                 </AnimatePresence>
 
+                {/* ── Big WIN! text — phase 4 ── */}
+                <AnimatePresence>
+                  {animPhase === 4 && (
+                    <motion.div
+                      key={`wintext-${profitVal}`}
+                      className="absolute pointer-events-none z-40 select-none"
+                      style={{ left: "50%", top: "42%", transform: "translate(-50%, -50%)", whiteSpace: "nowrap" }}
+                      initial={{ scale: 0.3, opacity: 0, y: 14 }}
+                      animate={{
+                        scale:   [0.3, 1.55, 1.25, 1.15, 0.85],
+                        opacity: [0,   1,    1,    1,    0],
+                        y:       [14,  -6,   -14,  -30,  -72],
+                      }}
+                      transition={{ duration: 2.2, times: [0, 0.13, 0.3, 0.6, 1.0], ease: "easeOut" }}
+                    >
+                      <span
+                        className="font-black leading-none"
+                        style={{
+                          fontSize: "64px",
+                          color: "#22c55e",
+                          textShadow:
+                            "0 0 24px rgba(34,197,94,1), 0 0 60px rgba(34,197,94,0.75), 0 0 120px rgba(34,197,94,0.45), 0 4px 12px rgba(0,0,0,0.6)",
+                          WebkitTextStroke: "1.5px rgba(255,255,255,0.3)",
+                          letterSpacing: "0.04em",
+                        }}
+                      >WIN!</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* ── WIN profit toast — phase 4 ── */}
                 <AnimatePresence>
                   {animPhase === 4 && (
@@ -766,7 +797,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               </div>
 
               {/* STATUS BOX — animated through trade cycle phases */}
-              <div className="mx-4 my-3 rounded-md overflow-hidden border border-white/[0.07]" style={{ background: "#333333", minHeight: "88px" }}>
+              <div className="mx-4 my-3 rounded-md overflow-hidden border border-white/[0.07]" style={{ background: "#333333", height: "118px", overflow: "hidden" }}>
                 <AnimatePresence mode="wait">
                   {animPhase === 0 && (
                     <motion.div key="idle" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.22 }}
