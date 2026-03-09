@@ -11,6 +11,35 @@ const up: Variants = {
   show:   { opacity: 1, y: 0,  filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
+// Ambient chart particles — defined once to avoid regeneration on every render
+const AMBIENT_DOTS = [
+  { id:0, cx:90,  cy:60,  delay:0,    dur:3.5 },
+  { id:1, cx:230, cy:140, delay:0.8,  dur:4.1 },
+  { id:2, cx:380, cy:45,  delay:1.5,  dur:3.8 },
+  { id:3, cx:520, cy:180, delay:0.3,  dur:4.6 },
+  { id:4, cx:660, cy:80,  delay:1.2,  dur:3.2 },
+  { id:5, cx:760, cy:160, delay:2.1,  dur:4.0 },
+];
+
+// Win confetti pieces
+const CONFETTI = [
+  {s:"$",c:"#ffd700",l:26,d:0,    yd:100,xd:14,  fs:13},
+  {s:"✦",c:"#00e5be",l:33,d:0.06, yd:120,xd:-18, fs:11},
+  {s:"$",c:"#ffd700",l:40,d:0.10, yd:105,xd:9,   fs:14},
+  {s:"★",c:"#22c55e",l:46,d:0.15, yd:135,xd:22,  fs:10},
+  {s:"$",c:"#ffd700",l:52,d:0.04, yd:110,xd:-12, fs:13},
+  {s:"✦",c:"#fbbf24",l:58,d:0.09, yd:125,xd:17,  fs:11},
+  {s:"$",c:"#ffd700",l:64,d:0.14, yd:95, xd:-8,  fs:12},
+  {s:"●",c:"#00e5be",l:70,d:0.05, yd:115,xd:15,  fs:9},
+  {s:"$",c:"#d946ef",l:30,d:0.19, yd:90, xd:20,  fs:12},
+  {s:"★",c:"#ffd700",l:43,d:0.12, yd:130,xd:-16, fs:10},
+  {s:"$",c:"#22c55e",l:55,d:0.07, yd:100,xd:-22, fs:13},
+  {s:"✦",c:"#00e5be",l:67,d:0.16, yd:118,xd:11,  fs:11},
+  {s:"$",c:"#ffd700",l:37,d:0.22, yd:108,xd:8,   fs:14},
+  {s:"💰",c:"#ffd700",l:49,d:0.02, yd:140,xd:-5,  fs:14},
+  {s:"$",c:"#4ade80",l:61,d:0.18, yd:92, xd:18,  fs:11},
+] as const;
+
 function Particles() {
   const dots = Array.from({ length: 40 }, (_, i) => ({
     id: i,
@@ -86,7 +115,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
     if (!inView || loopStartedRef.current) return;
     loopStartedRef.current = true;
     // Phase durations: idle, click, scan+signal, executing, win celebration
-    const DURS = [3200, 320, 1800, 900, 2600];
+    const DURS = [3200, 620, 1800, 900, 2800];
     let currentPhase = 0;
     const tick = () => {
       const next = ((currentPhase + 1) % 5) as 0|1|2|3|4;
@@ -98,6 +127,15 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
     phaseTimerRef.current = setTimeout(tick, 3800);
     return () => { if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current); };
   }, [inView]);
+
+  // Phase-reactive window box shadow (switches smoothly per phase)
+  const PHASE_SHADOW = [
+    "0 60px 180px rgba(0,0,0,0.92), 0 0 0 1px rgba(255,255,255,0.07)",
+    "0 60px 180px rgba(0,0,0,0.92), 0 0 0 1px rgba(96,165,250,0.55), 0 0 50px rgba(96,165,250,0.22)",
+    "0 60px 180px rgba(0,0,0,0.92), 0 0 0 2px rgba(0,229,190,0.8), 0 0 80px rgba(0,229,190,0.45), 0 0 130px rgba(0,229,190,0.18)",
+    "0 60px 180px rgba(0,0,0,0.92), 0 0 0 1.5px rgba(251,191,36,0.6), 0 0 48px rgba(251,191,36,0.22)",
+    "0 60px 180px rgba(0,0,0,0.92), 0 0 0 2.5px rgba(34,197,94,0.9), 0 0 100px rgba(34,197,94,0.55), 0 0 200px rgba(34,197,94,0.28)",
+  ] as const;
 
   return (
     <section
@@ -200,8 +238,10 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
 
         {/* ── Trinity App Window — charcoal #2a2a2a exactly matching screenshot ── */}
         <div ref={mockupContainerRef} className="w-full">
-        <div
-          className="relative rounded-xl overflow-hidden shadow-[0_60px_180px_rgba(0,0,0,0.95),0_0_0_1px_rgba(255,255,255,0.08)]"
+        <motion.div
+          className="relative rounded-xl overflow-hidden"
+          animate={{ boxShadow: PHASE_SHADOW[animPhase] }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
           style={{
             background: "#2a2a2a",
             ...(mockupScale < 1 ? {
@@ -371,6 +411,18 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                           stroke="rgba(255,255,255,0.06)" strokeWidth={1} strokeDasharray="3 5" />
                       ))}
 
+                      {/* Ambient floating particles — always on, very faint */}
+                      {AMBIENT_DOTS.map(({id, cx, cy, delay, dur}) => (
+                        <motion.circle
+                          key={`amb-${id}`}
+                          cx={cx} cy={cy} r={1.8}
+                          fill="rgba(0,229,190,0.45)"
+                          animate={{ opacity:[0.08,0.45,0.08], cy:[cy,cy-9,cy] }}
+                          style={{ transformOrigin:`${cx}px ${cy}px` }}
+                          transition={{ duration:dur, delay, repeat:Infinity, ease:"easeInOut" }}
+                        />
+                      ))}
+
                       {/* Historical candles */}
                       {raw.slice(0, candleCount - 1).map((c, i) => {
                         const x  = GAP * (i + 1);
@@ -422,35 +474,81 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                         );
                       })()}
 
-                      {/* Signal arrow overlay — phase 2 */}
-                      {animPhase === 2 && (
-                        <g>
-                          <motion.g
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.35, ease: [0.22,1,0.36,1] }}
-                          >
-                            {/* Arrow pointing up at the live candle */}
-                            <polygon
-                              points={`${GAP*candleCount},${toY(1.1582)} ${GAP*candleCount-7},${toY(1.1576)} ${GAP*candleCount+7},${toY(1.1576)}`}
+                      {/* Signal overlay — phase 2: concentric rings + arrow */}
+                      {animPhase === 2 && (() => {
+                        const scx = GAP * candleCount;
+                        const scy = toY(1.1582);
+                        return (
+                          <g>
+                            {/* Expanding concentric rings */}
+                            {([0,1,2] as const).map(ri => (
+                              <motion.circle key={`ring-${ri}`}
+                                cx={scx} cy={scy} r={8}
+                                fill="none" stroke="#00e5be" strokeWidth={1.5}
+                                style={{ transformOrigin:`${scx}px ${scy}px`, opacity:0 }}
+                                animate={{ scale:[1,7], opacity:[0.85,0] }}
+                                transition={{ duration:1.7, delay:ri*0.52, repeat:Infinity, ease:"easeOut" }}
+                              />
+                            ))}
+                            {/* Core pulsing dot */}
+                            <motion.circle
+                              cx={scx} cy={scy} r={5}
                               fill="#00e5be"
-                              style={{ filter: "drop-shadow(0 0 6px #00e5be)" }}
+                              style={{ filter:"drop-shadow(0 0 10px #00e5be) drop-shadow(0 0 22px rgba(0,229,190,0.6))" }}
+                              animate={{ scale:[1,1.5,1], opacity:[1,0.7,1] }}
+                              transition={{ duration:0.75, repeat:Infinity, ease:"easeInOut" }}
                             />
-                            {/* Horizontal scan line */}
+                            {/* Upward arrow with glow */}
+                            <motion.polygon
+                              points={`${scx},${scy-20} ${scx-9},${scy-7} ${scx+9},${scy-7}`}
+                              fill="#00e5be"
+                              style={{ filter:"drop-shadow(0 0 10px #00e5be) drop-shadow(0 0 24px rgba(0,229,190,0.55))" }}
+                              initial={{ opacity:0 }}
+                              animate={{ opacity:[0,1,0.8,1] }}
+                              transition={{ duration:0.35, ease:[0.22,1,0.36,1] }}
+                            />
+                            {/* CALL label */}
+                            <motion.text
+                              x={scx} y={scy-28}
+                              textAnchor="middle"
+                              fontSize={9} fontWeight={900} fill="#00e5be"
+                              style={{ letterSpacing:2, filter:"drop-shadow(0 0 6px #00e5be)" }}
+                              initial={{ opacity:0 }}
+                              animate={{ opacity:1 }}
+                              transition={{ delay:0.2, duration:0.3 }}
+                            >CALL</motion.text>
+                            {/* Full-width dashed level line */}
                             <motion.line
-                              x1={0} y1={toY(1.1582)} x2={W} y2={toY(1.1582)}
-                              stroke="rgba(0,229,190,0.2)" strokeWidth={1} strokeDasharray="4 3"
-                              initial={{ pathLength: 0 }}
-                              animate={{ pathLength: 1 }}
-                              transition={{ duration: 0.9, ease: "linear" }}
+                              x1={0} y1={scy} x2={W} y2={scy}
+                              stroke="rgba(0,229,190,0.22)" strokeWidth={1} strokeDasharray="5 4"
+                              initial={{ pathLength:0 }}
+                              animate={{ pathLength:1 }}
+                              transition={{ duration:0.9, ease:"linear" }}
                             />
-                          </motion.g>
-                        </g>
-                      )}
+                          </g>
+                        );
+                      })()}
                     </svg>
                   );
                 })()}
+
+                {/* ── Laser scan beam — phase 1 ── */}
+                <AnimatePresence>
+                  {animPhase === 1 && (
+                    <motion.div
+                      key="laser"
+                      className="absolute inset-y-0 pointer-events-none"
+                      style={{
+                        width: "4px", zIndex: 14,
+                        background: "linear-gradient(180deg, transparent 4%, #00e5be 28%, #e0fff8 50%, #00e5be 72%, transparent 96%)",
+                        boxShadow: "0 0 14px 7px rgba(0,229,190,0.75), 0 0 40px 16px rgba(0,229,190,0.35), 0 0 60px 22px rgba(0,229,190,0.15)",
+                      }}
+                      initial={{ left: "0%", opacity: 0 }}
+                      animate={{ left: "calc(100% - 60px)", opacity: [0, 1, 1, 1, 0.7] }}
+                      transition={{ duration: 0.52, ease: [0.4, 0, 0.2, 1] }}
+                    />
+                  )}
+                </AnimatePresence>
 
                 {/* Current price chip — animate position subtly */}
                 <motion.div
@@ -474,16 +572,16 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                   )}
                 </AnimatePresence>
 
-                {/* ── WIN flash — phase 4 ── */}
+                {/* ── WIN double-flash — phase 4 ── */}
                 <AnimatePresence>
                   {animPhase === 4 && (
                     <motion.div
                       key={`winflash-${profitVal}`}
                       className="absolute inset-0 pointer-events-none z-20"
                       initial={{ opacity: 0 }}
-                      animate={{ opacity: [0, 0.22, 0] }}
-                      transition={{ duration: 0.55, ease: "easeOut" }}
-                      style={{ background: "rgba(0,229,190,0.18)" }}
+                      animate={{ opacity: [0, 0.42, 0.08, 0.28, 0] }}
+                      transition={{ duration: 0.75, times:[0,0.1,0.3,0.5,1], ease: "easeOut" }}
+                      style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(34,197,94,0.45), rgba(0,229,190,0.2), transparent)" }}
                     />
                   )}
                 </AnimatePresence>
@@ -511,17 +609,23 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                   )}
                 </AnimatePresence>
 
-                {/* ── Floating $ coins — phase 4 ── */}
-                {animPhase === 4 && [0,1,2,3,4].map(i => (
+                {/* ── Confetti burst — phase 4 ── */}
+                {animPhase === 4 && CONFETTI.map(({s,c,l,d,yd,xd,fs}, i) => (
                   <motion.span
-                    key={`coin-${i}-${profitVal}`}
+                    key={`party-${i}-${profitVal}`}
                     className="absolute pointer-events-none font-black z-30 select-none"
-                    style={{ left:`${38 + i*6}%`, top:"52%", color:"#ffd700", fontSize:"12px",
-                      textShadow:"0 0 10px rgba(255,215,0,0.9)", filter:"drop-shadow(0 0 4px gold)" }}
-                    initial={{ opacity:0, y:0, x:0, scale:0.5 }}
-                    animate={{ opacity:[0,1,1,0], y:[0,-(20+i*14)], x:[(i-2)*8,(i-2)*18], scale:[0.5,1.1,0.9,0.7] }}
-                    transition={{ delay:i*0.08, duration:1.5, ease:"easeOut" }}
-                  >$</motion.span>
+                    style={{ left:`${l}%`, top:"56%", color:c, fontSize:`${fs}px`,
+                      textShadow:`0 0 14px ${c}, 0 0 28px ${c}`, willChange:"transform" }}
+                    initial={{ opacity:0, y:0, x:0, scale:0.25, rotate:0 }}
+                    animate={{
+                      opacity:[0, 1, 1, 1, 0],
+                      y:[0, -yd*0.25, -yd*0.65, -yd],
+                      x:[0, xd*0.4, xd*0.8, xd],
+                      scale:[0.25, 1.4, 1.15, 0.7],
+                      rotate:[0, (i%2===0?1:-1)*(25+i*9)]
+                    }}
+                    transition={{ delay:d, duration:1.85, ease:"easeOut", times:[0,0.12,0.45,1] }}
+                  >{s}</motion.span>
                 ))}
 
                 {/* Time axis */}
@@ -817,7 +921,40 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               </div>
             </div>
           </div>
-        </div>
+
+          {/* ── Diagonal shimmer sweep across whole window — phase 4 ── */}
+          <AnimatePresence>
+            {animPhase === 4 && (
+              <motion.div
+                key={`shimmer-${profitVal}`}
+                className="absolute inset-0 pointer-events-none overflow-hidden"
+                style={{ zIndex: 48 }}
+              >
+                <motion.div
+                  className="absolute top-0 bottom-0"
+                  style={{
+                    width: "45%",
+                    background: "linear-gradient(108deg, transparent 18%, rgba(255,255,255,0.055) 42%, rgba(0,229,190,0.13) 52%, rgba(255,255,255,0.04) 62%, transparent 80%)",
+                    willChange: "transform",
+                  }}
+                  initial={{ left: "-45%" }}
+                  animate={{ left: "155%" }}
+                  transition={{ duration: 0.88, delay: 0.06, ease: [0.25,0.46,0.45,0.94] }}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* ── Idle breathing glow ring — phase 0 ── */}
+          {animPhase === 0 && (
+            <motion.div
+              className="absolute inset-0 rounded-xl pointer-events-none"
+              style={{ zIndex: 0, boxShadow: "inset 0 0 0 1px rgba(0,229,190,0)" }}
+              animate={{ boxShadow: ["inset 0 0 0 1px rgba(0,229,190,0.0)","inset 0 0 0 1px rgba(0,229,190,0.2)","inset 0 0 0 1px rgba(0,229,190,0.0)"] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          )}
+        </motion.div>
 
         </div>{/* end mockupContainerRef */}
         <p className="mt-4 text-center text-[11px] text-gray-600 font-mono tracking-wider">
