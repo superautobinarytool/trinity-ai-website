@@ -21,24 +21,29 @@ const AMBIENT_DOTS = [
   { id:5, cx:760, cy:160, delay:2.1,  dur:4.0 },
 ];
 
-// Win confetti pieces — large cinematic sizes
-const CONFETTI = [
-  {s:"$",  c:"#ffd700", l:24, d:0,    yd:150, xd:20,  fs:52},
-  {s:"✦",  c:"#00e5be", l:32, d:0.06, yd:175, xd:-26, fs:36},
-  {s:"$",  c:"#ffd700", l:40, d:0.10, yd:140, xd:15,  fs:58},
-  {s:"★",  c:"#22c55e", l:46, d:0.15, yd:185, xd:32,  fs:42},
-  {s:"$",  c:"#ffd700", l:52, d:0.04, yd:155, xd:-18, fs:48},
-  {s:"✦",  c:"#fbbf24", l:58, d:0.09, yd:165, xd:24,  fs:34},
-  {s:"$",  c:"#4ade80", l:64, d:0.14, yd:130, xd:-12, fs:44},
-  {s:"💰", c:"#ffd700", l:70, d:0.05, yd:145, xd:18,  fs:38},
-  {s:"$",  c:"#d946ef", l:28, d:0.19, yd:120, xd:28,  fs:50},
-  {s:"★",  c:"#ffd700", l:44, d:0.12, yd:170, xd:-22, fs:40},
-  {s:"$",  c:"#22c55e", l:56, d:0.07, yd:138, xd:-30, fs:46},
-  {s:"💰", c:"#ffd700", l:62, d:0.16, yd:158, xd:16,  fs:34},
-  {s:"$",  c:"#ffd700", l:36, d:0.22, yd:148, xd:10,  fs:54},
-  {s:"✦",  c:"#00e5be", l:48, d:0.02, yd:180, xd:-8,  fs:30},
-  {s:"$",  c:"#fbbf24", l:68, d:0.18, yd:125, xd:22,  fs:42},
-] as const;
+// Brand-matched WIN particles — symmetric radial burst from live candle centre
+// 24 particles across 3 distance rings, brand palette only: teal · green · gold
+const WIN_PARTICLES: Array<{
+  dx: number; dy: number; c: string; d: number;
+  w: number; h: number; br: number;
+}> = (() => {
+  const PALETTE = ["#00e5be", "#4ade80", "#22c55e", "#fbbf24", "#00e5be", "#4ade80"];
+  return Array.from({ length: 24 }, (_, i) => {
+    const angle = (i / 24) * 360;
+    const rad   = (angle * Math.PI) / 180;
+    const dist  = 52 + (i % 3) * 42; // 52 / 94 / 136 px — three rings
+    const isBar = i % 5 === 0;        // every 5th is a thin vertical dash
+    return {
+      dx: +(Math.cos(rad) * dist).toFixed(1),
+      dy: +(Math.sin(rad) * dist).toFixed(1),
+      c:  PALETTE[i % PALETTE.length],
+      d:  (i % 4) * 0.028,          // tight stagger: 0 / 0.028 / 0.056 / 0.084 s
+      w:  isBar ? 2 : 5,
+      h:  isBar ? 13 : 5,
+      br: isBar ? 2 : 99,
+    };
+  });
+})();
 
 function Particles() {
   const dots = Array.from({ length: 40 }, (_, i) => ({
@@ -559,91 +564,107 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                   )}
                 </AnimatePresence>
 
-                {/* ── WIN double-flash — phase 4 ── */}
-                <AnimatePresence>
-                  {animPhase === 4 && (
-                    <motion.div
-                      key={`winflash-${profitVal}`}
-                      className="absolute inset-0 pointer-events-none z-20"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: [0, 0.42, 0.08, 0.28, 0] }}
-                      transition={{ duration: 0.75, times:[0,0.1,0.3,0.5,1], ease: "easeOut" }}
-                      style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(34,197,94,0.45), rgba(0,229,190,0.2), transparent)" }}
-                    />
-                  )}
-                </AnimatePresence>
+                {/* ── WIN celebration — phase 4 ── */}
 
-                {/* ── Big WIN! text — phase 4 ── */}
-                <AnimatePresence>
-                  {animPhase === 4 && (
-                    <motion.div
-                      key={`wintext-${profitVal}`}
-                      className="absolute pointer-events-none z-40 select-none"
-                      style={{ left: "50%", top: "42%", transform: "translate(-50%, -50%)", whiteSpace: "nowrap" }}
-                      initial={{ scale: 0.3, opacity: 0, y: 14 }}
-                      animate={{
-                        scale:   [0.3, 1.55, 1.25, 1.15, 0.85],
-                        opacity: [0,   1,    1,    1,    0],
-                        y:       [14,  -6,   -14,  -30,  -72],
-                      }}
-                      transition={{ duration: 2.2, times: [0, 0.13, 0.3, 0.6, 1.0], ease: "easeOut" }}
-                    >
-                      <span
-                        className="font-black leading-none"
-                        style={{
-                          fontSize: "64px",
-                          color: "#22c55e",
-                          textShadow:
-                            "0 0 24px rgba(34,197,94,1), 0 0 60px rgba(34,197,94,0.75), 0 0 120px rgba(34,197,94,0.45), 0 4px 12px rgba(0,0,0,0.6)",
-                          WebkitTextStroke: "1.5px rgba(255,255,255,0.3)",
-                          letterSpacing: "0.04em",
-                        }}
-                      >WIN!</span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* 1. Radial flash — teal/green brand colours, instant */}
+                {animPhase === 4 && (
+                  <motion.div
+                    key={`winflash-${profitVal}`}
+                    className="absolute inset-0 pointer-events-none z-20"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 0.55, 0.10, 0.30, 0] }}
+                    transition={{ duration: 0.65, times: [0, 0.08, 0.28, 0.52, 1], ease: "easeOut" }}
+                    style={{ background: "radial-gradient(ellipse 65% 55% at 52% 52%, rgba(0,229,190,0.42), rgba(34,197,94,0.22), transparent)" }}
+                  />
+                )}
 
-                {/* ── WIN profit toast — phase 4 ── */}
-                <AnimatePresence>
-                  {animPhase === 4 && (
-                    <motion.div
-                      key={`wintoast-${profitVal}`}
-                      className="absolute z-30 pointer-events-none select-none flex items-center gap-1.5"
-                      style={{ left: "52%", top: "30%" }}
-                      initial={{ opacity: 0, y: 8, scale: 0.8 }}
-                      animate={{ opacity: [0,1,1,1,0], y:[8,0,-8,-28,-52], scale:[0.8,1.1,1.05,1,0.9] }}
-                      transition={{ duration: 2.4, times:[0,0.12,0.35,0.75,1], ease:"easeOut" }}
-                    >
-                      <span className="text-[11px] font-black rounded px-1.5 py-0.5"
-                        style={{ background:"rgba(0,229,190,0.18)", color:"#00e5be", border:"1px solid rgba(0,229,190,0.4)", textShadow:"0 0 12px rgba(0,229,190,0.8)" }}>
-                        +$8.50 WIN
-                      </span>
-                      <motion.span
-                        animate={{ rotate: [0,15,-10,8,0] }}
-                        transition={{ duration:0.6, delay:0.1 }}
-                        style={{ fontSize:"14px" }}>💰</motion.span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* ── Confetti burst — phase 4 ── */}
-                {animPhase === 4 && CONFETTI.map(({s,c,l,d,yd,xd,fs}, i) => (
-                  <motion.span
-                    key={`party-${i}-${profitVal}`}
-                    className="absolute pointer-events-none font-black z-30 select-none"
-                    style={{ left:`${l}%`, top:"56%", color:c, fontSize:`${fs}px`,
-                      textShadow:`0 0 14px ${c}, 0 0 28px ${c}`, willChange:"transform" }}
-                    initial={{ opacity:0, y:0, x:0, scale:0.25, rotate:0 }}
-                    animate={{
-                      opacity:[0, 1, 1, 1, 0],
-                      y:[0, -yd*0.25, -yd*0.65, -yd],
-                      x:[0, xd*0.4, xd*0.8, xd],
-                      scale:[0.25, 1.4, 1.15, 0.7],
-                      rotate:[0, (i%2===0?1:-1)*(25+i*9)]
+                {/* 2. Geometric radial particle burst — all from live candle anchor */}
+                {animPhase === 4 && WIN_PARTICLES.map(({ dx, dy, c, d, w, h, br }, i) => (
+                  <motion.div
+                    key={`wp-${i}-${profitVal}`}
+                    className="absolute pointer-events-none z-30"
+                    style={{
+                      left: "52%", top: "52%",
+                      width: `${w}px`, height: `${h}px`,
+                      borderRadius: `${br}px`,
+                      background: c,
+                      boxShadow: `0 0 7px ${c}`,
+                      marginLeft: `${-w / 2}px`, marginTop: `${-h / 2}px`,
                     }}
-                    transition={{ delay:d, duration:1.85, ease:"easeOut", times:[0,0.12,0.45,1] }}
-                  >{s}</motion.span>
+                    initial={{ x: 0, y: 0, scale: 0, opacity: 1, rotate: 0 }}
+                    animate={{
+                      x: [0, dx * 0.5, dx * 1.08, dx],
+                      y: [0, dy * 0.5, dy * 1.08, dy],
+                      scale: [0, 1.6, 1.1, 0.4],
+                      opacity: [1, 1, 0.7, 0],
+                      rotate: [0, 0, (i % 2 === 0 ? 1 : -1) * 75],
+                    }}
+                    transition={{ delay: d, duration: 1.05, ease: [0.22, 1, 0.36, 1], times: [0, 0.32, 0.62, 1] }}
+                  />
                 ))}
+
+                {/* 3. WIN amount card — glass pill, teal border, branded typography */}
+                {animPhase === 4 && (
+                  <div
+                    className="absolute z-40 pointer-events-none select-none"
+                    style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
+                  >
+                    <motion.div
+                      key={`wincard-${profitVal}`}
+                      initial={{ scale: 0.52, opacity: 0, y: 10 }}
+                      animate={{
+                        scale:   [0.52, 1.12, 1.0,  1.0,  0.88],
+                        opacity: [0,    1,    1,    1,    0   ],
+                        y:       [10,  -3,   -8,  -22,  -52  ],
+                      }}
+                      transition={{ delay: 0.16, duration: 2.5, times: [0, 0.12, 0.24, 0.70, 1.0], ease: "easeOut" }}
+                      style={{
+                        padding: "13px 24px",
+                        background: "rgba(2, 12, 26, 0.90)",
+                        border: "1px solid rgba(0,229,190,0.55)",
+                        borderRadius: "10px",
+                        boxShadow: [
+                          "0 0 0 1px rgba(0,229,190,0.12)",
+                          "0 0 28px rgba(0,229,190,0.30)",
+                          "0 0 72px rgba(0,229,190,0.14)",
+                          "inset 0 1px 0 rgba(0,229,190,0.18)",
+                        ].join(", "),
+                        backdropFilter: "blur(18px) saturate(1.8)",
+                        textAlign: "center",
+                        whiteSpace: "nowrap",
+                        minWidth: "134px",
+                      }}
+                    >
+                      {/* Teal top accent line */}
+                      <div style={{
+                        position: "absolute", top: 0, left: "16px", right: "16px", height: "2px",
+                        background: "linear-gradient(90deg, transparent, #00e5be, #4ade80, transparent)",
+                        borderRadius: "2px",
+                      }} />
+                      {/* Amount */}
+                      <div style={{
+                        fontSize: "36px",
+                        fontWeight: 900,
+                        fontFamily: "'Inter', 'DM Sans', system-ui, monospace",
+                        background: "linear-gradient(135deg, #00e5be 0%, #4ade80 55%, #22c55e 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        letterSpacing: "-0.02em",
+                        lineHeight: 1.1,
+                      }}>+$8.50</div>
+                      {/* Label */}
+                      <div style={{
+                        fontSize: "8px",
+                        fontWeight: 900,
+                        letterSpacing: "0.26em",
+                        color: "rgba(0,229,190,0.62)",
+                        marginTop: "6px",
+                        textTransform: "uppercase",
+                        fontFamily: "monospace",
+                      }}>TRADE WON · EUR/USD</div>
+                    </motion.div>
+                  </div>
+                )}
 
                 {/* Time axis */}
                 <div className="absolute bottom-0 inset-x-0 h-[20px] flex items-center border-t border-white/[0.06]" style={{ paddingRight: "56px", background: "#050505" }}>
