@@ -1,5 +1,5 @@
 ﻿import { useRef, useState, useEffect } from "react";
-import { motion, useInView, type Variants } from "framer-motion";
+import { motion, AnimatePresence, useInView, type Variants } from "framer-motion";
 import { LockClosedIcon, ArrowUturnLeftIcon, BoltFilledIcon, ArrowRightIcon } from "@/components/ui/Icons";
 
 const stagger: Variants = {
@@ -54,6 +54,27 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
+
+  // ── Trade animation loop ─────────────────────────────────
+  const [animPhase, setAnimPhase] = useState<0|1|2|3|4>(0);
+  const [profitVal, setProfitVal] = useState(511.04);
+  const phaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loopStartedRef = useRef(false);
+  useEffect(() => {
+    if (!inView || loopStartedRef.current) return;
+    loopStartedRef.current = true;
+    const DURS = [2200, 450, 1100, 750, 2000];
+    let currentPhase = 0;
+    const tick = () => {
+      const next = ((currentPhase + 1) % 5) as 0|1|2|3|4;
+      currentPhase = next;
+      setAnimPhase(next);
+      if (next === 4) setProfitVal(v => parseFloat((v + 8.50).toFixed(2)));
+      phaseTimerRef.current = setTimeout(tick, DURS[next]);
+    };
+    phaseTimerRef.current = setTimeout(tick, DURS[0] + 3000);
+    return () => { if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current); };
+  }, [inView]);
 
   return (
     <section
@@ -243,7 +264,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               {/* ── CANDLESTICK CHART ── black bg, blue border */}
               <div
                 className="relative rounded-sm overflow-hidden"
-                style={{ background: "#000", border: "2px solid #1a6bb0", height: "280px" }}
+                style={{ background: "#000", border: "2px solid #1a6bb0", height: "340px" }}
               >
                 {/* Price axis - right */}
                 <div className="absolute right-0 top-0 bottom-4 w-14 flex flex-col justify-between py-2 border-l border-white/[0.06]" style={{ background: "#0a0a0a" }}>
@@ -269,15 +290,23 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
 
                   {/* Candles — fat, tall, exactly matching screenshot pattern */}
                   {(() => {
-                    // Each candle: [low%, high%, open%, close%] — % from bottom of chart
+                    // Each candle: [wick_lo%, wick_hi%, open%, close%] — % from bottom
+                    // Variety: chop → first push → acceleration → climax/dojis → new highs
                     const candles: [number,number,number,number][] = [
-                      [8,62,18,55],[5,58,52,12],[10,65,15,60],[8,60,55,14],[12,68,18,62],
-                      [15,72,64,20],[10,62,18,55],[8,64,58,14],[14,70,20,65],[12,68,62,18],
-                      [18,75,24,70],[22,78,72,28],[16,72,26,68],[20,76,70,24],[25,82,32,78],
-                      [28,80,78,32],[30,85,38,80],[35,88,84,40],[32,84,40,78],[38,88,82,42],
-                      [40,90,46,85],[42,88,85,46],[38,84,44,79],[44,92,50,88],[46,90,87,50],
-                      [42,88,48,84],[50,92,56,88],[52,90,86,56],[48,88,54,83],[55,92,60,88],
-                      [54,88,86,58],[56,90,62,86],
+                      // Choppy low range — hammers, dojis, spinning tops
+                      [15,45,22,38],[18,42,38,22],[20,44,24,37],[16,38,34,20],
+                      [12,38,16,34],[14,40,36,18],[10,36,14,30],[16,42,34,20],
+                      // First push — momentum picks up
+                      [18,52,24,48],[20,50,46,24],[18,56,22,52],[22,58,52,28],
+                      [20,62,26,58],[24,65,58,30],[22,68,28,64],[28,70,64,34],
+                      // Strong trend — thick bullish bodies, shallow pullbacks
+                      [30,78,36,74],[34,76,72,38],[28,80,34,76],[36,82,78,42],
+                      [38,84,44,80],[42,82,78,46],[40,86,46,82],[44,84,80,50],
+                      // Climax zone — shooting stars, bearish engulf attempts
+                      [42,88,48,84],[46,90,86,52],[44,88,50,84],[50,90,85,56],
+                      // Final push — new highs, one doji reversal signal
+                      [48,92,54,88],[52,90,86,58],[50,92,56,88],[54,92,88,60],
+                      [52,90,58,86],[56,92,64,88],[54,90,86,60],[58,92,64,88],
                     ];
                     return candles.map(([lo,hi,op,cl], i) => {
                       const up = cl > op;
@@ -305,6 +334,70 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                   })()}
                 </div>
 
+                {/* ── Scan line sweep — phases 1 & 2 ── */}
+                <AnimatePresence>
+                  {(animPhase === 1 || animPhase === 2) && (
+                    <motion.div
+                      key={`scan-${animPhase}`}
+                      className="absolute inset-y-0 z-10 pointer-events-none"
+                      style={{ width: "80px", background: "linear-gradient(90deg, transparent, rgba(0,229,190,0.16), transparent)" }}
+                      initial={{ left: "-80px" }}
+                      animate={{ left: "calc(100% + 80px)" }}
+                      transition={{ duration: 0.9, ease: "linear" }}
+                    />
+                  )}
+                </AnimatePresence>
+
+                {/* ── CALL signal badge — phase 2 ── */}
+                <AnimatePresence>
+                  {animPhase === 2 && (
+                    <motion.div
+                      key="callbadge"
+                      className="absolute z-20"
+                      style={{ right: "68px", top: "34%" }}
+                      initial={{ opacity: 0, x: 22, scale: 0.75 }}
+                      animate={{ opacity: 1, x: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -14, scale: 0.9 }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <div
+                        className="px-2.5 py-1 rounded text-[11px] font-black text-black tracking-widest"
+                        style={{ background: "#00e5be", boxShadow: "0 0 18px rgba(0,229,190,0.8), 0 0 40px rgba(0,229,190,0.3)" }}
+                      >▲ CALL</div>
+                      <div className="absolute left-1/2 top-full w-px" style={{ height: "55px", background: "rgba(0,229,190,0.45)", transform: "translateX(-50%)" }} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* ── Floating WIN toast — phase 4 ── */}
+                <AnimatePresence>
+                  {animPhase === 4 && (
+                    <motion.div
+                      key={`wintoast-${profitVal}`}
+                      className="absolute z-30 pointer-events-none select-none"
+                      style={{ left: "40%", top: "42%" }}
+                      initial={{ opacity: 0, y: 0, scale: 0.75 }}
+                      animate={{ opacity: [0, 1, 1, 0], y: [0, -22, -62, -90], scale: [0.75, 1.12, 1, 1] }}
+                      transition={{ duration: 2.0, times: [0, 0.18, 0.72, 1], ease: "easeOut" }}
+                    >
+                      <span className="font-black text-[18px] font-mono" style={{ color: "#00e5be", textShadow: "0 0 18px rgba(0,229,190,0.9)" }}>+$8.50</span>
+                      <span className="text-[15px] ml-1.5 font-black" style={{ color: "#22c55e" }}>✓</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* ── Dollar particles — phase 4 ── */}
+                {animPhase === 4 && [0, 1, 2, 3].map(i => (
+                  <motion.span
+                    key={`coin-${i}-${profitVal}`}
+                    className="absolute pointer-events-none font-black"
+                    style={{ left: `${29 + i * 7}%`, top: "50%", color: "#ffd700", fontSize: "11px", zIndex: 30, textShadow: "0 0 8px rgba(255,215,0,0.8)" }}
+                    initial={{ opacity: 0, y: 0, x: 0 }}
+                    animate={{ opacity: [0, 1, 0], y: -(26 + i * 11), x: (i - 1.5) * 15 }}
+                    transition={{ delay: i * 0.1, duration: 1.3, ease: "easeOut" }}
+                  >$</motion.span>
+                ))}
+
                 {/* Time axis */}
                 <div className="absolute bottom-0 inset-x-0 h-[18px] flex items-center border-t border-white/[0.06]" style={{ paddingRight: "56px", background: "#0a0a0a" }}>
                   <div className="flex justify-between w-full px-1">
@@ -321,20 +414,27 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               </div>
 
               {/* ── PROFIT CURVE ── */}
-              <div className="rounded-sm border border-white/[0.06] flex-1 flex flex-col min-h-0" style={{ background: "#252525" }}>
+              <div className="rounded-sm border border-white/[0.06]" style={{ background: "#252525" }}>
                 <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.05]">
                   <div className="w-3 h-3 rounded-sm" style={{ background: "#00e5be" }} />
                   <span className="text-[10px] font-black text-white tracking-widest">PROFIT CURVE</span>
                   <span className="text-[9px] font-semibold" style={{ color:"#888" }}>◆ LAST 100 TRADES</span>
                   <div className="ml-auto flex items-center gap-4">
-                    <span className="text-[12px] font-black tabular-nums" style={{ color:"#22c55e" }}>+$511.04</span>
+                    <motion.span
+                      key={profitVal}
+                      initial={{ y: -8, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      className="text-[12px] font-black tabular-nums"
+                      style={{ color: "#22c55e" }}
+                    >+${profitVal.toFixed(2)}</motion.span>
                     <span className="text-[10px]" style={{ color:"#666" }}>100 trades</span>
                     <span className="text-[10px] font-bold" style={{ color:"#22c55e" }}>◆ 85.0% win</span>
                   </div>
                 </div>
 
                 {/* Area chart — flat start, exponential rise toward end */}
-                <div className="relative flex-1 min-h-[70px]">
+                <div className="relative" style={{ height: "72px" }}>
                   <svg className="w-full h-full" viewBox="0 0 1000 80" preserveAspectRatio="none">
                     <defs>
                       <linearGradient id="pg2" x1="0" y1="0" x2="0" y2="1">
@@ -411,13 +511,21 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
 
               {/* START / STOP */}
               <div className="flex gap-2 px-4 py-3 border-b border-white/[0.06]">
-                <button
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-md text-[12px] font-black text-white transition-all hover:brightness-110 active:scale-[0.97]"
+                <motion.button
+                  animate={
+                    animPhase === 1
+                      ? { scale: 0.90, boxShadow: "0 0 28px rgba(29,78,216,0.95)" }
+                      : (animPhase === 2 || animPhase === 3)
+                      ? { scale: 1, boxShadow: "0 0 14px rgba(29,78,216,0.55)" }
+                      : { scale: 1, boxShadow: "0 0 0px rgba(29,78,216,0)" }
+                  }
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-md text-[12px] font-black text-white"
                   style={{ background: "#1d4ed8" }}
                 >
                   <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                   START
-                </button>
+                </motion.button>
                 <button
                   className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-md text-[12px] font-black text-white transition-all hover:brightness-110 active:scale-[0.97]"
                   style={{ background: "#dc2626" }}
@@ -427,16 +535,57 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                 </button>
               </div>
 
-              {/* READY TO START */}
-              <div className="mx-4 my-3 rounded-md flex flex-col items-center justify-center py-5 border border-white/[0.07]" style={{ background: "#333333" }}>
-                <div className="flex gap-2 mb-3">
-                  <div className="w-[10px] h-7 rounded-sm" style={{ background: "#444" }} />
-                  <div className="w-[10px] h-7 rounded-sm" style={{ background: "#444" }} />
-                </div>
-                <p className="text-[11px] font-black text-white tracking-widest">READY TO START</p>
-                <p className="text-[9px] text-center leading-relaxed mt-1 px-3" style={{ color: "#666" }}>
-                  Press START button to begin receiving signals
-                </p>
+              {/* STATUS BOX — animated through trade cycle phases */}
+              <div className="mx-4 my-3 rounded-md overflow-hidden border border-white/[0.07]" style={{ background: "#333333", minHeight: "88px" }}>
+                <AnimatePresence mode="wait">
+                  {animPhase === 0 && (
+                    <motion.div key="idle" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.22 }}
+                      className="flex flex-col items-center justify-center py-5">
+                      <div className="flex gap-2 mb-3">
+                        <div className="w-[10px] h-7 rounded-sm" style={{ background: "#444" }} />
+                        <div className="w-[10px] h-7 rounded-sm" style={{ background: "#444" }} />
+                      </div>
+                      <p className="text-[11px] font-black text-white tracking-widest">READY TO START</p>
+                      <p className="text-[9px] text-center leading-relaxed mt-1 px-3" style={{ color: "#666" }}>Press START to begin receiving signals</p>
+                    </motion.div>
+                  )}
+                  {animPhase === 1 && (
+                    <motion.div key="processing" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}
+                      className="flex flex-col items-center justify-center py-5">
+                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.65, repeat: Infinity, ease: "linear" }}
+                        className="w-5 h-5 rounded-full border-2 border-t-transparent mb-2" style={{ borderColor: "#60a5fa transparent #60a5fa #60a5fa" }} />
+                      <p className="text-[11px] font-black tracking-widest" style={{ color: "#60a5fa" }}>PROCESSING...</p>
+                    </motion.div>
+                  )}
+                  {animPhase === 2 && (
+                    <motion.div key="signal" initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22 }}
+                      className="flex flex-col items-center justify-center py-5">
+                      <motion.div animate={{ scale: [1, 1.28, 1] }} transition={{ duration: 0.38, repeat: 2 }}
+                        className="text-[22px] mb-1" style={{ color: "#00e5be" }}>▲</motion.div>
+                      <p className="text-[11px] font-black tracking-widest" style={{ color: "#00e5be" }}>CALL SIGNAL</p>
+                      <p className="text-[9px] mt-0.5" style={{ color: "rgba(0,229,190,0.65)" }}>EUR/USD · 1 Min · High conf.</p>
+                    </motion.div>
+                  )}
+                  {animPhase === 3 && (
+                    <motion.div key="executing" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}
+                      className="flex flex-col items-center justify-center py-5">
+                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 0.48, repeat: Infinity, ease: "linear" }}
+                        className="w-5 h-5 rounded-full border-2 border-t-transparent mb-2" style={{ borderColor: "#fbbf24 transparent #fbbf24 #fbbf24" }} />
+                      <p className="text-[11px] font-black tracking-widest" style={{ color: "#fbbf24" }}>⚡ EXECUTING...</p>
+                      <p className="text-[9px] mt-0.5" style={{ color: "#666" }}>Placing trade on broker</p>
+                    </motion.div>
+                  )}
+                  {animPhase === 4 && (
+                    <motion.div key="win" initial={{ opacity: 0, scale: 0.75 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.1 }}
+                      transition={{ duration: 0.28, type: "spring", stiffness: 340, damping: 22 }}
+                      className="flex flex-col items-center justify-center py-5">
+                      <motion.div animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 0.4 }}
+                        className="text-[20px] mb-1" style={{ color: "#22c55e" }}>✓</motion.div>
+                      <p className="text-[12px] font-black tracking-widest" style={{ color: "#22c55e" }}>WIN +$8.50</p>
+                      <p className="text-[9px] mt-0.5" style={{ color: "rgba(34,197,94,0.65)" }}>Trade completed successfully</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* TRADE AMOUNT */}
