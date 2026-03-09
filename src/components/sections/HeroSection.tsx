@@ -1,4 +1,4 @@
-﻿import { useRef } from "react";
+﻿import { useRef, useState, useEffect } from "react";
 import { motion, useInView, type Variants } from "framer-motion";
 import { LockClosedIcon, ArrowUturnLeftIcon, BoltFilledIcon, ArrowRightIcon } from "@/components/ui/Icons";
 
@@ -39,6 +39,21 @@ function Particles() {
 export default function HeroSection({ headerHeight = 110 }: { headerHeight?: number }) {
   const ref    = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
+
+  const mockupContainerRef = useRef<HTMLDivElement>(null);
+  const [mockupScale, setMockupScale] = useState(1);
+  const NATURAL_W = 1060;
+  const NATURAL_H = 600;
+
+  useEffect(() => {
+    const el = mockupContainerRef.current;
+    if (!el) return;
+    const obs = new ResizeObserver(() => {
+      setMockupScale(Math.min(1, el.clientWidth / NATURAL_W));
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
     <section
@@ -140,9 +155,18 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         <div className="absolute inset-x-40 -bottom-2 h-16 bg-emerald-400/10 blur-2xl rounded-full pointer-events-none" />
 
         {/* ── Trinity App Window — charcoal #2a2a2a exactly matching screenshot ── */}
+        <div ref={mockupContainerRef} className="w-full">
         <div
           className="relative rounded-xl overflow-hidden shadow-[0_60px_180px_rgba(0,0,0,0.95),0_0_0_1px_rgba(255,255,255,0.08)]"
-          style={{ background: "#2a2a2a" }}
+          style={{
+            background: "#2a2a2a",
+            ...(mockupScale < 1 ? {
+              width: `${NATURAL_W}px`,
+              transform: `scale(${mockupScale})`,
+              transformOrigin: "top left",
+              marginBottom: `${(mockupScale - 1) * NATURAL_H}px`,
+            } : {}),
+          }}
         >
           {/* ── TOP BAR ── */}
           <div
@@ -297,7 +321,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               </div>
 
               {/* ── PROFIT CURVE ── */}
-              <div className="rounded-sm border border-white/[0.06]" style={{ background: "#252525" }}>
+              <div className="rounded-sm border border-white/[0.06] flex-1 flex flex-col min-h-0" style={{ background: "#252525" }}>
                 <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.05]">
                   <div className="w-3 h-3 rounded-sm" style={{ background: "#00e5be" }} />
                   <span className="text-[10px] font-black text-white tracking-widest">PROFIT CURVE</span>
@@ -310,7 +334,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
                 </div>
 
                 {/* Area chart — flat start, exponential rise toward end */}
-                <div className="relative" style={{ height: "90px" }}>
+                <div className="relative flex-1 min-h-[70px]">
                   <svg className="w-full h-full" viewBox="0 0 1000 80" preserveAspectRatio="none">
                     <defs>
                       <linearGradient id="pg2" x1="0" y1="0" x2="0" y2="1">
@@ -479,6 +503,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
           </div>
         </div>
 
+        </div>{/* end mockupContainerRef */}
         <p className="mt-4 text-center text-[11px] text-gray-600 font-mono tracking-wider">
           Trinity · live interface · EUR/USD · Compounding strategy active
         </p>
