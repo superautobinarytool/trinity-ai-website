@@ -127,7 +127,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         </motion.div>
       </motion.div>
 
-      {/* Trinity Software — faithful UI recreation */}
+      {/* Trinity Software — pixel-perfect replica */}
       <motion.div
         initial={{ opacity: 0, y: 60 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -139,25 +139,25 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         <div className="absolute inset-x-16 -bottom-8 h-32 bg-[#22C55E]/20 blur-3xl rounded-full pointer-events-none" />
         <div className="absolute inset-x-40 -bottom-2 h-16 bg-emerald-400/10 blur-2xl rounded-full pointer-events-none" />
 
-        {/* ── Trinity App Window ── */}
+        {/* ── Trinity App Window — charcoal #2a2a2a exactly matching screenshot ── */}
         <div
-          className="relative rounded-xl overflow-hidden shadow-[0_60px_180px_rgba(0,0,0,0.95),0_0_0_1px_rgba(255,255,255,0.06)]"
-          style={{ background: "#161b2c" }}
+          className="relative rounded-xl overflow-hidden shadow-[0_60px_180px_rgba(0,0,0,0.95),0_0_0_1px_rgba(255,255,255,0.08)]"
+          style={{ background: "#2a2a2a" }}
         >
           {/* ── TOP BAR ── */}
           <div
             className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.06]"
-            style={{ background: "#1a1f30" }}
+            style={{ background: "#333333" }}
           >
             {/* Pair type pills */}
             <div className="flex rounded-md overflow-hidden border border-white/[0.1]">
-              <span className="px-4 py-1.5 text-[12px] font-black text-white tracking-wide" style={{ background: "#7c3aed" }}>CURRENCIES</span>
-              <span className="px-4 py-1.5 text-[12px] font-semibold text-gray-500" style={{ background: "#252836" }}>CRYPTO</span>
+              <span className="px-4 py-1.5 text-[12px] font-black text-white tracking-wide" style={{ background: "#d946ef" }}>CURRENCIES</span>
+              <span className="px-4 py-1.5 text-[12px] font-semibold text-gray-400" style={{ background: "#2a2a2a" }}>CRYPTO</span>
             </div>
             {/* EUR/USD dropdown */}
             <div
               className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-white/[0.12] text-white text-[13px] font-bold"
-              style={{ background: "#252836" }}
+              style={{ background: "#2a2a2a" }}
             >
               EUR/USD
               <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,12 +183,12 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
           </div>
 
           {/* ── BODY ── */}
-          <div className="flex" style={{ background: "#161b2c" }}>
+          <div className="flex" style={{ background: "#252525" }}>
 
             {/* ── LEFT ICON NAV ── */}
             <div
               className="w-10 shrink-0 flex flex-col items-center py-4 gap-5 border-r border-white/[0.05]"
-              style={{ background: "#161b2c" }}
+              style={{ background: "#1e1e1e" }}
             >
               {/* Hamburger */}
               <button className="text-gray-600 hover:text-gray-300 transition-colors">
@@ -297,7 +297,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               </div>
 
               {/* ── PROFIT CURVE ── */}
-              <div className="rounded-sm border border-white/[0.06]" style={{ background: "#111520" }}>
+              <div className="rounded-sm border border-white/[0.06]" style={{ background: "#252525" }}>
                 <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.05]">
                   <div className="w-3 h-3 rounded-sm" style={{ background: "#00e5be" }} />
                   <span className="text-[10px] font-black text-white tracking-widest">PROFIT CURVE</span>
@@ -371,14 +371,14 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
             {/* ── RIGHT CONTROL PANEL ── */}
             <div
               className="w-52 shrink-0 flex flex-col border-l border-white/[0.06]"
-              style={{ background: "#161b2c" }}
+              style={{ background: "#2d2d2d" }}
             >
               {/* TIMEFRAME */}
               <div className="px-4 pt-4 pb-3 border-b border-white/[0.06]">
                 <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.18em] mb-2">Timeframe</p>
                 <div
                   className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1] text-white text-[12px] font-semibold cursor-pointer hover:border-white/20 transition-colors"
-                  style={{ background: "#1e2436" }}
+                  style={{ background: "#3a3a3a" }}
                 >
                   1 Minute
                   <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7"/></svg>
@@ -404,7 +404,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               </div>
 
               {/* READY TO START */}
-              <div className="mx-4 my-3 rounded-md flex flex-col items-center justify-center py-5 border border-white/[0.07]" style={{ background: "#1e2436" }}>
+              <div className="mx-4 my-3 rounded-md flex flex-col items-center justify-center py-5 border border-white/[0.07]" style={{ background: "#333333" }}>
                 <div className="flex gap-2 mb-3">
                   <div className="w-[10px] h-7 rounded-sm" style={{ background: "#444" }} />
                   <div className="w-[10px] h-7 rounded-sm" style={{ background: "#444" }} />
@@ -418,7 +418,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               {/* TRADE AMOUNT */}
               <div className="px-4 pb-3 border-b border-white/[0.06]">
                 <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.18em] mb-2">Trade Amount</p>
-                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1]" style={{ background: "#1e2436" }}>
+                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1]" style={{ background: "#3a3a3a" }}>
                   <span className="text-[13px] font-bold text-white tabular-nums">10</span>
                   <div className="flex flex-col gap-px">
                     <button className="text-gray-500 hover:text-gray-200 leading-none">
@@ -434,7 +434,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               {/* TRADING STRATEGY */}
               <div className="px-4 py-3 border-b border-white/[0.06]">
                 <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.18em] mb-2">Trading Strategy</p>
-                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1] cursor-pointer hover:border-white/20 transition-colors" style={{ background: "#1e2436" }}>
+                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1] cursor-pointer hover:border-white/20 transition-colors" style={{ background: "#3a3a3a" }}>
                   <span className="text-[12px] font-semibold text-white">Compounding</span>
                   <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7"/></svg>
                 </div>
@@ -443,7 +443,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               {/* COMPOUNDING STEPS */}
               <div className="px-4 py-3 border-b border-white/[0.06]">
                 <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.18em] mb-2">Compounding Steps</p>
-                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1]" style={{ background: "#1e2436" }}>
+                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1]" style={{ background: "#3a3a3a" }}>
                   <span className="text-[13px] font-bold text-white tabular-nums">0</span>
                   <div className="flex flex-col gap-px">
                     <button className="text-gray-500 hover:text-gray-200"><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7"/></svg></button>
@@ -456,7 +456,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
               {/* BROKER PROFIT % */}
               <div className="px-4 py-3">
                 <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.18em] mb-2">Broker Profit %</p>
-                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1]" style={{ background: "#1e2436" }}>
+                <div className="flex items-center justify-between px-3 py-2 rounded-md border border-white/[0.1]" style={{ background: "#3a3a3a" }}>
                   <span className="text-[13px] font-bold text-white tabular-nums">77</span>
                   <div className="flex flex-col gap-px">
                     <button className="text-gray-500 hover:text-gray-200"><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7"/></svg></button>
