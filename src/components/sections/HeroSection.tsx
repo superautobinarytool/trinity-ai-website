@@ -79,27 +79,27 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
       >
         <motion.div variants={up} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/40 bg-green-500/10 text-green-300 text-sm font-semibold mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-          AI Signal Intelligence &mdash; 80%+ Verified Win Rate
+          #1 Binary Options Auto-Trading Software &mdash; 80%+ Win Rate
         </motion.div>
 
         <motion.h1
           variants={up}
           className="font-display text-5xl sm:text-6xl lg:text-[5.25rem] font-extrabold tracking-tightest leading-[1.04] text-white mb-7"
         >
-          The AI spots the trade.
+          The AI calls the trade.
           <br />
           <span
             className="bg-clip-text text-transparent"
             style={{ backgroundImage: "linear-gradient(90deg, #22C55E 0%, #16A34A 50%, #22C55E 100%)" }}
           >
-            You collect the profit.
+            You bank the payout.
           </span>
         </motion.h1>
 
         <motion.p variants={up} className="text-xl sm:text-2xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-12 font-light">
-          Trinity&apos;s AI analyses market data across 25+ assets in real time &mdash; finding
-          high-probability setups <strong className="text-white font-semibold">invisible to the human eye</strong>.&nbsp;
-          When it finds one, it fires instantly. No clicking. No hesitation. Just profit.
+          Trinity is the world&apos;s most advanced <strong className="text-white font-semibold">binary options auto-trading bot</strong> &mdash;
+          powered by AI that reads 25+ live assets, locks onto high-probability CALL&nbsp;&amp;&nbsp;PUT signals,
+          and executes them on your broker in milliseconds. You open it. You press START. It prints.
         </motion.p>
 
         <motion.div variants={up} className="flex flex-wrap items-center justify-center gap-3">
@@ -107,16 +107,16 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
             href="#pricing"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/50 text-white font-semibold text-base bg-white/5 backdrop-blur-sm hover:bg-white/15 hover:border-white/80 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
-            Activate Risk-Free Access
+            Start Making Money — Risk Free
             <ArrowRightIcon className="w-5 h-5" />
           </a>
         </motion.div>
 
         <motion.div variants={up} className="mt-8 flex flex-wrap items-center justify-center gap-5 text-sm text-gray-400">
           {([
-            { Icon: LockClosedIcon,     text: "Licensed & secured"    },
-            { Icon: ArrowUturnLeftIcon, text: "30-day money-back"      },
-            { Icon: BoltFilledIcon,     text: "Windows 10/11 — instant setup" },
+            { Icon: LockClosedIcon,     text: "Licensed & secured"         },
+            { Icon: ArrowUturnLeftIcon, text: "30-day money-back guarantee" },
+            { Icon: BoltFilledIcon,     text: "Works on IQ Option, Quotex, Deriv & more" },
           ] as const).map(({ Icon, text }) => (
             <div key={text} className="flex items-center gap-1.5">
               <Icon className="w-4 h-4" />
