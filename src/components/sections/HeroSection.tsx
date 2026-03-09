@@ -79,27 +79,27 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
       >
         <motion.div variants={up} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/40 bg-green-500/10 text-green-300 text-sm font-semibold mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-          80%+ Verified Win Rate — Live on Every Session
+          AI Signal Intelligence &mdash; 80%+ Verified Win Rate
         </motion.div>
 
         <motion.h1
           variants={up}
           className="font-display text-5xl sm:text-6xl lg:text-[5.25rem] font-extrabold tracking-tightest leading-[1.04] text-white mb-7"
         >
-          Your trades. Executed
+          The AI spots the trade.
           <br />
           <span
             className="bg-clip-text text-transparent"
             style={{ backgroundImage: "linear-gradient(90deg, #22C55E 0%, #16A34A 50%, #22C55E 100%)" }}
           >
-            perfectly. Every time.
+            You collect the profit.
           </span>
         </motion.h1>
 
         <motion.p variants={up} className="text-xl sm:text-2xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-12 font-light">
-          Trinity connects to your broker and fires trades at machine speed the instant a signal appears —
-          with <strong className="text-white font-semibold">80%+ accuracy</strong> and zero emotional interference.
-          You press START. Trinity does the rest.
+          Trinity&apos;s AI analyses market data across 25+ assets in real time &mdash; finding
+          high-probability setups <strong className="text-white font-semibold">invisible to the human eye</strong>.&nbsp;
+          When it finds one, it fires instantly. No clicking. No hesitation. Just profit.
         </motion.p>
 
         <motion.div variants={up} className="flex flex-wrap items-center justify-center gap-3">
