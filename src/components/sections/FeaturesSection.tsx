@@ -22,8 +22,8 @@ const FEATURES = [
     badge:   "cyan" as const,
     tag:     "Auto Execution",
     title:   "Press START. Trinity fires.",
-    desc:    "The moment MT5 generates a signal, Trinity clicks the trade on your broker — faster than any human ever could. No manual entry. No hesitation. No missed windows.",
-    points:  ["Direct MT5-to-broker connection", "Sub-50ms trade execution", "Zero emotional interference", "Works 24/7 without you watching"],
+    desc:    "The moment Trinity AI generates a signal, Trinity clicks the trade on your broker — faster than any human ever could. No manual entry. No hesitation. No missed windows.",
+    points:  ["Direct Trinity AI-to-broker connection", "Sub-50ms trade execution", "Zero emotional interference", "Works 24/7 without you watching"],
   },
   {
     Icon:    LayoutDashboardIcon,

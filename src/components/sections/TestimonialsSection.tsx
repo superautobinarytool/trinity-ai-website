@@ -38,7 +38,7 @@ const REVIEWS = [
   },
   {
     title: "Set it up in 10 minutes. Profitable the same day.",
-    body: "Literally connected my MT5 to Deriv, selected Linear strategy, pressed START. Didn't touch it for 4 hours. Came back to a $244 profit. I'm a believer now.",
+    body: "Literally connected Trinity AI to Deriv, selected Linear strategy, pressed START. Didn't touch it for 4 hours. Came back to a $244 profit. I'm a believer now.",
     author: "Marcus R.",
     role: "Deriv Trader",
     initials: "MR",

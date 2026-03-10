@@ -72,7 +72,7 @@ const PLANS = [
     featuresLabel: "Everything included:",
     features: [
       "Trinity software license (Windows 10/11)",
-      "MT5 auto-execution to your broker",
+      "Trinity AI signal auto-execution to your broker",
       "Live TradingView charts — 25+ pairs",
       "Linear & Compounding strategies",
       "Real-time session profit graph",

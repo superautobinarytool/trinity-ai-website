@@ -7,11 +7,11 @@ import { PlusIcon } from "@/components/ui/Icons";
 const FAQS = [
   {
     q: "What exactly is Trinity Trading Tool?",
-    a: "Trinity is a Windows desktop application that connects your MetaTrader 5 (MT5) directly to your binary options broker and automatically executes trades the instant a signal appears. You open the app, press START, and it does everything else at machine speed.",
+    a: "Trinity is a Windows desktop application powered by Trinity AI signals that automatically executes trades on your binary options broker the instant a signal appears. You open the app, press START, and it does everything else at machine speed.",
   },
   {
     q: "How does the 80%+ win rate work?",
-    a: "Trinity reads live signals from your MT5 setup and executes them with zero delay — eliminating the main reason traders lose: missed windows and hesitation. The 80%+ win rate is the result of fast, accurate, emotionless execution across all supported assets and market conditions.",
+    a: "Trinity reads live signals from its built-in Trinity AI engine and executes them with zero delay — eliminating the main reason traders lose: missed windows and hesitation. The 80%+ win rate is the result of fast, accurate, emotionless execution across all supported assets and market conditions.",
   },
   {
     q: "Which brokers does Trinity support?",

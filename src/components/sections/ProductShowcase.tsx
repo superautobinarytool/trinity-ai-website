@@ -17,9 +17,9 @@ const up: Variants = {
 const PRODUCTS = [
   {
     category: "Auto-Execution",
-    title: "From MT5 signal to executed trade — in milliseconds.",
+    title: "From Trinity AI signal to executed trade — in milliseconds.",
     description:
-      "Trinity monitors your MetaTrader 5 in real time. The instant a signal fires, Trinity automatically places the trade on your binary options broker — at machine speed, before the window closes. You never miss a signal again. Not one.",
+      "Trinity AI generates signals in real time. The instant a signal fires, Trinity automatically places the trade on your binary options broker — at machine speed, before the window closes. You never miss a signal again. Not one.",
     cta: "See How It Works",
     href: "#pricing",
     accent: "#22c55e",
