@@ -76,13 +76,15 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
 
   const mockupContainerRef = useRef<HTMLDivElement>(null);
   const [mockupScale, setMockupScale] = useState(1);
-  const NATURAL_W = 1060;
-  const NATURAL_H = 600;
+  // Natural width of THE LAPTOP LID OUTER FRAME (app is 1060px; lid adds ~88px of bezel total)
+  const NATURAL_W = 1148;
+  const NATURAL_H = 600; // app window height (screen aperture)
 
   useEffect(() => {
     const el = mockupContainerRef.current;
     if (!el) return;
     const obs = new ResizeObserver(() => {
+      // el is the lid outer div; scale so it fits the available column width
       setMockupScale(Math.min(1, el.clientWidth / NATURAL_W));
     });
     obs.observe(el);
@@ -229,34 +231,84 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         </motion.div>
       </motion.div>
 
-      {/* Trinity Software — pixel-perfect replica */}
+      {/* Trinity Software — inside laptop mockup */}
       <motion.div
-        initial={{ opacity: 0, y: 60 }}
+        initial={{ opacity: 0, y: 70 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.9, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 mt-20 w-full max-w-6xl mx-auto px-6"
+        transition={{ duration: 1.0, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 mt-20 w-full max-w-[1200px] mx-auto px-4 sm:px-6"
         aria-hidden="true"
       >
-        {/* Glow halos */}
-        <div className="absolute inset-x-16 -bottom-8 h-32 bg-[#22C55E]/20 blur-3xl rounded-full pointer-events-none" />
-        <div className="absolute inset-x-40 -bottom-2 h-16 bg-emerald-400/10 blur-2xl rounded-full pointer-events-none" />
+        {/* Deep floor shadow beneath whole laptop */}
+        <div className="absolute inset-x-[8%] bottom-[6%] h-20 blur-3xl rounded-full pointer-events-none"
+          style={{ background: "rgba(0,229,190,0.13)" }} />
+        <div className="absolute inset-x-[18%] bottom-[3%] h-10 blur-2xl rounded-full pointer-events-none"
+          style={{ background: "rgba(34,197,94,0.10)" }} />
 
-        {/* ── Trinity App Window — charcoal #2a2a2a exactly matching screenshot ── */}
-        <div ref={mockupContainerRef} className="w-full">
-        <motion.div
-          className="relative rounded-xl overflow-hidden"
-          animate={{ boxShadow: PHASE_SHADOW[animPhase] }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+        {/* ── LAPTOP OUTER WRAPPER — scales as one unit ── */}
+        <div
+          ref={mockupContainerRef}
+          className="relative w-full select-none"
           style={{
-            background: "#2a2a2a",
+            // CSS-only scale: all children use px, wrapper scales them down
             ...(mockupScale < 1 ? {
               width: `${NATURAL_W}px`,
               transform: `scale(${mockupScale})`,
-              transformOrigin: "top left",
-              marginBottom: `${(mockupScale - 1) * NATURAL_H}px`,
+              transformOrigin: "top center",
+              marginBottom: `${(mockupScale - 1) * (NATURAL_H + 124)}px`, // 124 = base height
             } : {}),
           }}
         >
+          {/* ── LID ── */}
+          <motion.div
+            animate={{ boxShadow: PHASE_SHADOW[animPhase] }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            style={{
+              width: `${NATURAL_W}px`,
+              background: "linear-gradient(175deg, #2e2e31 0%, #1c1c1e 40%, #141416 100%)",
+              borderRadius: "16px 16px 4px 4px",
+              padding: "14px 44px 12px",   // top-bezel left/right-bezel bottom-bezel
+              position: "relative",
+              border: "1px solid rgba(255,255,255,0.09)",
+              borderBottom: "1px solid rgba(255,255,255,0.04)",
+            }}
+          >
+            {/* Lid top-edge sheen */}
+            <div style={{
+              position: "absolute", top: 0, left: "12%", right: "12%", height: "1px",
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)",
+            }} />
+
+            {/* Webcam dot */}
+            <div style={{
+              position: "absolute", top: "7px", left: "50%", transform: "translateX(-50%)",
+              width: "6px", height: "6px", borderRadius: "50%",
+              background: "#111",
+              border: "1px solid rgba(255,255,255,0.12)",
+              boxShadow: "inset 0 0 0 1.5px rgba(0,0,0,0.8)",
+            }}>
+              {/* Webcam glint */}
+              <div style={{
+                position: "absolute", top: "1px", left: "1px",
+                width: "2px", height: "2px", borderRadius: "50%",
+                background: "rgba(255,255,255,0.35)",
+              }} />
+            </div>
+
+            {/* Screen aperture — the app window lives here */}
+            <div style={{
+              background: "#000",
+              borderRadius: "6px",
+              overflow: "hidden",
+              position: "relative",
+              // subtle inner shadow so screen looks recessed
+              boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.8), inset 0 2px 12px rgba(0,0,0,0.7)",
+            }}>
+              {/* The app window — no extra scale needed, we scale the whole wrapper */}
+              <motion.div
+                className="relative overflow-hidden"
+                style={{ background: "#2a2a2a", width: `${NATURAL_W - 88}px` }}
+              >
           {/* ── TOP BAR ── */}
           <div
             className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.06]"
@@ -1094,9 +1146,112 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
             />
           )}
         </motion.div>
+        </div>{/* screen aperture */}
 
-        </div>{/* end mockupContainerRef */}
-        <p className="mt-4 text-center text-[11px] text-gray-600 font-mono tracking-wider">
+          {/* Lid bottom-edge shadow line */}
+          <div style={{
+            position: "absolute", bottom: "-1px", left: 0, right: 0, height: "2px",
+            background: "linear-gradient(90deg, transparent 2%, rgba(0,0,0,0.7) 20%, rgba(0,0,0,0.7) 80%, transparent 98%)",
+          }} />
+        </motion.div>{/* /LID */}
+
+        {/* ── HINGE ── */}
+        <div style={{
+          width: `${NATURAL_W}px`,
+          height: "8px",
+          background: "linear-gradient(180deg, #0d0d0d 0%, #1a1a1c 60%, #1f1f22 100%)",
+          position: "relative",
+          zIndex: 2,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.7)",
+        }}>
+          {/* Hinge barrel hints — left and right */}
+          {["6%", "94%"].map(pos => (
+            <div key={pos} style={{
+              position: "absolute", top: "1px", left: pos, transform: "translateX(-50%)",
+              width: "40px", height: "6px", borderRadius: "3px",
+              background: "linear-gradient(180deg, #2a2a2e, #111113)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }} />
+          ))}
+        </div>
+
+        {/* ── BASE / KEYBOARD ── */}
+        <div style={{
+          width: `${NATURAL_W}px`,
+          height: "116px",
+          background: "linear-gradient(175deg, #252527 0%, #1a1a1c 55%, #141416 100%)",
+          borderRadius: "0 0 18px 18px",
+          border: "1px solid rgba(255,255,255,0.07)",
+          borderTop: "none",
+          position: "relative",
+          overflow: "hidden",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.7), 0 2px 0 rgba(255,255,255,0.04) inset",
+        }}>
+          {/* Base top-sheen */}
+          <div style={{
+            position: "absolute", top: 0, left: "5%", right: "5%", height: "1px",
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent)",
+          }} />
+
+          {/* Keyboard key rows — 3 rows of varying widths */}
+          <div style={{ position: "absolute", top: "14px", left: "50%", transform: "translateX(-50%)", width: "82%" }}>
+            {[
+              { count: 14, w: 44, gap: 4 },
+              { count: 13, w: 50, gap: 4 },
+              { count: 11, w: 60, gap: 4 },
+            ].map(({ count, w, gap }, ri) => (
+              <div key={ri} className="flex justify-center" style={{ gap: `${gap}px`, marginBottom: "4px" }}>
+                {Array.from({ length: count }, (_, ki) => (
+                  <div key={ki} style={{
+                    width: `${w}px`, height: "14px",
+                    borderRadius: "3px",
+                    background: "linear-gradient(175deg, #2e2e32 0%, #1e1e21 100%)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    boxShadow: "0 1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+                  }} />
+                ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Spacebar */}
+          <div style={{
+            position: "absolute", bottom: "22px", left: "50%", transform: "translateX(-50%)",
+            width: "34%", height: "14px", borderRadius: "3px",
+            background: "linear-gradient(175deg, #2e2e32 0%, #1e1e21 100%)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            boxShadow: "0 1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+          }} />
+
+          {/* Trackpad */}
+          <div style={{
+            position: "absolute", bottom: "10px", left: "50%", transform: "translateX(-50%)",
+            display: "none",   // hidden — trackpad below keyboard not realistic at this scale
+          }} />
+
+          {/* Apple-style logo area (subtle) */}
+          <div style={{
+            position: "absolute", bottom: "8px", right: "5%",
+            width: "28px", height: "6px", borderRadius: "3px",
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }} />
+        </div>{/* /BASE */}
+
+        {/* Desk reflection under laptop */}
+        <div style={{
+          width: `${NATURAL_W * 0.7}px`,
+          height: "12px",
+          margin: "0 auto",
+          background: "radial-gradient(ellipse, rgba(0,229,190,0.07) 0%, transparent 70%)",
+          borderRadius: "50%",
+          filter: "blur(6px)",
+          transform: "scaleY(0.4)",
+        }} />
+
+        </div>{/* /laptop outer wrapper + scale container */}
+
+        <p className="mt-5 text-center text-[11px] text-gray-600 font-mono tracking-wider">
           Trinity · live interface · EUR/USD · Compounding strategy active
         </p>
       </motion.div>
