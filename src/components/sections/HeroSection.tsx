@@ -45,28 +45,129 @@ const WIN_PARTICLES: Array<{
   });
 })();
 
-function Particles() {
-  const dots = Array.from({ length: 40 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 2.5 + 0.5,
-    delay: Math.random() * 4,
-    dur: Math.random() * 4 + 4,
-  }));
+// ── Background scene — all data defined at module level (no Math.random on render) ──
+const ORBS = [
+  { x: "14%",  y: "22%", size: 520, color: "0,185,222",  alpha: 0.11, dx: [0, 55,-30, 0] as number[], dy: [0, 28, 65, 0] as number[], dur: 26 },
+  { x: "82%",  y: "10%", size: 600, color: "0,229,190",  alpha: 0.08, dx: [0,-48, 20, 0] as number[], dy: [0, 52,-28, 0] as number[], dur: 33 },
+  { x: "58%",  y: "76%", size: 440, color: "34,197,94",  alpha: 0.07, dx: [0, 32,-22, 0] as number[], dy: [0,-38, 14, 0] as number[], dur: 23 },
+  { x: "22%",  y: "74%", size: 380, color: "96,165,250", alpha: 0.07, dx: [0,-28, 40, 0] as number[], dy: [0,-20, 18, 0] as number[], dur: 29 },
+];
+
+const STARS = Array.from({ length: 55 }, (_, i) => ({
+  id: i,
+  cx: +((i * 137.508) % 100).toFixed(1),
+  cy: +((i * 97.831 + 11.3) % 100).toFixed(1),
+  r:  i % 8 === 0 ? 0.22 : i % 4 === 0 ? 0.16 : 0.10,
+  delay: +((i * 0.31) % 6).toFixed(2),
+  dur:   +(2.5 + (i % 7) * 0.6).toFixed(2),
+  peak:  i % 6 === 0 ? 0.80 : i % 3 === 0 ? 0.50 : 0.30,
+}));
+
+const DIAMONDS = [
+  { cx:  5, cy: 13, s: 11, dur: 44, d:  0, op: 0.18 },
+  { cx: 94, cy:  8, s:  8, dur: 56, d:  5, op: 0.14 },
+  { cx:  4, cy: 53, s: 10, dur: 48, d: 10, op: 0.16 },
+  { cx: 96, cy: 47, s: 13, dur: 40, d:  2, op: 0.13 },
+  { cx: 50, cy: 96, s:  8, dur: 52, d:  7, op: 0.15 },
+  { cx:  7, cy: 87, s:  9, dur: 46, d: 12, op: 0.14 },
+  { cx: 93, cy: 82, s: 11, dur: 38, d:  4, op: 0.14 },
+  { cx: 48, cy:  3, s:  7, dur: 50, d:  8, op: 0.16 },
+];
+
+const SPARKS = Array.from({ length: 12 }, (_, i) => ({
+  id: i,
+  x:     +((i * 59.7 + 5) % 92 + 4).toFixed(1),
+  delay: +((i * 0.72) % 9).toFixed(2),
+  dur:   +(5.5 + (i % 5) * 1.4).toFixed(2),
+  r:      i % 4 === 0 ? 0.20 : 0.13,
+}));
+
+function HeroBackground() {
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
-      {dots.map(({ id, x, y, size, delay, dur }) => (
-        <motion.circle
-          key={id}
-          cx={`${x}%`} cy={`${y}%`} r={size}
-          fill="rgba(255,255,255,0.30)"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.5, 0] }}
-          transition={{ duration: dur, delay, repeat: Infinity, ease: "easeInOut" }}
+    <>
+      {/* Drifting gradient orbs */}
+      {ORBS.map((o, i) => (
+        <motion.div
+          key={`orb-${i}`}
+          className="absolute pointer-events-none"
+          style={{
+            left: o.x, top: o.y,
+            width: `${o.size}px`, height: `${o.size}px`,
+            borderRadius: "50%",
+            background: `radial-gradient(circle, rgba(${o.color},${o.alpha}) 0%, transparent 70%)`,
+            filter: "blur(55px)",
+            marginLeft: `-${o.size / 2}px`,
+            marginTop:  `-${o.size / 2}px`,
+            willChange: "transform",
+          }}
+          animate={{ x: o.dx, y: o.dy }}
+          transition={{ duration: o.dur, repeat: Infinity, ease: "easeInOut" }}
         />
       ))}
-    </svg>
+
+      {/* Slow-rotating diamond outlines */}
+      {DIAMONDS.map(({ cx, cy, s, dur, d, op }, i) => (
+        <motion.div
+          key={`dia-${i}`}
+          className="absolute pointer-events-none"
+          style={{
+            left: `${cx}%`, top: `${cy}%`,
+            width: `${s * 2}px`, height: `${s * 2}px`,
+            marginLeft: `-${s}px`, marginTop: `-${s}px`,
+            border: `0.8px solid rgba(0,229,190,${op})`,
+            transformOrigin: "center",
+          }}
+          animate={{ rotate: [45, 405] }}
+          transition={{ duration: dur, delay: d, repeat: Infinity, ease: "linear" }}
+        />
+      ))}
+
+      {/* SVG layer: star field + rising sparks */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        {STARS.map(({ id, cx, cy, r, delay, dur, peak }) => (
+          <motion.circle
+            key={id}
+            cx={cx} cy={cy} r={r}
+            fill="white"
+            animate={{ opacity: [0, peak, 0] }}
+            transition={{ duration: dur, delay, repeat: Infinity, ease: "easeInOut" }}
+          />
+        ))}
+        {SPARKS.map(({ id, x, delay, dur, r }) => (
+          <motion.circle
+            key={`sp-${id}`}
+            cx={x} r={r}
+            fill="rgba(0,229,190,0.65)"
+            animate={{ cy: [105, -5], opacity: [0, 0.65, 0.5, 0] }}
+            transition={{ duration: dur, delay, repeat: Infinity, ease: "linear", times: [0, 0.08, 0.85, 1] }}
+          />
+        ))}
+      </svg>
+
+      {/* Sweeping teal scan lines */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        {([{ top: "23%", delay: 0, dur: 12, rd: 10 }, { top: "57%", delay: 5, dur: 17, rd: 13 }, { top: "81%", delay: 11, dur: 14, rd: 11 }] as const).map(({ top, delay, dur, rd }, i) => (
+          <motion.div
+            key={i}
+            className="absolute left-0 right-0"
+            style={{
+              top,
+              height: "1px",
+              background: "linear-gradient(90deg, transparent 0%, rgba(0,229,190,0) 12%, rgba(0,229,190,0.22) 38%, rgba(0,229,190,0.32) 50%, rgba(0,229,190,0.22) 62%, rgba(0,229,190,0) 88%, transparent 100%)",
+              filter: "blur(0.5px)",
+            }}
+            initial={{ x: "-100%" }}
+            animate={{ x: "200vw" }}
+            transition={{ duration: dur, delay, repeat: Infinity, repeatDelay: rd, ease: "linear" }}
+          />
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -76,15 +177,13 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
 
   const mockupContainerRef = useRef<HTMLDivElement>(null);
   const [mockupScale, setMockupScale] = useState(1);
-  // Natural width of THE LAPTOP LID OUTER FRAME (app is 1060px; lid adds ~88px of bezel total)
-  const NATURAL_W = 1148;
-  const NATURAL_H = 600; // app window height (screen aperture)
+  const NATURAL_W = 1060;
+  const NATURAL_H = 600;
 
   useEffect(() => {
     const el = mockupContainerRef.current;
     if (!el) return;
     const obs = new ResizeObserver(() => {
-      // el is the lid outer div; scale so it fits the available column width
       setMockupScale(Math.min(1, el.clientWidth / NATURAL_W));
     });
     obs.observe(el);
@@ -154,25 +253,24 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
     >
       {/* Background */}
       <div className="absolute inset-0 bg-[#040d1a]" aria-hidden="true" />
+      {/* Soft top ambient light */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 100% 55% at 50% -2%, rgba(0,180,222,0.20) 0%, rgba(0,100,180,0.09) 48%, transparent 70%)" }}
+        aria-hidden="true"
+      />
+      {/* Subtle teal line grid — fades toward edges */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "radial-gradient(ellipse 110% 70% at 50% -10%, rgba(0,180,220,0.38) 0%, rgba(0,100,180,0.18) 38%, transparent 70%)",
+          backgroundImage: "linear-gradient(rgba(0,229,190,0.028) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,190,0.028) 1px, transparent 1px)",
+          backgroundSize: "72px 72px",
+          maskImage: "radial-gradient(ellipse 88% 82% at 50% 38%, black 5%, transparent 75%)",
         }}
         aria-hidden="true"
       />
-      <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-[#040d1a] to-transparent pointer-events-none" aria-hidden="true" />
-      <Particles />
-      <div
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)",
-          backgroundSize: "36px 36px",
-          maskImage: "radial-gradient(ellipse 80% 80% at 50% 30%, black 20%, transparent 80%)",
-        }}
-        aria-hidden="true"
-      />
+      <HeroBackground />
+      <div className="absolute bottom-0 inset-x-0 h-60 bg-gradient-to-t from-[#040d1a] to-transparent pointer-events-none" aria-hidden="true" />
 
       {/* Content */}
       <motion.div
@@ -231,84 +329,34 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         </motion.div>
       </motion.div>
 
-      {/* Trinity Software — inside laptop mockup */}
+      {/* Trinity Software — pixel-perfect replica */}
       <motion.div
-        initial={{ opacity: 0, y: 70 }}
+        initial={{ opacity: 0, y: 60 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 1.0, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 mt-20 w-full max-w-[1200px] mx-auto px-4 sm:px-6"
+        transition={{ duration: 0.9, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 mt-20 w-full max-w-6xl mx-auto px-6"
         aria-hidden="true"
       >
-        {/* Deep floor shadow beneath whole laptop */}
-        <div className="absolute inset-x-[8%] bottom-[6%] h-20 blur-3xl rounded-full pointer-events-none"
-          style={{ background: "rgba(0,229,190,0.13)" }} />
-        <div className="absolute inset-x-[18%] bottom-[3%] h-10 blur-2xl rounded-full pointer-events-none"
-          style={{ background: "rgba(34,197,94,0.10)" }} />
+        {/* Glow halos */}
+        <div className="absolute inset-x-16 -bottom-8 h-32 bg-[#22C55E]/20 blur-3xl rounded-full pointer-events-none" />
+        <div className="absolute inset-x-40 -bottom-2 h-16 bg-emerald-400/10 blur-2xl rounded-full pointer-events-none" />
 
-        {/* ── LAPTOP OUTER WRAPPER — scales as one unit ── */}
-        <div
-          ref={mockupContainerRef}
-          className="relative w-full select-none"
+        {/* ── Trinity App Window — charcoal #2a2a2a exactly matching screenshot ── */}
+        <div ref={mockupContainerRef} className="w-full">
+        <motion.div
+          className="relative rounded-xl overflow-hidden"
+          animate={{ boxShadow: PHASE_SHADOW[animPhase] }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
           style={{
-            // CSS-only scale: all children use px, wrapper scales them down
+            background: "#2a2a2a",
             ...(mockupScale < 1 ? {
               width: `${NATURAL_W}px`,
               transform: `scale(${mockupScale})`,
-              transformOrigin: "top center",
-              marginBottom: `${(mockupScale - 1) * (NATURAL_H + 124)}px`, // 124 = base height
+              transformOrigin: "top left",
+              marginBottom: `${(mockupScale - 1) * NATURAL_H}px`,
             } : {}),
           }}
         >
-          {/* ── LID ── */}
-          <motion.div
-            animate={{ boxShadow: PHASE_SHADOW[animPhase] }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            style={{
-              width: `${NATURAL_W}px`,
-              background: "linear-gradient(175deg, #2e2e31 0%, #1c1c1e 40%, #141416 100%)",
-              borderRadius: "16px 16px 4px 4px",
-              padding: "14px 44px 12px",   // top-bezel left/right-bezel bottom-bezel
-              position: "relative",
-              border: "1px solid rgba(255,255,255,0.09)",
-              borderBottom: "1px solid rgba(255,255,255,0.04)",
-            }}
-          >
-            {/* Lid top-edge sheen */}
-            <div style={{
-              position: "absolute", top: 0, left: "12%", right: "12%", height: "1px",
-              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)",
-            }} />
-
-            {/* Webcam dot */}
-            <div style={{
-              position: "absolute", top: "7px", left: "50%", transform: "translateX(-50%)",
-              width: "6px", height: "6px", borderRadius: "50%",
-              background: "#111",
-              border: "1px solid rgba(255,255,255,0.12)",
-              boxShadow: "inset 0 0 0 1.5px rgba(0,0,0,0.8)",
-            }}>
-              {/* Webcam glint */}
-              <div style={{
-                position: "absolute", top: "1px", left: "1px",
-                width: "2px", height: "2px", borderRadius: "50%",
-                background: "rgba(255,255,255,0.35)",
-              }} />
-            </div>
-
-            {/* Screen aperture — the app window lives here */}
-            <div style={{
-              background: "#000",
-              borderRadius: "6px",
-              overflow: "hidden",
-              position: "relative",
-              // subtle inner shadow so screen looks recessed
-              boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.8), inset 0 2px 12px rgba(0,0,0,0.7)",
-            }}>
-              {/* The app window — no extra scale needed, we scale the whole wrapper */}
-              <motion.div
-                className="relative overflow-hidden"
-                style={{ background: "#2a2a2a", width: `${NATURAL_W - 88}px` }}
-              >
           {/* ── TOP BAR ── */}
           <div
             className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.06]"
@@ -1146,112 +1194,9 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
             />
           )}
         </motion.div>
-        </div>{/* screen aperture */}
 
-          {/* Lid bottom-edge shadow line */}
-          <div style={{
-            position: "absolute", bottom: "-1px", left: 0, right: 0, height: "2px",
-            background: "linear-gradient(90deg, transparent 2%, rgba(0,0,0,0.7) 20%, rgba(0,0,0,0.7) 80%, transparent 98%)",
-          }} />
-        </motion.div>{/* /LID */}
-
-        {/* ── HINGE ── */}
-        <div style={{
-          width: `${NATURAL_W}px`,
-          height: "8px",
-          background: "linear-gradient(180deg, #0d0d0d 0%, #1a1a1c 60%, #1f1f22 100%)",
-          position: "relative",
-          zIndex: 2,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.7)",
-        }}>
-          {/* Hinge barrel hints — left and right */}
-          {["6%", "94%"].map(pos => (
-            <div key={pos} style={{
-              position: "absolute", top: "1px", left: pos, transform: "translateX(-50%)",
-              width: "40px", height: "6px", borderRadius: "3px",
-              background: "linear-gradient(180deg, #2a2a2e, #111113)",
-              border: "1px solid rgba(255,255,255,0.06)",
-            }} />
-          ))}
-        </div>
-
-        {/* ── BASE / KEYBOARD ── */}
-        <div style={{
-          width: `${NATURAL_W}px`,
-          height: "116px",
-          background: "linear-gradient(175deg, #252527 0%, #1a1a1c 55%, #141416 100%)",
-          borderRadius: "0 0 18px 18px",
-          border: "1px solid rgba(255,255,255,0.07)",
-          borderTop: "none",
-          position: "relative",
-          overflow: "hidden",
-          boxShadow: "0 8px 40px rgba(0,0,0,0.7), 0 2px 0 rgba(255,255,255,0.04) inset",
-        }}>
-          {/* Base top-sheen */}
-          <div style={{
-            position: "absolute", top: 0, left: "5%", right: "5%", height: "1px",
-            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent)",
-          }} />
-
-          {/* Keyboard key rows — 3 rows of varying widths */}
-          <div style={{ position: "absolute", top: "14px", left: "50%", transform: "translateX(-50%)", width: "82%" }}>
-            {[
-              { count: 14, w: 44, gap: 4 },
-              { count: 13, w: 50, gap: 4 },
-              { count: 11, w: 60, gap: 4 },
-            ].map(({ count, w, gap }, ri) => (
-              <div key={ri} className="flex justify-center" style={{ gap: `${gap}px`, marginBottom: "4px" }}>
-                {Array.from({ length: count }, (_, ki) => (
-                  <div key={ki} style={{
-                    width: `${w}px`, height: "14px",
-                    borderRadius: "3px",
-                    background: "linear-gradient(175deg, #2e2e32 0%, #1e1e21 100%)",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    boxShadow: "0 1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
-                  }} />
-                ))}
-              </div>
-            ))}
-          </div>
-
-          {/* Spacebar */}
-          <div style={{
-            position: "absolute", bottom: "22px", left: "50%", transform: "translateX(-50%)",
-            width: "34%", height: "14px", borderRadius: "3px",
-            background: "linear-gradient(175deg, #2e2e32 0%, #1e1e21 100%)",
-            border: "1px solid rgba(255,255,255,0.07)",
-            boxShadow: "0 1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
-          }} />
-
-          {/* Trackpad */}
-          <div style={{
-            position: "absolute", bottom: "10px", left: "50%", transform: "translateX(-50%)",
-            display: "none",   // hidden — trackpad below keyboard not realistic at this scale
-          }} />
-
-          {/* Apple-style logo area (subtle) */}
-          <div style={{
-            position: "absolute", bottom: "8px", right: "5%",
-            width: "28px", height: "6px", borderRadius: "3px",
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.06)",
-          }} />
-        </div>{/* /BASE */}
-
-        {/* Desk reflection under laptop */}
-        <div style={{
-          width: `${NATURAL_W * 0.7}px`,
-          height: "12px",
-          margin: "0 auto",
-          background: "radial-gradient(ellipse, rgba(0,229,190,0.07) 0%, transparent 70%)",
-          borderRadius: "50%",
-          filter: "blur(6px)",
-          transform: "scaleY(0.4)",
-        }} />
-
-        </div>{/* /laptop outer wrapper + scale container */}
-
-        <p className="mt-5 text-center text-[11px] text-gray-600 font-mono tracking-wider">
+        </div>{/* end mockupContainerRef */}
+        <p className="mt-4 text-center text-[11px] text-gray-600 font-mono tracking-wider">
           Trinity · live interface · EUR/USD · Compounding strategy active
         </p>
       </motion.div>
