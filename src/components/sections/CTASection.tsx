@@ -33,12 +33,14 @@ export default function CTASection() {
           className="max-w-3xl mx-auto"
         >
           <h2 className="font-display text-5xl sm:text-6xl lg:text-[5.25rem] font-extrabold tracking-tightest text-white leading-[1.04] mb-7">
-            Your competition is already{" "}
-            <span className="gradient-text">automating.</span>
+            While you&apos;re reading this,{" "}
+            <br className="hidden lg:block" />
+            <span className="gradient-text">Trinity just fired another trade.</span>
           </h2>
           <p className="text-xl text-gray-400 leading-relaxed mb-10 max-w-2xl mx-auto">
-            Every signal missed by hand is money someone else made. Trinity fires them all —
-            at machine speed, 80%+ accuracy, while you sleep. 11,000+ traders can&apos;t be wrong.
+            Every second you trade manually is a second a faster, more disciplined AI beats you
+            to the window. Trinity runs 24/7 at machine speed — 80%+ accuracy, zero hesitation,
+            zero emotion. 11,000+ traders already made the switch. Don&apos;t be last.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 mb-10">

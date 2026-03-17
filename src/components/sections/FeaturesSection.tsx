@@ -62,16 +62,17 @@ export default function FeaturesSection() {
           className="text-center mb-16 max-w-2xl mx-auto"
         >
           <Badge variant="cyan" className="mb-4">
-            The complete automated trading system
+            Why 90% of traders fail — and how Trinity stops it
           </Badge>
           <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white mb-5 leading-[1.1]">
-            Three reasons traders fail.
+            You&apos;re not losing because of bad luck.
             <br />
-            <span className="gradient-text">Trinity eliminates all three.</span>
+            <span className="gradient-text">You&apos;re losing because you&apos;re human.</span>
           </h2>
           <p className="text-gray-400 text-lg sm:text-xl leading-8 font-light">
-            Emotion. Missed signals. Inconsistency. Trinity was built specifically to remove
-            every one of those from your trading — permanently.
+            Emotion clouds judgement. Hesitation costs windows. Inconsistency kills edge.
+            These are the three killers of every manual trader — and Trinity was engineered
+            to remove all three, permanently.
           </p>
         </motion.div>
 

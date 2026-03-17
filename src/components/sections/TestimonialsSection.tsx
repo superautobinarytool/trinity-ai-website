@@ -128,16 +128,16 @@ export default function TestimonialsSection() {
           className="text-center mb-14"
         >
           <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white">
-            Real traders.
+            11,000+ traders already quit
             <br />
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: "linear-gradient(90deg,#22c55e,#16a34a)" }}
             >
-              Real profits.
+              trading manually.
             </span>
           </h2>
-          <p className="mt-4 text-gray-400 text-lg sm:text-xl font-light">Over 11,000 traders across IQ Option, Quotex, Deriv, Pocket Option and more.</p>
+          <p className="mt-4 text-gray-400 text-lg sm:text-xl font-light">The common thread? They all stopped guessing — and started letting Trinity execute for them.</p>
         </motion.div>
 
         {/* Carousel row */}

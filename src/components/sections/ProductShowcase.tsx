@@ -17,9 +17,9 @@ const up: Variants = {
 const PRODUCTS = [
   {
     category: "Auto-Execution",
-    title: "From Trinity AI signal to executed trade — in milliseconds.",
+    title: "The trade window is 3 seconds. Trinity fires in 47ms.",
     description:
-      "Trinity AI generates signals in real time. The instant a signal fires, Trinity automatically places the trade on your binary options broker — at machine speed, before the window closes. You never miss a signal again. Not one.",
+      "Every binary options trade has a tiny execution window. If you click a second late, you lose the edge. Trinity AI generates the signal and executes on your broker in under 50 milliseconds — at machine speed, every single time. You will never miss a window again. Not one.",
     cta: "See How It Works",
     href: "#pricing",
     accent: "#22c55e",
@@ -60,9 +60,9 @@ const PRODUCTS = [
   },
   {
     category: "Live Trading Charts",
-    title: "25+ professional charts. Built directly into the app.",
+    title: "25+ live charts. No browser. No subscriptions. Just one window.",
     description:
-      "Full professional-grade live charts for EUR/USD, GBP/USD, BTC/USD, ETH/USD and 21 more pairs stream directly inside the Trinity platform. No browser tabs. No extra subscriptions. Every asset you trade, visible in one window.",
+      "Professional-grade live charts for EUR/USD, GBP/USD, BTC/USD, ETH/USD and 22 more pairs stream directly inside Trinity — while the bot trades simultaneously. No switching tabs. No extra tools. Everything in one place, running in real time.",
     cta: "Explore the Dashboard",
     href: "#pricing",
     accent: "#16a34a",
@@ -88,9 +88,9 @@ const PRODUCTS = [
   },
   {
     category: "Trade Analytics",
-    title: "Every trade logged. Your profit curve, live.",
+    title: "Your profit curve, updating in real time. No spreadsheets. Ever.",
     description:
-      "Every trade Trinity places is recorded instantly — asset, direction, entry, result, P&L. Your real-time profit graph plots your cumulative session performance trade by trade. You always know exactly how you're performing. No guessing.",
+      "Every trade Trinity fires is logged the instant it closes — asset, direction, entry, result, P&L. Your live session graph plots cumulative performance trade by trade. You always know exactly where you stand. No guessing, no logging, no spreadsheets. Just a rising curve.",
     cta: "View Analytics Demo",
     href: "#pricing",
     accent: "#10b981",

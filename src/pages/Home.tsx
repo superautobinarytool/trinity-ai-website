@@ -5,8 +5,10 @@ import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/sections/HeroSection";
 import LogoBar from "@/components/sections/LogoBar";
 import FeaturesSection from "@/components/sections/FeaturesSection";
+import VideoDemoSection from "@/components/sections/VideoDemoSection";
 import ProductShowcase from "@/components/sections/ProductShowcase";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import VideoTestimonialsSection from "@/components/sections/VideoTestimonialsSection";
 import PricingSection from "@/components/sections/PricingSection";
 import FAQSection from "@/components/sections/FAQSection";
 import CTASection from "@/components/sections/CTASection";
@@ -20,12 +22,14 @@ import CTASection from "@/components/sections/CTASection";
  * 3. HeroSection      — headline, dashboard mock, stats
  * 4. LogoBar          — scrolling platform compatibility ticker
  * 5. FeaturesSection  — 3 feature pillars (signals, automation, analytics)
- * 6. ProductShowcase  — deep-dive alternating product sections
- * 7. TestimonialsSection — masonry review cards
- * 8. PricingSection   — monthly/yearly toggle, Pro & Pro+ cards
- * 9. FAQSection       — animated accordion
- * 10. CTASection      — final conversion push
- * 11. Footer          — links, legal, socials
+ * 6. VideoDemoSection — horizontal video demo slider (4 platform sessions)
+ * 7. ProductShowcase  — deep-dive alternating product sections
+ * 8. TestimonialsSection — masonry review cards
+ * 9. VideoTestimonialsSection — 9:16 portrait video testimonials (blur-side focus)
+ * 10. PricingSection  — monthly/yearly toggle, Starter & Pro cards
+ * 11. FAQSection      — animated accordion
+ * 12. CTASection      — final conversion push
+ * 13. Footer          — links, legal, socials
  */
 export default function Home() {
   const [barHeight, setBarHeight] = useState(0);
@@ -41,8 +45,10 @@ export default function Home() {
         <HeroSection headerHeight={barHeight + 64} />
         <LogoBar />
         <FeaturesSection />
+        <VideoDemoSection />
         <ProductShowcase />
         <TestimonialsSection />
+        <VideoTestimonialsSection />
         <PricingSection />
         <FAQSection />
         <CTASection />

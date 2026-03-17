@@ -50,11 +50,12 @@ export default function FAQSection() {
       >
         <Badge variant="neutral" className="mb-4">FAQ</Badge>
         <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white mb-5">
-          Questions{" "}
-          <span className="gradient-text">answered.</span>
+          Got doubts?{" "}
+          <span className="gradient-text">Good. Read these.</span>
         </h2>
         <p className="text-gray-400 text-lg">
-          Can&apos;t find what you&apos;re looking for? Ask us on Discord — we respond in under 10 minutes.
+          We answer every question honestly — including the ones other tools bury in fine print.
+          Still unsure? Hit us on Discord — we reply in under 10 minutes.
         </p>
       </motion.div>
 
