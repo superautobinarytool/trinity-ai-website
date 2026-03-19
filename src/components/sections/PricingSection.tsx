@@ -68,7 +68,7 @@ const PLANS = [
     sub: "$54.39 first month, then $67.99 / mo",
     gem: <BlueDiamond />,
     cta: "Get Started Now",
-    ctaHref: "https://discord.gg/titansalgo",
+    ctaHref: "/checkout?plan=starter",
     featuresLabel: "Everything included:",
     features: [
       "Trinity software license (Windows 10/11)",
@@ -92,7 +92,7 @@ const PLANS = [
     sub: "$67.99 first month, then $97.99 / mo",
     gem: <PurpleCrystal />,
     cta: "Activate Pro Access",
-    ctaHref: "https://discord.gg/titansalgo",
+    ctaHref: "/checkout?plan=pro",
     featuresLabel: "Everything in Starter, plus:",
     features: [
       "Martingale strategy unlocked",
@@ -193,8 +193,6 @@ export default function PricingSection() {
               {/* CTA */}
               <a
                 href={plan.ctaHref}
-                target="_blank"
-                rel="noopener noreferrer"
                 className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98] ${
                   plan.light
                     ? "bg-gray-900 text-white hover:bg-gray-800"
