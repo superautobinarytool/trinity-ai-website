@@ -5,14 +5,13 @@ import Badge from "@/components/ui/Badge";
 import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from "@/components/ui/Icons";
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   VIDEO TESTIMONIALS — paste 9:16 portrait YouTube video IDs below.
-   Example: videoId: "abc123XYZ"  (YouTube Short or vertical video)
-   Leave videoId as "" to display a richly styled text testimonial placeholder.
+   VIDEO TESTIMONIALS — direct MP4 video URLs for each portrait card.
+   Replace videoUrl values with your own links at any time.
    ───────────────────────────────────────────────────────────────────────────── */
 const TESTIMONIALS = [
   {
     id: 0,
-    videoId: "", // ← paste 9:16 YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935023130-278c04c1-7eba-433d-bece-0b83ff5ce6ac.mp4",
     name: "Alex M.",
     role: "Binary Options Trader",
     flag: "🇺🇸",
@@ -25,7 +24,7 @@ const TESTIMONIALS = [
   },
   {
     id: 1,
-    videoId: "", // ← paste 9:16 YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935156030-47640820-6d0a-4d6d-95c5-060180fe16bc.mp4",
     name: "Sarah K.",
     role: "Full-Time Trader",
     flag: "🇬🇧",
@@ -38,7 +37,7 @@ const TESTIMONIALS = [
   },
   {
     id: 2,
-    videoId: "", // ← paste 9:16 YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935176730-8b12e855-acbc-43b7-9c4b-f7275c85e57d.mp4",
     name: "James T.",
     role: "IQ Option Trader",
     flag: "🇦🇺",
@@ -51,7 +50,7 @@ const TESTIMONIALS = [
   },
   {
     id: 3,
-    videoId: "", // ← paste 9:16 YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935195345-00e350ab-510c-48d9-9613-c2c53f8e2aa1.mp4",
     name: "Priya D.",
     role: "Pocket Option Trader",
     flag: "🇮🇳",
@@ -64,7 +63,7 @@ const TESTIMONIALS = [
   },
   {
     id: 4,
-    videoId: "", // ← paste 9:16 YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935023130-278c04c1-7eba-433d-bece-0b83ff5ce6ac.mp4",
     name: "Marcus R.",
     role: "Deriv Trader",
     flag: "🇿🇦",
@@ -137,13 +136,14 @@ function TestimonialCard({
     >
       {/* ── Video area (top ~65%) ── */}
       <div className="flex-1 relative overflow-hidden">
-        {t.videoId && isCenter && playing ? (
-          /* Actual YouTube embed — only mounted when center + play pressed */
-          <iframe
-            className="absolute inset-0 w-full h-full"
-            src={`https://www.youtube.com/embed/${t.videoId}?autoplay=1&controls=1&modestbranding=1&rel=0`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
+        {t.videoUrl && isCenter && playing ? (
+          /* Native MP4 video — only mounted when center + play pressed */
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            src={t.videoUrl}
+            autoPlay
+            controls
+            playsInline
             title={`${t.name} testimonial`}
           />
         ) : (
@@ -196,25 +196,25 @@ function TestimonialCard({
               <motion.button
                 className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-white"
                 style={{
-                  background: t.videoId ? t.color : "rgba(255,255,255,0.08)",
-                  boxShadow: t.videoId ? `0 0 28px ${t.color}55` : "none",
-                  cursor: t.videoId ? "pointer" : "default",
+                  background: t.videoUrl ? t.color : "rgba(255,255,255,0.08)",
+                  boxShadow: t.videoUrl ? `0 0 28px ${t.color}55` : "none",
+                  cursor: t.videoUrl ? "pointer" : "default",
                 }}
-                onClick={() => t.videoId && setPlaying(true)}
-                whileHover={t.videoId ? { scale: 1.05 } : {}}
-                whileTap={t.videoId ? { scale: 0.96 } : {}}
-                aria-label={t.videoId ? "Play testimonial video" : "Video coming soon"}
+                onClick={() => t.videoUrl && setPlaying(true)}
+                whileHover={t.videoUrl ? { scale: 1.05 } : {}}
+                whileTap={t.videoUrl ? { scale: 0.96 } : {}}
+                aria-label={t.videoUrl ? "Play testimonial video" : "Video coming soon"}
               >
                 <svg
                   viewBox="0 0 20 20"
                   fill="white"
                   className="w-4 h-4"
                   aria-hidden="true"
-                  style={{ opacity: t.videoId ? 1 : 0.4 }}
+                  style={{ opacity: t.videoUrl ? 1 : 0.4 }}
                 >
                   <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
                 </svg>
-                {t.videoId ? "Watch Video" : "Video Coming Soon"}
+                {t.videoUrl ? "Watch Video" : "Video Coming Soon"}
               </motion.button>
             )}
           </>

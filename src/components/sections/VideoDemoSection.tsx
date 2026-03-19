@@ -5,14 +5,13 @@ import Badge from "@/components/ui/Badge";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/ui/Icons";
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   DEMO VIDEOS — paste your YouTube video IDs below.
-   Example: videoId: "dQw4w9WgXcQ"
-   Leave videoId as "" to display a styled animated placeholder.
+   DEMO VIDEOS — direct MP4 video URLs for each demo slot.
+   Replace videoUrl values with your own links at any time.
    ───────────────────────────────────────────────────────────────────────────── */
 const DEMOS = [
   {
     id: 0,
-    videoId: "", // ← paste YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935023130-278c04c1-7eba-433d-bece-0b83ff5ce6ac.mp4",
     badge: "Live Signal Capture",
     accent: "#00e5be",
     title: "AI flags the winning trade before your eyes even register it.",
@@ -22,7 +21,7 @@ const DEMOS = [
   },
   {
     id: 1,
-    videoId: "", // ← paste YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935156030-47640820-6d0a-4d6d-95c5-060180fe16bc.mp4",
     badge: "Zero-Delay Auto Execution",
     accent: "#22c55e",
     title: "47ms. Signal fires. Trade executes. You didn't touch anything.",
@@ -32,7 +31,7 @@ const DEMOS = [
   },
   {
     id: 2,
-    videoId: "", // ← paste YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935176730-8b12e855-acbc-43b7-9c4b-f7275c85e57d.mp4",
     badge: "Linear Compounding — 30 Days",
     accent: "#4ade80",
     title: "$200 in. $1,100 out. Not one manual trade placed.",
@@ -42,7 +41,7 @@ const DEMOS = [
   },
   {
     id: 3,
-    videoId: "", // ← paste YouTube video ID here
+    videoUrl: "https://videotourl.com/videos/1773935195345-00e350ab-510c-48d9-9613-c2c53f8e2aa1.mp4",
     badge: "Martingale Recovery — Real Session",
     accent: "#f59e0b",
     title: "5 losses in a row. Still closed the session in profit.",
@@ -56,13 +55,14 @@ type Demo = (typeof DEMOS)[number];
 
 /* ── Animated placeholder / video embed ── */
 function VideoArea({ demo, playing, onPlay }: { demo: Demo; playing: boolean; onPlay: () => void }) {
-  if (playing && demo.videoId) {
+  if (playing && demo.videoUrl) {
     return (
-      <iframe
-        className="w-full h-full"
-        src={`https://www.youtube.com/embed/${demo.videoId}?autoplay=1&controls=1&modestbranding=1&rel=0`}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
+      <video
+        className="w-full h-full object-cover"
+        src={demo.videoUrl}
+        autoPlay
+        controls
+        playsInline
         title={demo.title}
       />
     );
@@ -113,15 +113,15 @@ function VideoArea({ demo, playing, onPlay }: { demo: Demo; playing: boolean; on
         onClick={onPlay}
         className="w-[68px] h-[68px] rounded-full flex items-center justify-center border-2"
         style={{
-          background: demo.videoId ? `${demo.accent}22` : "rgba(255,255,255,0.04)",
-          borderColor: demo.videoId ? demo.accent : "rgba(255,255,255,0.12)",
-          boxShadow: demo.videoId ? `0 0 48px ${demo.accent}44` : "none",
+          background: demo.videoUrl ? `${demo.accent}22` : "rgba(255,255,255,0.04)",
+          borderColor: demo.videoUrl ? demo.accent : "rgba(255,255,255,0.12)",
+          boxShadow: demo.videoUrl ? `0 0 48px ${demo.accent}44` : "none",
         }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
-        aria-label={demo.videoId ? "Play demo video" : "Video coming soon"}
+        aria-label={demo.videoUrl ? "Play demo video" : "Video coming soon"}
       >
-        {demo.videoId ? (
+        {demo.videoUrl ? (
           <svg viewBox="0 0 24 24" fill={demo.accent} className="w-7 h-7 translate-x-0.5" aria-hidden="true">
             <path d="M6.75 5.25 17.25 12 6.75 18.75V5.25Z" />
           </svg>
@@ -130,7 +130,7 @@ function VideoArea({ demo, playing, onPlay }: { demo: Demo; playing: boolean; on
         )}
       </motion.button>
 
-      {demo.videoId && (
+      {demo.videoUrl && (
         <p className="text-xs font-semibold" style={{ color: `${demo.accent}cc` }}>
           Click to play
         </p>
