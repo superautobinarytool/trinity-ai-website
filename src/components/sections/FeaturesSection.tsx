@@ -59,17 +59,17 @@ export default function FeaturesSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-16 max-w-2xl mx-auto"
+          className="text-center mb-10 sm:mb-16 max-w-2xl mx-auto"
         >
           <Badge variant="cyan" className="mb-4">
             Why 90% of traders fail — and how Trinity stops it
           </Badge>
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white mb-5 leading-[1.1]">
+          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white mb-4 sm:mb-5 leading-[1.1]">
             You&apos;re not losing because of bad luck.
             <br />
             <span className="gradient-text">You&apos;re losing because you&apos;re human.</span>
           </h2>
-          <p className="text-gray-400 text-lg sm:text-xl leading-8 font-light">
+          <p className="text-gray-400 text-base sm:text-lg leading-7 sm:leading-8 font-light">
             Emotion clouds judgement. Hesitation costs windows. Inconsistency kills edge.
             These are the three killers of every manual trader — and Trinity was engineered
             to remove all three, permanently.
@@ -81,11 +81,11 @@ export default function FeaturesSection() {
           variants={container}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
-          className="grid md:grid-cols-3 gap-6"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
         >
           {FEATURES.map(({ Icon, color, glow, badge, tag, title, desc, points }) => (
             <motion.div key={title} variants={cardV}>
-              <GlowCard glowColor={glow} className="h-full p-7 flex flex-col gap-5">
+              <GlowCard glowColor={glow} className="h-full p-5 sm:p-7 flex flex-col gap-4 sm:gap-5">
                 {/* Icon */}
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center text-white shadow-lg`}>
                   <Icon className="w-6 h-6" />

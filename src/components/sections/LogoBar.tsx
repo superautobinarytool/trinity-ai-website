@@ -132,19 +132,19 @@ export default function LogoBar() {
 
       <div className="flex overflow-hidden select-none" aria-hidden="true">
         <motion.div
-          className="flex gap-20 items-center pr-20"
+          className="flex gap-12 sm:gap-20 items-center pr-12 sm:pr-20"
           animate={{ x: ["0%", "-50%"] }}
           transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
         >
           {DOUBLED.map(({ name, Icon }, i) => (
             <div
               key={i}
-              className="flex items-center gap-3 flex-shrink-0 opacity-40 hover:opacity-70 transition-opacity duration-300"
+              className="flex items-center gap-2 sm:gap-3 flex-shrink-0 opacity-40 hover:opacity-70 transition-opacity duration-300"
             >
-              <span className="w-8 h-8 flex-shrink-0 rounded-lg overflow-hidden">
+              <span className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0 rounded-lg overflow-hidden">
                 <Icon />
               </span>
-              <span className="text-base text-gray-300 font-semibold whitespace-nowrap tracking-tight">{name}</span>
+              <span className="text-sm sm:text-base text-gray-300 font-semibold whitespace-nowrap tracking-tight">{name}</span>
             </div>
           ))}
         </motion.div>

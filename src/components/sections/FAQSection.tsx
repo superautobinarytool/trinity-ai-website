@@ -46,14 +46,14 @@ export default function FAQSection() {
         initial={{ opacity: 0, y: 24 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        className="text-center mb-14 max-w-xl mx-auto"
+        className="text-center mb-10 sm:mb-14 max-w-xl mx-auto"
       >
         <Badge variant="neutral" className="mb-4">FAQ</Badge>
-        <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white mb-5">
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-white mb-4 sm:mb-5">
           Got doubts?{" "}
           <span className="gradient-text">Good. Read these.</span>
         </h2>
-        <p className="text-gray-400 text-lg">
+        <p className="text-gray-400 text-base sm:text-lg">
           We answer every question honestly — including the ones other tools bury in fine print.
           Still unsure? Hit us on Discord — we reply in under 10 minutes.
         </p>

@@ -202,7 +202,7 @@ export default function VideoDemoSection() {
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <Badge variant="cyan" className="mb-5">Platform In Action</Badge>
           <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white mb-5 leading-[1.08]">
@@ -221,7 +221,7 @@ export default function VideoDemoSection() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="flex items-center justify-between mb-7"
+          className="flex items-center justify-between mb-6 sm:mb-7 gap-2"
         >
           {/* Counter */}
           <span className="text-sm font-mono text-gray-600 tabular-nums select-none">
@@ -267,7 +267,7 @@ export default function VideoDemoSection() {
           </div>
         </motion.div>
 
-        {/* ── Demo Card ── */}
+            {/* ── Demo Card ── */}
         <AnimatePresence mode="wait" custom={dir}>
           <motion.div
             key={activeIdx}
@@ -310,11 +310,11 @@ export default function VideoDemoSection() {
 
             {/* Title + description */}
             <div
-              className="px-8 py-8 grid sm:grid-cols-[1fr_auto] gap-6 items-start"
+              className="px-4 py-5 sm:px-8 sm:py-7 grid sm:grid-cols-[1fr_auto] gap-4 sm:gap-6 items-start"
               style={{ background: "linear-gradient(180deg, #040e1e 0%, #030b18 100%)" }}
             >
               <div>
-                <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-3 leading-snug">
+                <h3 className="font-display text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-3 leading-snug">
                   {demo.title}
                 </h3>
                 <p className="text-gray-400 text-sm leading-relaxed max-w-2xl">{demo.sub}</p>
@@ -347,7 +347,7 @@ export default function VideoDemoSection() {
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex gap-3 mt-6"
+          className="flex gap-2 sm:gap-3 mt-5 sm:mt-6 overflow-x-auto pb-2 scrollbar-hide"
         >
           {DEMOS.map((d, i) => (
             <button

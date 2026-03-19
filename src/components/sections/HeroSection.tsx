@@ -248,8 +248,8 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
       ref={ref}
       id="hero"
       aria-label="Start trading like smart money"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-center"
-      style={{ paddingTop: headerHeight + 48, paddingBottom: "6rem" }}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-center pb-12 sm:pb-24"
+      style={{ paddingTop: headerHeight + 48 }}
     >
       {/* Background */}
       <div className="absolute inset-0 bg-[#040d1a]" aria-hidden="true" />
@@ -277,7 +277,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         variants={stagger}
         initial="hidden"
         animate={inView ? "show" : "hidden"}
-        className="relative z-10 max-w-3xl mx-auto px-6"
+        className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6"
       >
         <motion.div variants={up} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/40 bg-green-500/10 text-green-300 text-sm font-semibold mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
@@ -298,24 +298,24 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
           </span>
         </motion.h1>
 
-        <motion.p variants={up} className="text-xl sm:text-2xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-12 font-light">
+        <motion.p variants={up} className="text-base sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-10 sm:mb-12 font-light">
           90% of binary options traders lose — because they&apos;re slower, less disciplined, and less informed than the market.
           Trinity is the <strong className="text-white font-semibold">AI-powered binary options bot</strong> that eliminates all three:
           reading 25+ assets, firing high-probability CALL&nbsp;&amp;&nbsp;PUT signals, and executing on your broker in milliseconds.
           You press START. Trinity does the rest.
         </motion.p>
 
-        <motion.div variants={up} className="flex flex-wrap items-center justify-center gap-3">
+        <motion.div variants={up} className="flex flex-wrap items-center justify-center gap-3 px-2">
           <a
             href="#pricing"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/50 text-white font-semibold text-base bg-white/5 backdrop-blur-sm hover:bg-white/15 hover:border-white/80 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/50 text-white font-semibold text-base bg-white/5 backdrop-blur-sm hover:bg-white/15 hover:border-white/80 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
             Get Trinity — Start Profiting Today
             <ArrowRightIcon className="w-5 h-5" />
           </a>
         </motion.div>
 
-        <motion.div variants={up} className="mt-8 flex flex-wrap items-center justify-center gap-5 text-sm text-gray-400">
+        <motion.div variants={up} className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-400">
           {([
             { Icon: LockClosedIcon,     text: "Licensed & secured"         },
             { Icon: ArrowUturnLeftIcon, text: "30-day money-back guarantee" },
@@ -334,7 +334,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         initial={{ opacity: 0, y: 60 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.9, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 mt-20 w-full max-w-6xl mx-auto px-6"
+        className="relative z-10 mt-12 sm:mt-20 w-full max-w-6xl mx-auto px-3 sm:px-6"
         aria-hidden="true"
       >
         {/* Glow halos */}

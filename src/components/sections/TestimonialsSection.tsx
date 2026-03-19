@@ -125,9 +125,9 @@ export default function TestimonialsSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-14"
+          className="text-center mb-10 sm:mb-14"
         >
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-white">
             11,000+ traders already quit
             <br />
             <span
@@ -137,16 +137,16 @@ export default function TestimonialsSection() {
               trading manually.
             </span>
           </h2>
-          <p className="mt-4 text-gray-400 text-lg sm:text-xl font-light">The common thread? They all stopped guessing — and started letting Trinity execute for them.</p>
+          <p className="mt-3 sm:mt-4 text-gray-400 text-base sm:text-lg font-light">The common thread? They all stopped guessing — and started letting Trinity execute for them.</p>
         </motion.div>
 
         {/* Carousel row */}
-        <div className="relative flex items-center gap-4">
-          {/* Prev arrow */}
+        <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          {/* Prev arrow — hidden on mobile, shown at sm+ */}
           <button
             onClick={prev}
             disabled={page === 0}
-            className="flex-shrink-0 w-11 h-11 rounded-full border border-white/20 bg-white/5 hover:bg-white/15 disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center text-white"
+            className="hidden sm:flex flex-shrink-0 w-11 h-11 rounded-full border border-white/20 bg-white/5 hover:bg-white/15 disabled:opacity-20 disabled:cursor-not-allowed transition-all items-center justify-center text-white"
             aria-label="Previous reviews"
           >
             <ChevronLeftIcon className="w-4 h-4" />
@@ -192,11 +192,32 @@ export default function TestimonialsSection() {
             </AnimatePresence>
           </div>
 
-          {/* Next arrow */}
+          {/* Next arrow — hidden on mobile, shown at sm+ */}
           <button
             onClick={next}
             disabled={page === totalPages - 1}
-            className="flex-shrink-0 w-11 h-11 rounded-full border border-white/20 bg-white/5 hover:bg-white/15 disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center text-white"
+            className="hidden sm:flex flex-shrink-0 w-11 h-11 rounded-full border border-white/20 bg-white/5 hover:bg-white/15 disabled:opacity-20 disabled:cursor-not-allowed transition-all items-center justify-center text-white"
+            aria-label="Next reviews"
+          >
+            <ChevronRightIcon className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Mobile prev/next buttons */}
+        <div className="flex sm:hidden items-center justify-center gap-3 mt-5">
+          <button
+            onClick={prev}
+            disabled={page === 0}
+            className="w-11 h-11 rounded-full border border-white/20 bg-white/5 hover:bg-white/15 disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center text-white"
+            aria-label="Previous reviews"
+          >
+            <ChevronLeftIcon className="w-4 h-4" />
+          </button>
+          <span className="text-xs text-gray-500 tabular-nums">{page + 1} / {totalPages}</span>
+          <button
+            onClick={next}
+            disabled={page === totalPages - 1}
+            className="w-11 h-11 rounded-full border border-white/20 bg-white/5 hover:bg-white/15 disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center text-white"
             aria-label="Next reviews"
           >
             <ChevronRightIcon className="w-4 h-4" />
@@ -204,7 +225,7 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Dots */}
-        <div className="flex justify-center gap-2 mt-8">
+        <div className="flex justify-center gap-2 mt-6 sm:mt-8">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}

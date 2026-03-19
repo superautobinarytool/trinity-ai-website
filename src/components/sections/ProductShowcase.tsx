@@ -150,7 +150,7 @@ function ProductCard({ product, index, inView }: {
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
-          className="flex flex-col justify-center gap-5 p-8 lg:p-10"
+          className="flex flex-col justify-center gap-4 sm:gap-5 p-5 sm:p-8 lg:p-10"
         >
           <motion.span
             variants={up}
@@ -160,7 +160,7 @@ function ProductCard({ product, index, inView }: {
             {product.category}
           </motion.span>
 
-          <motion.h3 variants={up} className="font-display text-2xl sm:text-[1.85rem] font-bold text-white leading-tight tracking-tight">
+          <motion.h3 variants={up} className="font-display text-xl sm:text-[1.85rem] font-bold text-white leading-tight tracking-tight">
             {product.title}
           </motion.h3>
 
@@ -196,15 +196,15 @@ export default function ProductShowcase() {
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-14"
+          className="text-center mb-10 sm:mb-14"
         >
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-white">
             Everything inside one{" "}
             <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#22c55e,#16a34a)" }}>
               private platform.
             </span>
           </h2>
-          <p className="mt-5 text-gray-400 text-lg sm:text-xl leading-8 font-light max-w-xl mx-auto">
+          <p className="mt-3 sm:mt-5 text-gray-400 text-base sm:text-lg leading-7 sm:leading-8 font-light max-w-xl mx-auto">
             Auto-execution. Live charts. Real-time analytics. All working together, all exclusive to verified Trinity users.
           </p>
         </motion.div>

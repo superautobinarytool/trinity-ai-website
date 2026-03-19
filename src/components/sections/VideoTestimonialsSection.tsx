@@ -346,15 +346,15 @@ export default function VideoTestimonialsSection() {
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <Badge variant="green" className="mb-5">Real People · Real Results</Badge>
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white mb-5 leading-[1.08]">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white mb-4 sm:mb-5 leading-[1.1]">
             They filmed it themselves.
             <br />
             <span className="gradient-text">No script. No filters. No edits.</span>
           </h2>
-          <p className="text-gray-400 text-lg sm:text-xl font-light max-w-2xl mx-auto leading-8">
+          <p className="text-gray-400 text-base sm:text-lg font-light max-w-2xl mx-auto leading-7 sm:leading-8">
             These aren&apos;t actors. These are Trinity users who hit record on their phones, opened
             their broker accounts, and showed you exactly what Trinity did for them.
           </p>
@@ -435,7 +435,7 @@ export default function VideoTestimonialsSection() {
           </div>
 
           {/* ── Navigation ── */}
-          <div className="flex flex-col items-center gap-6 mt-10">
+          <div className="flex flex-col items-center gap-4 sm:gap-6 mt-8 sm:mt-10">
             {/* Dot indicators */}
             <div className="flex gap-2.5 items-center">
               {TESTIMONIALS.map((t, i) => (
@@ -455,41 +455,42 @@ export default function VideoTestimonialsSection() {
             </div>
 
             {/* Arrow buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={prev}
-                disabled={activeIdx === 0}
-                className="w-12 h-12 rounded-full border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.10] disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center text-white"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeftIcon className="w-5 h-5" />
-              </button>
+              <div className="flex gap-2 sm:gap-3">
+                <button
+                  onClick={prev}
+                  disabled={activeIdx === 0}
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.10] disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center text-white"
+                  aria-label="Previous testimonial"
+                >
+                  <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
 
-              {/* Name label */}
-              <div
-                className="flex items-center gap-3 px-6 py-3 rounded-full text-sm font-semibold"
-                style={{
-                  background: `${activeColor}12`,
-                  border: `1px solid ${activeColor}35`,
-                  color: activeColor,
-                  minWidth: 180,
-                  justifyContent: "center",
-                  transition: "all 0.35s ease",
-                }}
-              >
-                <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: activeColor }} />
-                {TESTIMONIALS[activeIdx].name} &nbsp;·&nbsp; {TESTIMONIALS[activeIdx].profit}
+                {/* Name label */}
+                <div
+                  className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold"
+                  style={{
+                    background: `${activeColor}12`,
+                    border: `1px solid ${activeColor}35`,
+                    color: activeColor,
+                    minWidth: 140,
+                    maxWidth: 220,
+                    justifyContent: "center",
+                    transition: "all 0.35s ease",
+                  }}
+                >
+                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full flex-shrink-0" style={{ background: activeColor }} />
+                  {TESTIMONIALS[activeIdx].name} &nbsp;·&nbsp; {TESTIMONIALS[activeIdx].profit}
+                </div>
+
+                <button
+                  onClick={next}
+                  disabled={activeIdx === TESTIMONIALS.length - 1}
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.10] disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center text-white"
+                  aria-label="Next testimonial"
+                >
+                  <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
               </div>
-
-              <button
-                onClick={next}
-                disabled={activeIdx === TESTIMONIALS.length - 1}
-                className="w-12 h-12 rounded-full border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.10] disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center text-white"
-                aria-label="Next testimonial"
-              >
-                <ChevronRightIcon className="w-5 h-5" />
-              </button>
-            </div>
 
             {/* Trust row */}
             <p className="text-xs text-gray-600 font-light text-center">

@@ -118,15 +118,15 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-14"
+          className="text-center mb-10 sm:mb-14"
         >
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tighter text-white">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-white">
             One tool.{" "}
             <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#22c55e,#16a34a)" }}>
               Unlimited upside.
             </span>
           </h2>
-          <p className="mt-4 text-gray-400 text-lg sm:text-xl font-light max-w-xl mx-auto">
+          <p className="mt-3 sm:mt-4 text-gray-400 text-base sm:text-lg font-light max-w-xl mx-auto">
             10 trades at 80% win rate with a $100 stake — <strong className="text-white">$440 net profit</strong>. Trinity pays for itself in the first session.
           </p>
         </motion.div>
@@ -139,7 +139,7 @@ export default function PricingSection() {
               initial={{ opacity: 0, y: 32 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className={`relative rounded-2xl overflow-hidden flex flex-col p-8 ${
+              className={`relative rounded-2xl overflow-hidden flex flex-col p-5 sm:p-8 ${
                 plan.light
                   ? "bg-white text-gray-900 shadow-[0_8px_60px_rgba(139,92,246,0.25)]"
                   : "bg-[#0c1327] border border-white/[0.09] shadow-[0_8px_40px_rgba(0,0,0,0.4)] text-white"

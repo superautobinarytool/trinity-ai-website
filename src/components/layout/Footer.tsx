@@ -97,10 +97,10 @@ export default function Footer() {
       {/* Top gradient separator */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#22C55E]/30 to-transparent" aria-hidden="true" />
 
-      <div className="container-xl py-16 sm:py-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
+      <div className="container-xl py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-12">
           {/* Brand column */}
-          <div className="col-span-2 lg:col-span-2">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-2">
             <a href="/" className="flex items-center mb-6 w-fit" aria-label="Project Trinity home">
               <img
                 src={logoWhite}
@@ -137,7 +137,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-14 pt-8 border-t border-white/[0.07] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="mt-8 pt-6 sm:pt-8 border-t border-white/[0.07] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-600 text-center sm:text-left">
             © 2026 Project Trinity. All rights reserved. Trading involves risk — only trade with capital you can afford to lose.
           </p>
