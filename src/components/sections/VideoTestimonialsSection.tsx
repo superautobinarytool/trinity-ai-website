@@ -100,10 +100,12 @@ function Stars({ count, color }: { count: number; color: string }) {
 function TestimonialCard({
   t,
   isCenter,
+  sectionInView,
   onClick,
 }: {
   t: (typeof TESTIMONIALS)[number];
   isCenter: boolean;
+  sectionInView: boolean;
   onClick?: () => void;
 }) {
   const [playing, setPlaying] = useState(false);
@@ -112,6 +114,11 @@ function TestimonialCard({
   useEffect(() => {
     if (!isCenter) setPlaying(false);
   }, [isCenter]);
+
+  // Auto-play the center card when the section enters the viewport
+  useEffect(() => {
+    if (isCenter && sectionInView) setPlaying(true);
+  }, [isCenter, sectionInView]);
 
   return (
     <div
@@ -142,6 +149,7 @@ function TestimonialCard({
             className="absolute inset-0 w-full h-full object-cover"
             src={t.videoUrl}
             autoPlay
+            muted
             controls
             playsInline
             title={`${t.name} testimonial`}
@@ -390,6 +398,7 @@ export default function VideoTestimonialsSection() {
                     <TestimonialCard
                       t={t}
                       isCenter={isCenter}
+                      sectionInView={inView}
                       onClick={() => {
                         if (pos === -1) prev();
                         if (pos === 1) next();

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import Section from "@/components/ui/Section";
 import Badge from "@/components/ui/Badge";
@@ -61,6 +61,7 @@ function VideoArea({ demo, playing, onPlay }: { demo: Demo; playing: boolean; on
         className="w-full h-full object-cover"
         src={demo.videoUrl}
         autoPlay
+        muted
         controls
         playsInline
         title={demo.title}
@@ -148,11 +149,18 @@ export default function VideoDemoSection() {
   const [dir, setDir]             = useState(1);
   const [playing, setPlaying]     = useState(false);
 
+  // Auto-play when section scrolls into view
+  useEffect(() => {
+    if (inView) setPlaying(true);
+  }, [inView]);
+
   const goTo = (i: number) => {
     if (i === activeIdx) return;
     setDir(i > activeIdx ? 1 : -1);
     setActiveIdx(i);
     setPlaying(false);
+    // Re-trigger autoplay after slide transition completes
+    setTimeout(() => setPlaying(true), 560);
   };
   const prev = () => activeIdx > 0 && goTo(activeIdx - 1);
   const next = () => activeIdx < DEMOS.length - 1 && goTo(activeIdx + 1);
