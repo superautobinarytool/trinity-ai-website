@@ -73,46 +73,39 @@ const VALID_COUPONS: Record<string, CouponDef> = {
 };
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   NOWPAYMENTS INTEGRATION STUB
-   ─────────────────────────────────────────────────────────────────────────────
-   This function is the single integration point for NOWPayments.io.
-   Once your backend endpoint is ready, uncomment the fetch block and remove the
-   throw. See NOWPAYMENTS_INTEGRATION.md for the full backend setup guide.
-
-   Expected backend response shape:
-     { invoice_url: string }        ← hosted checkout page URL from NOWPayments
+   NOWPAYMENTS — LIVE INTEGRATION
+   The frontend calls our own serverless endpoint (/api/payments/create-invoice)
+   which holds the API key server-side and proxies the request to NOWPayments.
+   The endpoint returns { invoice_url } which we redirect the user to.
    ───────────────────────────────────────────────────────────────────────────── */
 interface OrderPayload {
   name: string;
   email: string;
   plan: PlanId;
   coupon: string | null;
-  amount: number;          // final amount after discount (USD)
-  orderId: string;         // unique order reference generated client-side
+  amount: number;   // USD amount after any coupon discount
+  orderId: string;  // unique reference e.g. TRINITY-1718910000000-AB12CD
 }
 
 async function initiateNOWPayment(order: OrderPayload): Promise<string> {
-  /* ── PRODUCTION: uncomment this block once your backend is ready ────────── */
-  //
-  // const res = await fetch("/api/payments/create-invoice", {
-  //   method:  "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body:    JSON.stringify(order),
-  // });
-  //
-  // if (!res.ok) {
-  //   const err = await res.json().catch(() => ({}));
-  //   throw new Error(err.message ?? "Payment gateway error. Please try again.");
-  // }
-  //
-  // const { invoice_url } = await res.json();
-  // return invoice_url;  // redirect user to this URL
-  //
-  /* ── END PRODUCTION BLOCK ───────────────────────────────────────────────── */
+  const res = await fetch("/api/payments/create-invoice", {
+    method:  "POST",
+    headers: { "Content-Type": "application/json" },
+    body:    JSON.stringify(order),
+  });
 
-  // Stub: logs the order so you can verify the shape before going live
-  console.info("[NOWPayments stub] Order payload ready:", order);
-  throw new Error("NOWPAYMENTS_NOT_CONFIGURED");
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(
+      (data as { message?: string }).message ??
+      "Payment gateway error. Please try again or contact support."
+    );
+  }
+
+  const { invoice_url } = data as { invoice_url: string };
+  if (!invoice_url) throw new Error("No payment URL returned. Please try again.");
+  return invoice_url;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -227,7 +220,7 @@ export default function Checkout() {
   const [couponState, setCouponState]     = useState<"idle" | "valid" | "invalid">("idle");
 
   /* ── Submission state ────────────────────────────────────────────────────── */
-  const [submitState, setSubmitState] = useState<"idle" | "loading" | "error" | "stub">("idle");
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "error">("idle");
   const [submitError, setSubmitError] = useState("");
 
   /* ── Mobile summary collapsed state ─────────────────────────────────────── */
@@ -321,17 +314,12 @@ export default function Checkout() {
         amount: total,
         orderId,
       });
-      // Redirect to NOWPayments hosted checkout page
+      // Redirect to NOWPayments hosted payment page
       window.location.href = url;
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Unknown error";
-      if (msg === "NOWPAYMENTS_NOT_CONFIGURED") {
-        // Development: show helpful stub message
-        setSubmitState("stub");
-      } else {
-        setSubmitState("error");
-        setSubmitError(msg);
-      }
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setSubmitState("error");
+      setSubmitError(msg);
     }
   }
 
@@ -468,30 +456,6 @@ export default function Checkout() {
               </p>
             </div>
 
-            {/* Stub / backend not configured notice */}
-            <AnimatePresence>
-              {submitState === "stub" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="mb-6 p-4 rounded-xl border border-amber-500/30 bg-amber-500/[0.07]"
-                  role="status"
-                >
-                  <p className="text-sm font-semibold text-amber-400 mb-1">Payment backend not yet connected</p>
-                  <p className="text-xs text-amber-400/70 leading-relaxed">
-                    Your order details are valid and ready. Connect the backend endpoint to go live — see{" "}
-                    <span className="font-mono font-medium">NOWPAYMENTS_INTEGRATION.md</span> in the project root.
-                  </p>
-                  <p className="text-xs text-amber-400/50 mt-2 font-mono">
-                    Order: {name.trim()} · {email.trim()} · {planId} · ${total.toFixed(2)}
-                    {appliedCoupon && ` · Coupon: ${appliedCoupon.code}`}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
             {/* Server error notice */}
             <AnimatePresence>
               {submitState === "error" && submitError && (
@@ -624,7 +588,7 @@ export default function Checkout() {
 
               {/* ── Payment method block ── */}
               <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5 sm:p-6 flex flex-col gap-4">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between flex-wrap gap-2">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-600">Payment Method</p>
                   <span className="text-[10px] text-gray-600 font-medium">Powered by NOWPayments.io</span>
                 </div>
@@ -651,8 +615,17 @@ export default function Checkout() {
                 </div>
 
                 <p className="text-xs text-gray-600 leading-relaxed">
-                  After clicking below, you&apos;ll be taken to our secure payment page where you can choose your preferred cryptocurrency. Your order is locked in at today&apos;s rate.
+                  After clicking below you&apos;ll be taken to our secure payment page to choose your preferred cryptocurrency. Your order amount is locked in at today&apos;s rate.
                 </p>
+
+                {/* Fiat coming soon strip */}
+                <div className="flex items-center gap-2.5 pt-1 border-t border-white/[0.05]">
+                  <div className="w-1.5 h-1.5 rounded-full bg-amber-400/60 flex-shrink-0" aria-hidden="true" />
+                  <p className="text-[11px] text-gray-600 leading-relaxed">
+                    <span className="text-gray-500 font-medium">Credit / debit card payments</span>
+                    {" "}are being activated and will be available within a few days.
+                  </p>
+                </div>
               </div>
 
               {/* ── Submit ── */}
