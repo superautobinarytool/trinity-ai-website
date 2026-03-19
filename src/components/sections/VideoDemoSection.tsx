@@ -54,7 +54,7 @@ const DEMOS = [
 type Demo = (typeof DEMOS)[number];
 
 /* ── Animated placeholder / video embed ── */
-function VideoArea({ demo, playing, onPlay }: { demo: Demo; playing: boolean; onPlay: () => void }) {
+function VideoArea({ demo, playing, onPlay, onUserPause }: { demo: Demo; playing: boolean; onPlay: () => void; onUserPause: () => void }) {
   if (playing && demo.videoUrl) {
     return (
       <video
@@ -65,6 +65,7 @@ function VideoArea({ demo, playing, onPlay }: { demo: Demo; playing: boolean; on
         controls
         playsInline
         title={demo.title}
+        onPause={(e) => { if (!e.currentTarget.ended) onUserPause(); }}
       />
     );
   }
@@ -149,13 +150,32 @@ export default function VideoDemoSection() {
   const [dir, setDir]             = useState(1);
   const [playing, setPlaying]     = useState(false);
 
-  // Auto-play when section scrolls into view
+  const autoScrollRef = useRef(true); // flips false when user takes manual control
+  const activeIdxRef  = useRef(0);    // mirrors activeIdx for use inside interval closure
+
+  // Keep ref in sync with state
+  useEffect(() => { activeIdxRef.current = activeIdx; }, [activeIdx]);
+
+  // Autoplay + 3-second looping auto-advance when section enters viewport
   useEffect(() => {
-    if (inView) setPlaying(true);
+    if (!inView) return;
+    setPlaying(true);
+    const id = setInterval(() => {
+      if (!autoScrollRef.current) return;
+      const next = (activeIdxRef.current + 1) % DEMOS.length;
+      setDir(1);
+      setActiveIdx(next);
+      setPlaying(false);
+      setTimeout(() => setPlaying(true), 560);
+    }, 3000);
+    return () => clearInterval(id);
   }, [inView]);
+
+  const stopAutoScroll = () => { autoScrollRef.current = false; };
 
   const goTo = (i: number) => {
     if (i === activeIdx) return;
+    stopAutoScroll();
     setDir(i > activeIdx ? 1 : -1);
     setActiveIdx(i);
     setPlaying(false);
@@ -284,7 +304,7 @@ export default function VideoDemoSection() {
             {/* 16:9 video area */}
             <div className="relative w-full" style={{ paddingTop: "56.25%", background: "#040e1e" }}>
               <div className="absolute inset-0">
-                <VideoArea demo={demo} playing={playing} onPlay={() => setPlaying(true)} />
+                <VideoArea demo={demo} playing={playing} onPlay={() => setPlaying(true)} onUserPause={stopAutoScroll} />
               </div>
             </div>
 

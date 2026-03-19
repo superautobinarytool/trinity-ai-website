@@ -101,11 +101,13 @@ function TestimonialCard({
   t,
   isCenter,
   sectionInView,
+  onUserPause,
   onClick,
 }: {
   t: (typeof TESTIMONIALS)[number];
   isCenter: boolean;
   sectionInView: boolean;
+  onUserPause: () => void;
   onClick?: () => void;
 }) {
   const [playing, setPlaying] = useState(false);
@@ -153,6 +155,7 @@ function TestimonialCard({
             controls
             playsInline
             title={`${t.name} testimonial`}
+            onPause={(e) => { if (!e.currentTarget.ended) onUserPause(); }}
           />
         ) : (
           /* Placeholder / thumbnail */
@@ -300,6 +303,25 @@ export default function VideoTestimonialsSection() {
 
   const [activeIdx, setActiveIdx] = useState(0);
 
+  const autoScrollRef = useRef(true); // flips false when user takes manual control
+  const activeIdxRef  = useRef(0);    // mirrors activeIdx for use inside interval closure
+
+  // Keep ref in sync with state
+  useEffect(() => { activeIdxRef.current = activeIdx; }, [activeIdx]);
+
+  // 3-second looping auto-advance when section enters viewport
+  useEffect(() => {
+    if (!inView) return;
+    const id = setInterval(() => {
+      if (!autoScrollRef.current) return;
+      const next = (activeIdxRef.current + 1) % TESTIMONIALS.length;
+      setActiveIdx(next);
+    }, 3000);
+    return () => clearInterval(id);
+  }, [inView]);
+
+  const stopAutoScroll = () => { autoScrollRef.current = false; };
+
   const trackX =
     containerW != null
       ? (containerW - CARD_W) / 2 - activeIdx * ITEM_W
@@ -307,6 +329,7 @@ export default function VideoTestimonialsSection() {
 
   const goTo = (i: number) => {
     if (i < 0 || i >= TESTIMONIALS.length) return;
+    stopAutoScroll();
     setActiveIdx(i);
   };
   const prev = () => goTo(activeIdx - 1);
@@ -399,6 +422,7 @@ export default function VideoTestimonialsSection() {
                       t={t}
                       isCenter={isCenter}
                       sectionInView={inView}
+                      onUserPause={stopAutoScroll}
                       onClick={() => {
                         if (pos === -1) prev();
                         if (pos === 1) next();
