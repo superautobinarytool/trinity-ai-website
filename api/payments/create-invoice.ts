@@ -113,7 +113,7 @@ export default async function handler(
     order_id:          orderId,
     order_description: `Trinity ${planLabel} License — 1 Month`,
     success_url:       `${appUrl}/thank-you?order=${orderId}&plan=${plan}`,
-    cancel_url:        `${appUrl}/checkout?plan=${plan}`,
+    cancel_url:        `${appUrl}/payment-cancelled?plan=${plan}`,
     ipn_callback_url:  `${appUrl}/api/payments/webhook`,
   };
 
