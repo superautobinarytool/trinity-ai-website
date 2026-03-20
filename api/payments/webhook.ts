@@ -127,9 +127,16 @@ export default async function handler(
   }
 
   // ── 6. Write the license row ───────────────────────────────────────────────
-  const now    = new Date();
-  const expiry = new Date(now);
-  expiry.setDate(expiry.getDate() + 30); // 30-day subscription cycle
+  const now      = new Date();
+  const expiry   = new Date(now);
+  const isAnnual = (order.plan as string).endsWith("-annual");
+
+  // Annual plans run for exactly 1 calendar year; monthly plans run 30 days.
+  if (isAnnual) {
+    expiry.setFullYear(expiry.getFullYear() + 1);
+  } else {
+    expiry.setDate(expiry.getDate() + 30);
+  }
 
   const { data: license, error: licenseError } = await getSupabaseAdmin()
     .from("licenses")
@@ -137,6 +144,8 @@ export default async function handler(
       customer_name: order.customer_name,
       email:         order.email,
       license_key:   licenseKey!,
+      plan:          order.plan,
+      billing_type:  isAnnual ? "annual" : "monthly",
       start_date:    now.toISOString(),
       expiry_date:   expiry.toISOString(),
       is_active:     true,
@@ -177,7 +186,7 @@ export default async function handler(
     await sendLicenseEmail({
       to:           order.email,
       customerName: order.customer_name,
-      plan:         order.plan as "starter" | "pro",
+      plan:         order.plan as "starter" | "pro" | "starter-annual" | "pro-annual",
       licenseKey:   licenseKey!,
       orderId:      order_id,
       expiryDate:   expiryLabel,

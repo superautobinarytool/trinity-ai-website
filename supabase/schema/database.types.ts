@@ -31,6 +31,8 @@ export interface Database {
           customer_name: string;
           email:         string;
           license_key:   string;
+          plan:          "starter" | "pro" | "starter-annual" | "pro-annual"; // migration 003
+          billing_type:  "monthly" | "annual";                               // migration 003
           start_date:    string;               // timestamptz
           expiry_date:   string;               // timestamptz
           is_active:     boolean;
@@ -42,6 +44,8 @@ export interface Database {
           customer_name: string;
           email:         string;
           license_key:   string;
+          plan?:         "starter" | "pro" | "starter-annual" | "pro-annual";
+          billing_type?: "monthly" | "annual";
           start_date?:   string;
           expiry_date:   string;
           is_active?:    boolean;
@@ -53,6 +57,8 @@ export interface Database {
           customer_name?: string;
           email?:         string;
           license_key?:   string;
+          plan?:          "starter" | "pro" | "starter-annual" | "pro-annual";
+          billing_type?:  "monthly" | "annual";
           start_date?:    string;
           expiry_date?:   string;
           is_active?:     boolean;
@@ -105,7 +111,7 @@ export interface Database {
           order_id:               string;      // unique client ref
           customer_name:          string;
           email:                  string;
-          plan:                   "starter" | "pro";
+          plan:                   "starter" | "pro" | "starter-annual" | "pro-annual";
           amount_usd:             number;
           coupon_code:            string | null;
           status:                 "pending" | "confirmed" | "failed" | "expired";
@@ -119,7 +125,7 @@ export interface Database {
           order_id:               string;
           customer_name:          string;
           email:                  string;
-          plan:                   "starter" | "pro";
+          plan:                   "starter" | "pro" | "starter-annual" | "pro-annual";
           amount_usd:             number;
           coupon_code?:           string | null;
           status?:                "pending" | "confirmed" | "failed" | "expired";
@@ -133,7 +139,7 @@ export interface Database {
           order_id?:              string;
           customer_name?:         string;
           email?:                 string;
-          plan?:                  "starter" | "pro";
+          plan?:                  "starter" | "pro" | "starter-annual" | "pro-annual";
           amount_usd?:            number;
           coupon_code?:           string | null;
           status?:                "pending" | "confirmed" | "failed" | "expired";

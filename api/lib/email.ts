@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY!);
 export interface LicenseEmailPayload {
   to: string;
   customerName: string;
-  plan: "starter" | "pro";
+  plan: "starter" | "pro" | "starter-annual" | "pro-annual";
   licenseKey: string;
   orderId: string;
   expiryDate: string; // human-readable, e.g. "April 19, 2026"
@@ -18,17 +18,29 @@ export interface LicenseEmailPayload {
 const EMAIL_FROM    = process.env.EMAIL_FROM ?? "Trinity Trading <noreply@trinitytradingai.com>";
 const EMAIL_REPLY   = process.env.EMAIL_REPLY_TO ?? "support@trinitytradingai.com";
 
-// ── Public API ──────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────
+function getPlanLabel(plan: string): string {
+  switch (plan) {
+    case "pro":             return "Pro";
+    case "starter-annual": return "Starter Annual";
+    case "pro-annual":     return "Pro Annual";
+    default:               return "Starter";
+  }
+}
+
+// ── Public API ────────────────────────────────────────────────────────
 export async function sendLicenseEmail(payload: LicenseEmailPayload): Promise<void> {
-  const planLabel = payload.plan === "pro" ? "Pro" : "Starter";
+  const planLabel   = getPlanLabel(payload.plan);
+  const isAnnual    = payload.plan.endsWith("-annual");
+  const billingDesc = isAnnual ? "Annual" : "Monthly";
 
   const { error } = await resend.emails.send({
     from:    EMAIL_FROM,
     replyTo: EMAIL_REPLY,
     to:      payload.to,
-    subject:  `🔑 Your Trinity ${planLabel} license key is ready`,
-    html:     buildHtml(payload),
-    text:     buildPlainText(payload),
+    subject: `🔑 Your Trinity ${planLabel} License – ${billingDesc} Subscription`,
+    html:    buildHtml(payload),
+    text:    buildPlainText(payload),
   });
 
   if (error) {
@@ -38,8 +50,11 @@ export async function sendLicenseEmail(payload: LicenseEmailPayload): Promise<vo
 
 // ── HTML template ───────────────────────────────────────────────────────────
 function buildHtml(p: LicenseEmailPayload): string {
-  const planLabel = p.plan === "pro" ? "Pro" : "Starter";
-  const firstName = p.customerName.split(" ")[0];
+  const planLabel   = getPlanLabel(p.plan);
+  const isAnnual    = p.plan.endsWith("-annual");
+  const billingDesc = isAnnual ? "Annual" : "Monthly";
+  const validFor    = isAnnual ? "1 year" : "30 days";
+  const firstName   = p.customerName.split(" ")[0];
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -80,7 +95,7 @@ function buildHtml(p: LicenseEmailPayload): string {
                     <span style="display:inline-block;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);
                                  color:#22C55E;font-size:11px;font-weight:700;letter-spacing:0.08em;
                                  padding:4px 10px;border-radius:100px;text-transform:uppercase;">
-                      ${planLabel} Plan
+                      ${planLabel} &middot; ${billingDesc}
                     </span>
                   </td>
                 </tr>
@@ -126,6 +141,7 @@ function buildHtml(p: LicenseEmailPayload): string {
                   <td style="padding:0 20px 16px;">
                     <p style="margin:0;font-size:12px;color:#6b7280;">
                       Valid until <strong style="color:#9ca3af;">${escapeHtml(p.expiryDate)}</strong>
+                      <span style="color:#4b5563;margin-left:6px;">(${validFor})</span>
                     </p>
                   </td>
                 </tr>
@@ -213,10 +229,13 @@ function buildHtml(p: LicenseEmailPayload): string {
 
 // ── Plain-text fallback ──────────────────────────────────────────────────────
 function buildPlainText(p: LicenseEmailPayload): string {
-  const planLabel = p.plan === "pro" ? "Pro" : "Starter";
+  const planLabel   = getPlanLabel(p.plan);
+  const isAnnual    = p.plan.endsWith("-annual");
+  const billingDesc = isAnnual ? "Annual" : "Monthly";
+  const validFor    = isAnnual ? "1 year" : "30 days";
   return `
-TRINITY TRADING — Your ${planLabel} License Key
-================================================
+TRINITY TRADING — Your ${planLabel} License Key (${billingDesc})
+${"=".repeat(52)}
 
 Hi ${p.customerName},
 
@@ -224,7 +243,8 @@ Your payment has been confirmed. Here is your license key:
 
   ${p.licenseKey}
 
-Valid until: ${p.expiryDate}
+Valid until: ${p.expiryDate} (${validFor})
+Billing type: ${billingDesc} subscription
 
 HOW TO ACTIVATE
 ---------------
