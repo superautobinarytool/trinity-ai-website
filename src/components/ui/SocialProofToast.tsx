@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 interface Notification {
   name:     string;
   location: string;
-  flag:     string;
+  cc:       string;   // ISO 3166-1 alpha-2 country code (lowercase) for flagcdn.com
   plan:     string;
 }
 
@@ -26,56 +26,56 @@ type ActiveNotification = Notification & { minutesAgo: number; uid: number };
 
 // ── Data — 50 entries, diverse geography, skewed toward Pro Annual ─────────────
 const NOTIFICATIONS: Notification[] = [
-  { name: "James T.",      location: "New York, US",          flag: "🇺🇸", plan: "Pro Annual"      },
-  { name: "Sarah M.",      location: "London, UK",            flag: "🇬🇧", plan: "Starter Annual"  },
-  { name: "Ahmad K.",      location: "Dubai, UAE",            flag: "🇦🇪", plan: "Pro Monthly"     },
-  { name: "Priya S.",      location: "Singapore",             flag: "🇸🇬", plan: "Starter Annual"  },
-  { name: "Lucas B.",      location: "Sydney, AU",            flag: "🇦🇺", plan: "Pro Annual"      },
-  { name: "Emma W.",       location: "Toronto, CA",           flag: "🇨🇦", plan: "Starter Monthly" },
-  { name: "Michael C.",    location: "Berlin, DE",            flag: "🇩🇪", plan: "Pro Annual"      },
-  { name: "Yuki T.",       location: "Tokyo, JP",             flag: "🇯🇵", plan: "Pro Monthly"     },
-  { name: "Sofia V.",      location: "Amsterdam, NL",         flag: "🇳🇱", plan: "Starter Annual"  },
-  { name: "Raj P.",        location: "Mumbai, IN",            flag: "🇮🇳", plan: "Pro Annual"      },
-  { name: "Carlos M.",     location: "São Paulo, BR",         flag: "🇧🇷", plan: "Starter Monthly" },
-  { name: "Lisa H.",       location: "Paris, FR",             flag: "🇫🇷", plan: "Pro Annual"      },
-  { name: "Daniel O.",     location: "Lagos, NG",             flag: "🇳🇬", plan: "Starter Annual"  },
-  { name: "Amira F.",      location: "Cairo, EG",             flag: "🇪🇬", plan: "Pro Monthly"     },
-  { name: "Kevin L.",      location: "Hong Kong",             flag: "🇭🇰", plan: "Pro Annual"      },
-  { name: "Nina R.",       location: "Stockholm, SE",         flag: "🇸🇪", plan: "Starter Annual"  },
-  { name: "Omar A.",       location: "Riyadh, SA",            flag: "🇸🇦", plan: "Pro Annual"      },
-  { name: "Taylor S.",     location: "Chicago, US",           flag: "🇺🇸", plan: "Starter Monthly" },
-  { name: "Isabella C.",   location: "Milan, IT",             flag: "🇮🇹", plan: "Pro Annual"      },
-  { name: "Marcus J.",     location: "Johannesburg, ZA",      flag: "🇿🇦", plan: "Starter Annual"  },
-  { name: "Chen W.",       location: "Shanghai, CN",          flag: "🇨🇳", plan: "Pro Monthly"     },
-  { name: "Fatima H.",     location: "Istanbul, TR",          flag: "🇹🇷", plan: "Pro Annual"      },
-  { name: "Nathan B.",     location: "Melbourne, AU",         flag: "🇦🇺", plan: "Starter Annual"  },
-  { name: "Elena K.",      location: "Warsaw, PL",            flag: "🇵🇱", plan: "Pro Monthly"     },
-  { name: "Arjun V.",      location: "Bangalore, IN",         flag: "🇮🇳", plan: "Pro Annual"      },
-  { name: "Mia L.",        location: "Barcelona, ES",         flag: "🇪🇸", plan: "Starter Monthly" },
-  { name: "Ryan O.",       location: "Dublin, IE",            flag: "🇮🇪", plan: "Pro Annual"      },
-  { name: "Hana S.",       location: "Seoul, KR",             flag: "🇰🇷", plan: "Pro Annual"      },
-  { name: "Felix M.",      location: "Zurich, CH",            flag: "🇨🇭", plan: "Starter Annual"  },
-  { name: "Chloe P.",      location: "Montreal, CA",          flag: "🇨🇦", plan: "Pro Monthly"     },
-  { name: "Ethan G.",      location: "Los Angeles, US",       flag: "🇺🇸", plan: "Pro Annual"      },
-  { name: "Aisha B.",      location: "Nairobi, KE",           flag: "🇰🇪", plan: "Starter Annual"  },
-  { name: "Victor S.",     location: "Moscow, RU",            flag: "🇷🇺", plan: "Pro Monthly"     },
-  { name: "Layla M.",      location: "Beirut, LB",            flag: "🇱🇧", plan: "Pro Annual"      },
-  { name: "Jack T.",       location: "Auckland, NZ",          flag: "🇳🇿", plan: "Starter Annual"  },
-  { name: "Mei L.",        location: "Taipei, TW",            flag: "🇹🇼", plan: "Pro Monthly"     },
-  { name: "Benjamin F.",   location: "Frankfurt, DE",         flag: "🇩🇪", plan: "Pro Annual"      },
-  { name: "Ana C.",        location: "Buenos Aires, AR",      flag: "🇦🇷", plan: "Starter Annual"  },
-  { name: "Zaid A.",       location: "Karachi, PK",           flag: "🇵🇰", plan: "Pro Monthly"     },
-  { name: "Sophie D.",     location: "Brussels, BE",          flag: "🇧🇪", plan: "Pro Annual"      },
-  { name: "Alexander M.",  location: "Athens, GR",            flag: "🇬🇷", plan: "Starter Annual"  },
-  { name: "Yuna K.",       location: "Osaka, JP",             flag: "🇯🇵", plan: "Starter Monthly" },
-  { name: "Hassan O.",     location: "Accra, GH",             flag: "🇬🇭", plan: "Pro Annual"      },
-  { name: "Anna V.",       location: "Vienna, AT",            flag: "🇦🇹", plan: "Starter Annual"  },
-  { name: "Oliver B.",     location: "Edinburgh, UK",         flag: "🇬🇧", plan: "Pro Monthly"     },
-  { name: "Sophia R.",     location: "Lisbon, PT",            flag: "🇵🇹", plan: "Pro Annual"      },
-  { name: "Noah C.",       location: "Houston, US",           flag: "🇺🇸", plan: "Starter Annual"  },
-  { name: "Rin T.",        location: "Kuala Lumpur, MY",      flag: "🇲🇾", plan: "Pro Annual"      },
-  { name: "Marco B.",      location: "Rome, IT",              flag: "🇮🇹", plan: "Pro Annual"      },
-  { name: "Camille D.",    location: "Lyon, FR",              flag: "🇫🇷", plan: "Pro Annual"      },
+  { name: "James T.",      location: "New York, US",          cc: "us", plan: "Pro Annual"      },
+  { name: "Sarah M.",      location: "London, UK",            cc: "gb", plan: "Starter Annual"  },
+  { name: "Ahmad K.",      location: "Dubai, UAE",            cc: "ae", plan: "Pro Monthly"     },
+  { name: "Priya S.",      location: "Singapore",             cc: "sg", plan: "Starter Annual"  },
+  { name: "Lucas B.",      location: "Sydney, AU",            cc: "au", plan: "Pro Annual"      },
+  { name: "Emma W.",       location: "Toronto, CA",           cc: "ca", plan: "Starter Monthly" },
+  { name: "Michael C.",    location: "Berlin, DE",            cc: "de", plan: "Pro Annual"      },
+  { name: "Yuki T.",       location: "Tokyo, JP",             cc: "jp", plan: "Pro Monthly"     },
+  { name: "Sofia V.",      location: "Amsterdam, NL",         cc: "nl", plan: "Starter Annual"  },
+  { name: "Raj P.",        location: "Mumbai, IN",            cc: "in", plan: "Pro Annual"      },
+  { name: "Carlos M.",     location: "São Paulo, BR",         cc: "br", plan: "Starter Monthly" },
+  { name: "Lisa H.",       location: "Paris, FR",             cc: "fr", plan: "Pro Annual"      },
+  { name: "Daniel O.",     location: "Lagos, NG",             cc: "ng", plan: "Starter Annual"  },
+  { name: "Amira F.",      location: "Cairo, EG",             cc: "eg", plan: "Pro Monthly"     },
+  { name: "Kevin L.",      location: "Hong Kong",             cc: "hk", plan: "Pro Annual"      },
+  { name: "Nina R.",       location: "Stockholm, SE",         cc: "se", plan: "Starter Annual"  },
+  { name: "Omar A.",       location: "Riyadh, SA",            cc: "sa", plan: "Pro Annual"      },
+  { name: "Taylor S.",     location: "Chicago, US",           cc: "us", plan: "Starter Monthly" },
+  { name: "Isabella C.",   location: "Milan, IT",             cc: "it", plan: "Pro Annual"      },
+  { name: "Marcus J.",     location: "Johannesburg, ZA",      cc: "za", plan: "Starter Annual"  },
+  { name: "Chen W.",       location: "Shanghai, CN",          cc: "cn", plan: "Pro Monthly"     },
+  { name: "Fatima H.",     location: "Istanbul, TR",          cc: "tr", plan: "Pro Annual"      },
+  { name: "Nathan B.",     location: "Melbourne, AU",         cc: "au", plan: "Starter Annual"  },
+  { name: "Elena K.",      location: "Warsaw, PL",            cc: "pl", plan: "Pro Monthly"     },
+  { name: "Arjun V.",      location: "Bangalore, IN",         cc: "in", plan: "Pro Annual"      },
+  { name: "Mia L.",        location: "Barcelona, ES",         cc: "es", plan: "Starter Monthly" },
+  { name: "Ryan O.",       location: "Dublin, IE",            cc: "ie", plan: "Pro Annual"      },
+  { name: "Hana S.",       location: "Seoul, KR",             cc: "kr", plan: "Pro Annual"      },
+  { name: "Felix M.",      location: "Zurich, CH",            cc: "ch", plan: "Starter Annual"  },
+  { name: "Chloe P.",      location: "Montreal, CA",          cc: "ca", plan: "Pro Monthly"     },
+  { name: "Ethan G.",      location: "Los Angeles, US",       cc: "us", plan: "Pro Annual"      },
+  { name: "Aisha B.",      location: "Nairobi, KE",           cc: "ke", plan: "Starter Annual"  },
+  { name: "Victor S.",     location: "Moscow, RU",            cc: "ru", plan: "Pro Monthly"     },
+  { name: "Layla M.",      location: "Beirut, LB",            cc: "lb", plan: "Pro Annual"      },
+  { name: "Jack T.",       location: "Auckland, NZ",          cc: "nz", plan: "Starter Annual"  },
+  { name: "Mei L.",        location: "Taipei, TW",            cc: "tw", plan: "Pro Monthly"     },
+  { name: "Benjamin F.",   location: "Frankfurt, DE",         cc: "de", plan: "Pro Annual"      },
+  { name: "Ana C.",        location: "Buenos Aires, AR",      cc: "ar", plan: "Starter Annual"  },
+  { name: "Zaid A.",       location: "Karachi, PK",           cc: "pk", plan: "Pro Monthly"     },
+  { name: "Sophie D.",     location: "Brussels, BE",          cc: "be", plan: "Pro Annual"      },
+  { name: "Alexander M.",  location: "Athens, GR",            cc: "gr", plan: "Starter Annual"  },
+  { name: "Yuna K.",       location: "Osaka, JP",             cc: "jp", plan: "Starter Monthly" },
+  { name: "Hassan O.",     location: "Accra, GH",             cc: "gh", plan: "Pro Annual"      },
+  { name: "Anna V.",       location: "Vienna, AT",            cc: "at", plan: "Starter Annual"  },
+  { name: "Oliver B.",     location: "Edinburgh, UK",         cc: "gb", plan: "Pro Monthly"     },
+  { name: "Sophia R.",     location: "Lisbon, PT",            cc: "pt", plan: "Pro Annual"      },
+  { name: "Noah C.",       location: "Houston, US",           cc: "us", plan: "Starter Annual"  },
+  { name: "Rin T.",        location: "Kuala Lumpur, MY",      cc: "my", plan: "Pro Annual"      },
+  { name: "Marco B.",      location: "Rome, IT",              cc: "it", plan: "Pro Annual"      },
+  { name: "Camille D.",    location: "Lyon, FR",              cc: "fr", plan: "Pro Annual"      },
 ];
 
 // ── Timing constants ──────────────────────────────────────────────────────────
@@ -230,17 +230,24 @@ export default function SocialProofToast() {
                 >
                   {initials(active.name)}
                 </div>
-                {/* Flag badge in bottom-right corner of avatar */}
+                {/* Flag image badge — bottom-right of avatar */}
                 <span
-                  className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center w-5 h-5 rounded-full text-[13px] leading-none"
+                  className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center w-[22px] h-[22px] rounded-full overflow-hidden"
                   style={{
                     background: "#0c0c14",
-                    border:     "1.5px solid rgba(255,255,255,0.08)",
-                    fontSize:   "13px",
-                    lineHeight: 1,
+                    border:     "1.5px solid rgba(255,255,255,0.1)",
+                    padding:    "2px",
                   }}
                 >
-                  {active.flag}
+                  <img
+                    src={`https://flagcdn.com/20x15/${active.cc}.png`}
+                    srcSet={`https://flagcdn.com/40x30/${active.cc}.png 2x`}
+                    width={14}
+                    height={11}
+                    alt={active.cc.toUpperCase()}
+                    className="rounded-[1px] object-cover"
+                    style={{ display: "block" }}
+                  />
                 </span>
               </div>
 
