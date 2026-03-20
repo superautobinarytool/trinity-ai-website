@@ -82,7 +82,7 @@ export default function ThankYou() {
                 { step: "1", text: "NOWPayments confirms your crypto transaction — this usually takes 1–3 minutes." },
                 { step: "2", text: "We receive confirmation and automatically send your Trinity licence key to the email you provided." },
                 { step: "3", text: "Follow the setup instructions in that email to activate software on your Windows machine." },
-                { step: "4", text: "Join our Discord — our team will walk you through your first session." },
+                { step: "4", text: "Join our Telegram — our team will walk you through your first session." },
               ].map(({ step, text }) => (
                 <li key={step} className="flex items-start gap-3">
                   <span
@@ -100,12 +100,12 @@ export default function ThankYou() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="https://discord.gg/titansalgo"
+              href="https://t.me/trinitytradingai"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white transition-all duration-200 bg-gradient-to-r from-[#22C55E] to-[#16A34A] shadow-[0_0_24px_rgba(34,197,94,0.3)] hover:shadow-[0_0_40px_rgba(34,197,94,0.5)] hover:scale-[1.02] active:scale-[0.99]"
             >
-              Join our Discord
+              Join our Telegram
               <ArrowRightIcon className="w-4 h-4" />
             </a>
             <Link
@@ -120,12 +120,12 @@ export default function ThankYou() {
           <p className="mt-8 text-xs text-gray-700 leading-relaxed">
             Didn't receive an email within 10 minutes?{" "}
             <a
-              href="https://discord.gg/titansalgo"
+              href="https://t.me/tti_mark_support"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-500 hover:text-white transition-colors"
             >
-              Message us on Discord
+              Message us on Telegram
             </a>{" "}
             with your order reference and we'll sort it out immediately.
           </p>

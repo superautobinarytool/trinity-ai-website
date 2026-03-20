@@ -97,7 +97,7 @@ export default function PaymentCancelled() {
                 },
                 {
                   icon: "3",
-                  text: "Need help? Reach us on Discord — our team responds within minutes.",
+                  text: "Need help? Reach us on Telegram — our team responds within minutes.",
                 },
               ].map(({ icon, text }) => (
                 <li key={icon} className="flex items-start gap-3">
@@ -139,12 +139,12 @@ export default function PaymentCancelled() {
           <p className="mt-8 text-xs text-gray-700 leading-relaxed">
             Questions?{" "}
             <a
-              href="https://discord.gg/titansalgo"
+              href="https://t.me/tti_mark_support"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-500 hover:text-white transition-colors underline underline-offset-2"
             >
-              Contact support on Discord
+              Contact support on Telegram
             </a>
           </p>
         </motion.div>

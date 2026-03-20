@@ -1,35 +1,35 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import logoWhite from "@/assets/logo-white.png";
+import { XMarkIcon } from "@/components/ui/Icons";
 
-const PRODUCT_LINKS = [
-  { label: "Features",    href: "#features"    },
-  { label: "Products",    href: "#products"    },
-  { label: "Pricing",     href: "#pricing"     },
-  { label: "Dashboard",   href: "#"            },
-  { label: "AI Signals",  href: "#"            },
+/* ── Link type ──────────────────────────────────────────────────────────── */
+type FooterLink = { label: string } & (
+  | { href: string; onClick?: undefined }
+  | { onClick: () => void; href?: undefined }
+);
+
+const PRODUCT_LINKS: FooterLink[] = [
+  { label: "Features",   href: "#features" },
+  { label: "Products",   href: "#products" },
+  { label: "Pricing",    href: "#pricing"  },
+  { label: "Dashboard",  href: "#"         },
+  { label: "AI Signals", href: "#"         },
 ];
 
-const RESOURCE_LINKS = [
-  { label: "Documentation", href: "#" },
-  { label: "Blog",          href: "#" },
-  { label: "Community",     href: "https://discord.gg/6WrP7CXnHd" },
-  { label: "Affiliates",    href: "#" },
-  { label: "Careers",       href: "#" },
-];
-
-const LEGAL_LINKS = [
-  { label: "Privacy Policy",  href: "#" },
-  { label: "Terms of Use",    href: "#" },
-  { label: "Refund Policy",   href: "#" },
-  { label: "Disclaimer",      href: "#" },
+const COMMUNITY_LINKS: FooterLink[] = [
+  { label: "Community",  href: "https://t.me/trinitytradingai"  },
+  { label: "Support",    href: "https://t.me/tti_mark_support"  },
 ];
 
 const SOCIALS = [
   {
-    label: "Discord",
-    href: "https://discord.gg/6WrP7CXnHd",
+    label: "Telegram",
+    href: "https://t.me/trinitytradingai",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
-        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.054a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
+        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
       </svg>
     ),
   },
@@ -65,25 +65,44 @@ const SOCIALS = [
 function FooterColumn({
   title,
   links,
+  className,
 }: {
   title: string;
-  links: { label: string; href: string }[];
+  links: FooterLink[];
+  className?: string;
 }) {
   return (
-    <div>
+    <div className={className}>
       <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">
         {title}
       </h3>
       <ul className="space-y-3" role="list">
-        {links.map(({ label, href }) => (
+        {links.map(({ label, href, onClick }) => (
           <li key={label}>
-            <a
-              href={href}
-              className="text-sm text-gray-400 hover:text-white transition-colors duration-150"
-              {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            >
-              {label}
-            </a>
+            {onClick ? (
+              <button
+                type="button"
+                onClick={onClick}
+                className="text-sm text-gray-400 hover:text-white transition-colors duration-150 text-left"
+              >
+                {label}
+              </button>
+            ) : href?.startsWith("http") || href?.startsWith("#") ? (
+              <a
+                href={href}
+                className="text-sm text-gray-400 hover:text-white transition-colors duration-150"
+                {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                {label}
+              </a>
+            ) : (
+              <Link
+                to={href ?? "/"}
+                className="text-sm text-gray-400 hover:text-white transition-colors duration-150"
+              >
+                {label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
@@ -91,16 +110,148 @@ function FooterColumn({
   );
 }
 
+/* ── Disclaimer Modal ────────────────────────────────────────────────────── */
+function DisclaimerModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="disclaimer-title"
+    >
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Card */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 8 }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 w-full max-w-lg max-h-[85vh] flex flex-col rounded-2xl border border-white/[0.10] bg-[#0c0c14]"
+        style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05)" }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-white/[0.07] flex-shrink-0">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" aria-hidden="true" />
+            <h2
+              id="disclaimer-title"
+              className="font-display font-bold text-white text-base sm:text-lg"
+            >
+              Trading Risk Disclaimer
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close disclaimer"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/[0.08] transition-all duration-150 flex-shrink-0"
+          >
+            <XMarkIcon className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div className="flex-1 overflow-y-auto px-5 sm:px-6 py-5 sm:py-6 space-y-4 text-sm text-gray-400 leading-relaxed">
+          <p className="text-gray-300">
+            <strong className="text-white font-semibold">
+              Please read this disclaimer carefully before using Trinity Trading AI.
+            </strong>
+          </p>
+
+          {[
+            {
+              title: "Not Financial Advice",
+              body: "All information, signals, analysis, and content provided by Trinity Trading AI are for educational and informational purposes only. Nothing on this platform constitutes financial advice, investment advice, trading advice, or any other sort of advice. You should not treat any of the platform's content as such.",
+            },
+            {
+              title: "Risk of Loss",
+              body: "Trading financial instruments — including forex, CFDs, commodities, indices, and cryptocurrencies — involves a significant risk of loss and is not suitable for all investors. Carefully consider whether trading is appropriate for you in light of your financial circumstances, investment objectives, risk appetite, and level of experience.",
+            },
+            {
+              title: "Past Performance",
+              body: "Past performance of Trinity's AI signals and any historical trading results shown on this website are not indicative of future results. Markets are inherently unpredictable. Any stated accuracy rates represent historical averages and do not guarantee future outcomes.",
+            },
+            {
+              title: "Automated Trading Risks",
+              body: "Automated trading systems carry unique risks, including software failures, connectivity issues, and unanticipated market conditions. Trinity provides a tool to assist traders — it does not operate your account autonomously. You remain fully responsible for all trading decisions and resulting outcomes.",
+            },
+            {
+              title: "Capital at Risk",
+              body: "Never trade with money you cannot afford to lose in its entirety. Leveraged products can result in losses exceeding your initial deposit.",
+            },
+            {
+              title: "Regulatory Notice",
+              body: "Trinity Trading AI is a software tool provider. It is not a licensed financial adviser, broker, or investment firm. Ensure you comply with all applicable laws and regulations in your jurisdiction before trading.",
+            },
+          ].map(({ title, body }) => (
+            <section key={title}>
+              <h3 className="text-white font-semibold text-sm mb-1.5">{title}</h3>
+              <p>{body}</p>
+            </section>
+          ))}
+
+          <div className="pt-3 border-t border-white/[0.07]">
+            <p className="text-xs text-gray-600">
+              By using Trinity Trading AI you acknowledge that you have read, understood, and
+              agreed to this disclaimer. Questions?{" "}
+              <a
+                href="https://t.me/tti_mark_support"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#22C55E]/80 hover:text-[#22C55E] transition-colors"
+              >
+                Contact us on Telegram
+              </a>
+              .
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="px-5 sm:px-6 py-4 border-t border-white/[0.07] flex justify-end flex-shrink-0">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/[0.07] border border-white/[0.10] hover:bg-white/[0.12] hover:border-white/[0.20] transition-all duration-150"
+          >
+            I Understand
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function Footer() {
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
+
+  const LEGAL_LINKS: FooterLink[] = [
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms of Use",   href: "/terms-of-use"   },
+    { label: "Refund Policy",  href: "/refund-policy"  },
+    { label: "Disclaimer",     onClick: () => setDisclaimerOpen(true) },
+  ];
+
   return (
     <footer role="contentinfo" className="relative bg-[#050508] border-t border-white/[0.07]">
       {/* Top gradient separator */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#22C55E]/30 to-transparent" aria-hidden="true" />
 
       <div className="container-xl py-12 sm:py-16 lg:py-20">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
+
           {/* Brand column */}
-          <div className="col-span-2 sm:col-span-3 lg:col-span-2">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
             <a href="/" className="flex items-center mb-6 w-fit" aria-label="Project Trinity home">
               <img
                 src={logoWhite}
@@ -110,7 +261,8 @@ export default function Footer() {
               />
             </a>
             <p className="text-sm text-gray-500 leading-relaxed max-w-xs mb-6">
-              Institutional-grade trading signals and AI-powered automation for serious traders seeking consistent edge.
+              Institutional-grade trading signals and AI-powered automation for serious traders
+              seeking consistent edge.
             </p>
 
             {/* Socials */}
@@ -130,16 +282,25 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
-          <FooterColumn title="Product"   links={PRODUCT_LINKS}  />
-          <FooterColumn title="Resources" links={RESOURCE_LINKS} />
-          <FooterColumn title="Legal"     links={LEGAL_LINKS}    />
+          {/* Product */}
+          <FooterColumn title="Product"   links={PRODUCT_LINKS}   />
+
+          {/* Community */}
+          <FooterColumn title="Community" links={COMMUNITY_LINKS} />
+
+          {/* Legal — full width on mobile so all 4 links display cleanly */}
+          <FooterColumn
+            title="Legal"
+            links={LEGAL_LINKS}
+            className="col-span-2 sm:col-span-1"
+          />
         </div>
 
         {/* Bottom bar */}
-          <div className="mt-8 pt-6 sm:pt-8 border-t border-white/[0.07] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-8 pt-6 sm:pt-8 border-t border-white/[0.07] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-600 text-center sm:text-left">
-            © 2026 Project Trinity. All rights reserved. Trading involves risk — only trade with capital you can afford to lose.
+            © 2026 Project Trinity. All rights reserved. Trading involves risk — only trade with
+            capital you can afford to lose.
           </p>
           <div className="flex items-center gap-2" aria-label="Accepted payment methods">
             {["VISA", "MC", "AMEX", "PayPal"].map(m => (
@@ -153,6 +314,13 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Disclaimer modal */}
+      <AnimatePresence>
+        {disclaimerOpen && (
+          <DisclaimerModal onClose={() => setDisclaimerOpen(false)} />
+        )}
+      </AnimatePresence>
     </footer>
   );
 }

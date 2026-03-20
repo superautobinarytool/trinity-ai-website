@@ -726,9 +726,9 @@ export default function Checkout() {
             © 2026 Project Trinity · All rights reserved · Trading involves risk
           </p>
           <div className="flex items-center gap-4 text-xs text-gray-700">
-            <a href="#" className="hover:text-gray-400 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-gray-400 transition-colors">Terms</a>
-            <a href="https://discord.gg/titansalgo" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition-colors">Support</a>
+            <Link to="/privacy-policy" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
+            <Link to="/terms-of-use" className="hover:text-gray-400 transition-colors">Terms</Link>
+            <a href="https://t.me/tti_mark_support" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition-colors">Support</a>
           </div>
         </div>
       </footer>
@@ -867,12 +867,12 @@ function TrustPanel() {
         <p className="text-xs text-gray-600">
           Questions?{" "}
           <a
-            href="https://discord.gg/titansalgo"
+            href="https://t.me/tti_mark_support"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[#22C55E]/80 hover:text-[#22C55E] transition-colors font-semibold"
           >
-            Chat with us on Discord
+            Chat with us on Telegram
           </a>
           {" "}— we reply in minutes.
         </p>

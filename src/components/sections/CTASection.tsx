@@ -48,7 +48,7 @@ export default function CTASection() {
               Start 30-Day Risk-Free Trial
               <ArrowRightIcon className="w-5 h-5" />
             </Button>
-            <Button variant="secondary" size="lg" href="https://discord.gg/6WrP7CXnHd">
+            <Button variant="secondary" size="lg" href="https://t.me/trinitytradingai">
               Join the Community
             </Button>
           </div>

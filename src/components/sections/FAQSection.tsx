@@ -55,7 +55,7 @@ export default function FAQSection() {
         </h2>
         <p className="text-gray-400 text-base sm:text-lg">
           We answer every question honestly — including the ones other tools bury in fine print.
-          Still unsure? Hit us on Discord — we reply in under 10 minutes.
+          Still unsure? Find us on Telegram — we reply in under 10 minutes.
         </p>
       </motion.div>
 
