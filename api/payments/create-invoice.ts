@@ -4,8 +4,10 @@ import { getSupabaseAdmin } from "../lib/supabase-admin";
 /* ─── Plan catalogue (single source of truth server-side) ───────────────────
    Mirror any price changes here AND in the frontend PLANS constant.          */
 const PLAN_PRICES: Record<string, number> = {
-  starter: 54.39,
-  pro:     67.99,
+  starter:          99,
+  pro:             199,
+  "starter-annual": 599,
+  "pro-annual":     899,
 };
 
 const NOWPAYMENTS_BASE = process.env.NOWPAYMENTS_SANDBOX === "true"
@@ -105,13 +107,16 @@ export default async function handler(
 
   // ── 4. Create NOWPayments invoice ─────────────────────────────────────────
   const appUrl = (process.env.APP_URL ?? "").replace(/\/$/, "");
-  const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
+  const isAnnual   = (plan as string).endsWith("-annual");
+  const baseName   = (plan as string).replace("-annual", "");
+  const planLabel  = baseName.charAt(0).toUpperCase() + baseName.slice(1);
+  const periodDesc = isAnnual ? "1 Year" : "1 Month";
 
   const npBody = {
     price_amount:      amount,
     price_currency:    "usd",
     order_id:          orderId,
-    order_description: `Trinity ${planLabel} License — 1 Month`,
+    order_description: `Trinity ${planLabel} License — ${periodDesc}`,
     success_url:       `${appUrl}/thank-you?order=${orderId}&plan=${plan}`,
     cancel_url:        `${appUrl}/payment-cancelled?plan=${plan}`,
     ipn_callback_url:  `${appUrl}/api/payments/webhook`,

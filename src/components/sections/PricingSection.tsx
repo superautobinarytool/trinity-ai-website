@@ -1,4 +1,4 @@
-﻿import { useRef } from "react";
+﻿import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import Section from "@/components/ui/Section";
 
@@ -55,20 +55,17 @@ function GreenCheck() {
   );
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   Plan catalogue — monthly prices + annual deal data
+   ───────────────────────────────────────────────────────────────────────────── */
 const PLANS = [
   {
-    id: "pro",
+    id: "starter",
     name: "Starter",
-    badge: "Most Accessible",
+    popBadge: "Most Accessible",
     popular: false,
-    originalPrice: "$67",
-    price: "$54",
-    cents: ".39",
-    period: "/ mo",
-    sub: "$54.39 first month, then $67.99 / mo",
     gem: <BlueDiamond />,
-    cta: "Get Started Now",
-    ctaHref: "/checkout?plan=starter",
+    light: false,
     featuresLabel: "Everything included:",
     features: [
       "Trinity software license (Windows 10/11)",
@@ -78,21 +75,32 @@ const PLANS = [
       "Real-time session profit graph",
       "Full trade history & analytics",
     ],
-    light: false,
+    monthly: {
+      price: 99,
+      sub: "Billed monthly  ·  Cancel anytime",
+      cta: "Get Started Now",
+      href: "/checkout?plan=starter",
+    },
+    annual: {
+      totalPrice: 599,
+      moEquivInt: 49,
+      moEquivCents: ".92",
+      normalMonthly: 99,
+      savedTotal: 589,
+      savePct: 50,
+      monthsFree: 6,
+      sub: "Just $599 billed once annually  ·  Cancel anytime",
+      cta: "Get Started — Best Value",
+      href: "/checkout?plan=starter-annual",
+    },
   },
   {
     id: "ultimate",
     name: "Pro",
-    badge: "Best Results",
+    popBadge: "Best Results",
     popular: true,
-    originalPrice: "$97",
-    price: "$67",
-    cents: ".99",
-    period: "/ mo",
-    sub: "$67.99 first month, then $97.99 / mo",
     gem: <PurpleCrystal />,
-    cta: "Activate Pro Access",
-    ctaHref: "/checkout?plan=pro",
+    light: true,
     featuresLabel: "Everything in Starter, plus:",
     features: [
       "Advanced AI compound scaling mode",
@@ -102,23 +110,42 @@ const PLANS = [
       "Exclusive pro-only settings",
       "Early access to every new feature",
     ],
-    light: true,
+    monthly: {
+      price: 199,
+      sub: "Billed monthly  ·  Cancel anytime",
+      cta: "Activate Pro Access",
+      href: "/checkout?plan=pro",
+    },
+    annual: {
+      totalPrice: 899,
+      moEquivInt: 74,
+      moEquivCents: ".92",
+      normalMonthly: 199,
+      savedTotal: 1489,
+      savePct: 62,
+      monthsFree: 7,
+      sub: "Just $899 billed once annually  ·  Cancel anytime",
+      cta: "Activate Pro — Best Value",
+      href: "/checkout?plan=pro-annual",
+    },
   },
 ];
 
 export default function PricingSection() {
-  const ref    = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.1 });
+  const ref            = useRef<HTMLDivElement>(null);
+  const inView         = useInView(ref, { once: true, amount: 0.1 });
+  const [billAnnually, setBillAnnually] = useState(false);
 
   return (
     <Section id="pricing" className="bg-[#080d1a]">
       <div ref={ref} className="max-w-5xl mx-auto px-4">
-        {/* Header */}
+
+        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-10 sm:mb-14"
+          className="text-center mb-8 sm:mb-10"
         >
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-white">
             One tool.{" "}
@@ -131,79 +158,180 @@ export default function PricingSection() {
           </p>
         </motion.div>
 
-        {/* Cards */}
+        {/* ── Billing period toggle ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12"
+        >
+          <button
+            onClick={() => setBillAnnually(false)}
+            className={`text-sm font-bold px-4 py-2 rounded-full transition-all duration-200 ${
+              !billAnnually
+                ? "text-white bg-white/10 border border-white/20"
+                : "text-gray-500 hover:text-gray-300"
+            }`}
+          >
+            Monthly
+          </button>
+
+          {/* Toggle pill */}
+          <button
+            onClick={() => setBillAnnually((v) => !v)}
+            aria-pressed={billAnnually}
+            aria-label="Toggle annual billing"
+            className={`relative w-12 h-6 rounded-full transition-colors duration-300 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E] ${
+              billAnnually ? "bg-[#22C55E]" : "bg-white/15"
+            }`}
+          >
+            <span
+              className="absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-300"
+              style={{ left: billAnnually ? "calc(100% - 20px)" : "4px" }}
+              aria-hidden="true"
+            />
+          </button>
+
+          <button
+            onClick={() => setBillAnnually(true)}
+            className={`flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-full transition-all duration-200 ${
+              billAnnually
+                ? "text-white bg-white/10 border border-white/20"
+                : "text-gray-500 hover:text-gray-300"
+            }`}
+          >
+            Annual
+            <span className="px-2 py-0.5 rounded-full bg-[#22C55E] text-[9px] font-black text-white tracking-wide">
+              SAVE UP TO 62%
+            </span>
+          </button>
+        </motion.div>
+
+        {/* ── Plan cards ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {PLANS.map((plan, i) => (
-            <motion.div
-              key={plan.id}
-              initial={{ opacity: 0, y: 32 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className={`relative rounded-2xl overflow-hidden flex flex-col p-5 sm:p-8 ${
-                plan.light
-                  ? "bg-white text-gray-900 shadow-[0_8px_60px_rgba(139,92,246,0.25)]"
-                  : "bg-[#0c1327] border border-white/[0.09] shadow-[0_8px_40px_rgba(0,0,0,0.4)] text-white"
-              }`}
-            >
-              {/* Gem icon – top right */}
-              <div className="absolute top-5 right-5 w-14 h-14">
-                {plan.gem}
-              </div>
+          {PLANS.map((plan, i) => {
+            const mo  = plan.monthly;
+            const ann = plan.annual;
 
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2 mb-5">
-                <span className={`text-xs font-bold px-3 py-1 rounded-full border ${plan.light ? "border-gray-300 text-gray-700 bg-gray-100" : "border-white/20 text-gray-300 bg-white/5"}`}>
-                  {plan.badge}
-                </span>
-                {plan.popular && (
-                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-violet-100 text-violet-700 border border-violet-200">
-                    Popular
-                  </span>
-                )}
-              </div>
-
-              {/* Plan name */}
-              <p className={`text-sm font-bold uppercase tracking-widest mb-1 ${plan.light ? "text-gray-500" : "text-gray-400"}`}>{plan.name}</p>
-
-              {/* Strikethrough original */}
-              <p className={`text-sm line-through mb-1 ${plan.light ? "text-gray-400" : "text-gray-500"}`}>{plan.originalPrice}.99 / mo</p>
-
-              {/* Main price */}
-              <div className="flex items-start gap-0.5 mb-1">
-                <span className={`text-xl font-bold mt-2 ${plan.light ? "text-gray-800" : "text-white"}`}>$</span>
-                <span className={`font-display text-6xl font-extrabold leading-none tracking-tightest ${plan.light ? "text-gray-900" : "text-white"}`}>{plan.price.replace("$", "")}</span>
-                <div className="flex flex-col justify-end pb-1">
-                  <span className={`text-2xl font-bold ${plan.light ? "text-gray-800" : "text-white"}`}>{plan.cents}</span>
-                  <span className={`text-sm font-semibold ${plan.light ? "text-gray-500" : "text-gray-400"}`}>{plan.period}</span>
-                </div>
-              </div>
-              <p className={`text-xs mb-7 ${plan.light ? "text-gray-400" : "text-gray-500"}`}>{plan.sub}</p>
-
-              {/* Features */}
-              <p className={`text-sm font-bold mb-4 ${plan.light ? "text-gray-700" : "text-gray-300"}`}>{plan.featuresLabel}</p>
-              <ul className="flex flex-col gap-3 flex-1 mb-8">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-3">
-                    <GreenCheck />
-                    <span className={`text-sm ${plan.light ? "text-gray-700" : "text-gray-300"}`}>{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA */}
-              <a
-                href={plan.ctaHref}
-                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98] ${
+            return (
+              <motion.div
+                key={plan.id}
+                initial={{ opacity: 0, y: 32 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.1 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                className={`relative rounded-2xl overflow-hidden flex flex-col p-5 sm:p-8 ${
                   plan.light
-                    ? "bg-gray-900 text-white hover:bg-gray-800"
-                    : "bg-white/10 border border-white/20 text-white hover:bg-white/20"
+                    ? "bg-white text-gray-900 shadow-[0_8px_60px_rgba(139,92,246,0.25)]"
+                    : "bg-[#0c1327] border border-white/[0.09] shadow-[0_8px_40px_rgba(0,0,0,0.4)] text-white"
                 }`}
               >
-                {plan.cta} &rarr;
-              </a>
-              <p className={`text-xs text-center mt-3 ${plan.light ? "text-gray-400" : "text-gray-500"}`}>30-day money-back guarantee</p>
-            </motion.div>
-          ))}
+                {/* Gem icon */}
+                <div className="absolute top-5 right-5 w-14 h-14">{plan.gem}</div>
+
+                {/* Badges */}
+                <div className="flex flex-wrap gap-2 mb-5">
+                  <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
+                    plan.light ? "border-gray-300 text-gray-700 bg-gray-100" : "border-white/20 text-gray-300 bg-white/5"
+                  }`}>
+                    {plan.popBadge}
+                  </span>
+                  {plan.popular && (
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-violet-100 text-violet-700 border border-violet-200">
+                      Popular
+                    </span>
+                  )}
+                  {billAnnually && (
+                    <span className="text-[11px] font-black px-3 py-1 rounded-full bg-[#22C55E] text-white tracking-wide">
+                      🎁 {ann.monthsFree} MONTHS FREE
+                    </span>
+                  )}
+                </div>
+
+                {/* Plan name */}
+                <p className={`text-sm font-bold uppercase tracking-widest mb-2 ${plan.light ? "text-gray-500" : "text-gray-400"}`}>
+                  {plan.name}
+                </p>
+
+                {/* Strikethrough — annual mode only */}
+                {billAnnually && (
+                  <p className={`text-sm line-through mb-1 ${plan.light ? "text-gray-400" : "text-gray-500"}`}>
+                    ${ann.normalMonthly}/mo if billed monthly
+                  </p>
+                )}
+
+                {/* Main price */}
+                <div className="flex items-start gap-0.5 mb-1">
+                  <span className={`text-xl font-bold mt-2 ${plan.light ? "text-gray-800" : "text-white"}`}>$</span>
+                  <span className={`font-display text-6xl font-extrabold leading-none tracking-tightest ${
+                    plan.light ? "text-gray-900" : "text-white"
+                  }`}>
+                    {billAnnually ? ann.moEquivInt : mo.price}
+                  </span>
+                  <div className="flex flex-col justify-end pb-1">
+                    {billAnnually && (
+                      <span className={`text-2xl font-bold ${plan.light ? "text-gray-800" : "text-white"}`}>
+                        {ann.moEquivCents}
+                      </span>
+                    )}
+                    <span className={`text-sm font-semibold ${plan.light ? "text-gray-500" : "text-gray-400"}`}>
+                      / mo
+                    </span>
+                  </div>
+                </div>
+
+                {/* Sub text */}
+                <p className={`text-xs mb-4 ${plan.light ? "text-gray-400" : "text-gray-500"}`}>
+                  {billAnnually ? ann.sub : mo.sub}
+                </p>
+
+                {/* Annual savings callout */}
+                {billAnnually && (
+                  <div className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl mb-6 ${
+                    plan.light
+                      ? "bg-green-50 border border-green-200"
+                      : "bg-[#22C55E]/[0.08] border border-[#22C55E]/20"
+                  }`}>
+                    <span className={`text-sm font-black whitespace-nowrap ${
+                      plan.light ? "text-green-700" : "text-[#22C55E]"
+                    }`}>
+                      {ann.savePct}% OFF
+                    </span>
+                    <span className={`text-xs leading-snug ${plan.light ? "text-green-700" : "text-[#22C55E]/80"}`}>
+                      You save ${ann.savedTotal.toLocaleString()} compared to monthly billing
+                    </span>
+                  </div>
+                )}
+
+                {/* Features */}
+                <p className={`text-sm font-bold mb-4 ${plan.light ? "text-gray-700" : "text-gray-300"}`}>
+                  {plan.featuresLabel}
+                </p>
+                <ul className="flex flex-col gap-3 flex-1 mb-8" role="list">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-3">
+                      <GreenCheck />
+                      <span className={`text-sm ${plan.light ? "text-gray-700" : "text-gray-300"}`}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA */}
+                <a
+                  href={billAnnually ? ann.href : mo.href}
+                  className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98] ${
+                    plan.light
+                      ? "bg-gray-900 text-white hover:bg-gray-800"
+                      : "bg-white/10 border border-white/20 text-white hover:bg-white/20"
+                  }`}
+                >
+                  {billAnnually ? ann.cta : mo.cta} &rarr;
+                </a>
+                <p className={`text-xs text-center mt-3 ${plan.light ? "text-gray-400" : "text-gray-500"}`}>
+                  30-day money-back guarantee
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </Section>

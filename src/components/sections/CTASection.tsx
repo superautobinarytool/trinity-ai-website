@@ -46,7 +46,7 @@ export default function CTASection() {
 
           <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-10">
             <Button variant="primary" size="lg" href="#pricing">
-              Start 30-Day Risk-Free Trial
+              Get Started — 30-Day Guarantee
               <ArrowRightIcon className="w-5 h-5" />
             </Button>
             <Button variant="secondary" size="lg" href="https://t.me/trinitytradingai">

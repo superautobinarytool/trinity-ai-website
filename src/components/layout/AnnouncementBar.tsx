@@ -87,24 +87,24 @@ export default function AnnouncementBar({ onHeightChange }: { onHeightChange?: (
             <a
               href="#pricing"
               className="flex items-center gap-1.5 sm:gap-2 group min-w-0"
-              aria-label="View pricing — 30 day risk free offer"
+              aria-label="View pricing — 30-day money-back guarantee"
             >
               <TrendingUpIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-200 flex-shrink-0" />
               {/* Desktop */}
               <span className="hidden md:inline text-sm font-semibold tracking-tight">
                 <strong className="font-extrabold text-white">Trinity is LIVE!</strong>
                 <span className="text-green-100/90 mx-2">—</span>
-                <span className="text-white/85">80%+ Win Rate · Machine-Speed Execution · 30 Days Risk-Free</span>
+                <span className="text-white/85">80%+ Win Rate · Machine-Speed Execution · 30-Day Money-Back Guarantee</span>
               </span>
               {/* Tablet */}
               <span className="hidden sm:inline md:hidden text-sm font-semibold">
                 <strong className="font-extrabold">Trinity Trading Tool</strong>
                 <span className="text-green-100/80 mx-1.5">—</span>
-                <span className="text-white/85">80%+ Win Rate · Risk-Free</span>
+                <span className="text-white/85">80%+ Win Rate · 30-Day Guarantee</span>
               </span>
               {/* Mobile */}
               <span className="sm:hidden text-xs font-bold tracking-tight">
-                Trinity — 80% Win Rate · 30 Days Free
+                Trinity — 80% Win Rate · 30-Day Guarantee
               </span>
               <ArrowRightIcon className="w-3 h-3 text-white/60 group-hover:translate-x-0.5 transition-transform flex-shrink-0" />
             </a>

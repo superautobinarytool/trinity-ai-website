@@ -19,16 +19,18 @@ import {
    PLAN DEFINITIONS
    Mirrors the data in PricingSection so the checkout is always in sync.
    ───────────────────────────────────────────────────────────────────────────── */
-type PlanId = "starter" | "pro";
+type PlanId = "starter" | "pro" | "starter-annual" | "pro-annual";
 
 const PLANS = {
   starter: {
     id: "starter" as PlanId,
     name: "Starter",
-    price: 54.39,
-    renewalPrice: 67.99,
+    price: 99,
+    renewalPrice: 99,
     badge: "Most Accessible",
     accentColor: "#22C55E",
+    period: "mo",
+    renewalNote: "Renews at $99.00/mo after your first month. Cancel anytime — no fees, no questions.",
     features: [
       "Trinity software license (Windows 10/11)",
       "Trinity AI signal auto-execution to your broker",
@@ -39,13 +41,35 @@ const PLANS = {
       "30-day money-back guarantee",
     ],
   },
+  "starter-annual": {
+    id: "starter-annual" as PlanId,
+    name: "Starter — Annual",
+    price: 599,
+    renewalPrice: 599,
+    badge: "Best Value · 6 Months FREE",
+    accentColor: "#22C55E",
+    period: "yr",
+    renewalNote: "Renews at $599.00/yr after your first year. Cancel anytime — no fees, no questions.",
+    features: [
+      "Trinity software license (Windows 10/11)",
+      "Trinity AI signal auto-execution to your broker",
+      "Live TradingView charts — 25+ pairs",
+      "Smart Compounding profit strategy",
+      "Real-time session profit graph",
+      "Full trade history & analytics",
+      "6 months FREE vs monthly billing",
+      "30-day money-back guarantee",
+    ],
+  },
   pro: {
     id: "pro" as PlanId,
     name: "Pro",
-    price: 67.99,
-    renewalPrice: 97.99,
+    price: 199,
+    renewalPrice: 199,
     badge: "Best Results",
     accentColor: "#22C55E",
+    period: "mo",
+    renewalNote: "Renews at $199.00/mo after your first month. Cancel anytime — no fees, no questions.",
     features: [
       "Everything in Starter",
       "Advanced AI compound scaling mode",
@@ -54,6 +78,27 @@ const PLANS = {
       "Advanced session configuration",
       "Exclusive pro-only settings",
       "Early access to every new feature",
+      "30-day money-back guarantee",
+    ],
+  },
+  "pro-annual": {
+    id: "pro-annual" as PlanId,
+    name: "Pro — Annual",
+    price: 899,
+    renewalPrice: 899,
+    badge: "Ultimate Value · 7 Months FREE",
+    accentColor: "#22C55E",
+    period: "yr",
+    renewalNote: "Renews at $899.00/yr after your first year. Cancel anytime — no fees, no questions.",
+    features: [
+      "Everything in Pro monthly",
+      "Advanced AI compound scaling mode",
+      "Priority signal feed",
+      "1-on-1 onboarding & setup call",
+      "Advanced session configuration",
+      "Exclusive pro-only settings",
+      "Early access to every new feature",
+      "7 months FREE vs monthly billing",
       "30-day money-back guarantee",
     ],
   },
@@ -195,7 +240,11 @@ function FormField({
 export default function Checkout() {
   const [searchParams] = useSearchParams();
   const rawPlan = searchParams.get("plan");
-  const planId: PlanId = rawPlan === "pro" ? "pro" : "starter";
+  const planId: PlanId =
+    rawPlan === "pro"             ? "pro"             :
+    rawPlan === "starter-annual"  ? "starter-annual"  :
+    rawPlan === "pro-annual"      ? "pro-annual"      :
+    "starter";
   const plan = PLANS[planId];
 
   /* ── Form state ──────────────────────────────────────────────────────────── */
@@ -429,7 +478,7 @@ export default function Checkout() {
               />
               <span className="font-semibold text-white">Trinity {plan.name}</span>
               <span className="text-gray-500">·</span>
-              <span className="text-gray-400 font-medium">${total.toFixed(2)}/mo</span>
+              <span className="text-gray-400 font-medium">${total.toFixed(2)}/{plan.period}</span>
               {appliedCoupon && (
                 <span className="text-[11px] font-bold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full border border-[#22C55E]/20">
                   -{appliedCoupon.value}%
@@ -689,7 +738,7 @@ export default function Checkout() {
                   <a href="#" className="text-gray-500 hover:text-white transition-colors underline underline-offset-2">Terms of Service</a>
                   {" "}and{" "}
                   <a href="#" className="text-gray-500 hover:text-white transition-colors underline underline-offset-2">Refund Policy</a>.
-                  Your subscription renews at ${plan.renewalPrice.toFixed(2)}/mo until cancelled.
+                  Your subscription renews at ${plan.renewalPrice.toFixed(2)}/{plan.period} until cancelled.
                 </p>
               </div>
             </form>
@@ -771,7 +820,7 @@ function OrderSummaryCard({
           <p className="font-display font-extrabold text-2xl text-white leading-none">
             ${total.toFixed(2)}
           </p>
-          <p className="text-[11px] text-gray-500 mt-0.5">/ mo</p>
+          <p className="text-[11px] text-gray-500 mt-0.5">/ {plan.period}</p>
         </div>
       </div>
 
@@ -819,7 +868,7 @@ function OrderSummaryCard({
         </div>
 
         <p className="text-[11px] text-gray-600 leading-relaxed">
-          Renews at ${plan.renewalPrice.toFixed(2)}/mo after your first month. Cancel anytime — no fees, no questions.
+          {plan.renewalNote}
         </p>
       </div>
     </div>
