@@ -61,7 +61,7 @@ export default async function handler(req, res) {
   // ── Call NOWPayments Invoices API ─────────────────────────────────────────
   const isSandbox  = process.env.NOWPAYMENTS_SANDBOX === "true";
   const apiBaseUrl = isSandbox
-    ? "https://api.sandbox.nowpayments.io/v1/invoice"
+    ? "https://api-sandbox.nowpayments.io/v1/invoice"
     : "https://api.nowpayments.io/v1/invoice";
 
   if (isSandbox) {
