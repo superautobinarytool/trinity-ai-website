@@ -74,17 +74,18 @@ const VALID_COUPONS: Record<string, CouponDef> = {
 
 /* ─────────────────────────────────────────────────────────────────────────────
    NOWPAYMENTS — LIVE INTEGRATION
-   The frontend calls our own serverless endpoint (/api/payments/create-invoice)
-   which holds the API key server-side and proxies the request to NOWPayments.
-   The endpoint returns { invoice_url } which we redirect the user to.
+   The frontend calls our serverless endpoint (/api/payments/create-invoice).
+   The server validates the coupon against the DB, recalculates the price
+   independently (never trusting the client), then creates the NOWPayments
+   invoice and returns { invoice_url } to redirect the user to.
    ───────────────────────────────────────────────────────────────────────────── */
 interface OrderPayload {
-  name: string;
-  email: string;
-  plan: PlanId;
-  coupon: string | null;
-  amount: number;   // USD amount after any coupon discount
-  orderId: string;  // unique reference e.g. TRINITY-1718910000000-AB12CD
+  name:    string;
+  email:   string;
+  plan:    PlanId;
+  coupon:  string | null;
+  orderId: string; // unique reference e.g. TRINITY-1718910000000-AB12CD
+  // Note: amount is NOT sent — server recalculates from DB to prevent tampering
 }
 
 async function initiateNOWPayment(order: OrderPayload): Promise<string> {
@@ -311,7 +312,6 @@ export default function Checkout() {
         email:  email.trim().toLowerCase(),
         plan:   planId,
         coupon: appliedCoupon?.code ?? null,
-        amount: total,
         orderId,
       });
       // Redirect to NOWPayments hosted payment page
