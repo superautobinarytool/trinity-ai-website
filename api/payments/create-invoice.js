@@ -59,9 +59,18 @@ export default async function handler(req, res) {
   const webhookUrl = process.env.NOWPAYMENTS_WEBHOOK_URL || `${base}/api/payments/webhook`;
 
   // ── Call NOWPayments Invoices API ─────────────────────────────────────────
+  const isSandbox  = process.env.NOWPAYMENTS_SANDBOX === "true";
+  const apiBaseUrl = isSandbox
+    ? "https://api.sandbox.nowpayments.io/v1/invoice"
+    : "https://api.nowpayments.io/v1/invoice";
+
+  if (isSandbox) {
+    console.info("[NOWPayments] ⚠️  SANDBOX MODE — no real funds will be moved");
+  }
+
   let response;
   try {
-    response = await fetch("https://api.nowpayments.io/v1/invoice", {
+    response = await fetch(apiBaseUrl, {
       method:  "POST",
       headers: {
         "x-api-key":    apiKey,
