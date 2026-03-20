@@ -32,21 +32,21 @@ const DEMOS = [
   {
     id: 2,
     videoUrl: "https://videotourl.com/videos/1773935176730-8b12e855-acbc-43b7-9c4b-f7275c85e57d.mp4",
-    badge: "Linear Compounding — 30 Days",
+    badge: "Compounding Growth — 30 Days",
     accent: "#4ade80",
     title: "$200 in. $1,100 out. Not one manual trade placed.",
     sub:
-      "30 consecutive days on Linear Compounding strategy, EUR/USD. Every winning trade reinvested. Every dollar building exponentially on the last. The compounding snowball, fully automated.",
+      "30 consecutive days on Compounding strategy, EUR/USD. Every winning trade reinvested into the next. Every dollar building exponentially on the last. The compounding snowball, fully automated.",
     bars: [20, 28, 35, 42, 50, 58, 67, 74, 80, 86, 90, 94, 97, 100],
   },
   {
     id: 3,
     videoUrl: "https://videotourl.com/videos/1773935195345-00e350ab-510c-48d9-9613-c2c53f8e2aa1.mp4",
-    badge: "Martingale Recovery — Real Session",
+    badge: "Compound Recovery — Real Session",
     accent: "#f59e0b",
-    title: "5 losses in a row. Still closed the session in profit.",
+    title: "Compounding turned a rough patch into the session's biggest win.",
     sub:
-      "Trinity's Martingale mode scales the stake after each loss, hits the recovery trade, and flips the session from red to green. Engineered specifically to turn losing streaks into winning outcomes.",
+      "Watch Trinity's AI compound mode adapt in real time — as winning trades stack, the position size scales automatically, accelerating recovery and pushing the session firmly into profit.",
     bars: [60, 45, 30, 18, 12, 8, 25, 48, 70, 85, 92, 96, 99, 100],
   },
 ] as const;

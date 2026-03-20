@@ -6,12 +6,12 @@ import { PlusIcon } from "@/components/ui/Icons";
 
 const FAQS = [
   {
-    q: "What exactly is Trinity Trading Tool?",
-    a: "Trinity is a Windows desktop application powered by Trinity AI signals that automatically executes trades on your binary options broker the instant a signal appears. You open the app, press START, and it does everything else at machine speed.",
+    q: "What exactly is Trinity Trading AI?",
+    a: "Trinity is a Windows desktop application powered by a proprietary AI signal engine that automatically executes trades on your binary options broker the instant a high-probability signal is generated. You open the app, press START, and Trinity's AI handles everything else — scanning 25+ assets, identifying premium setups, and firing trades at machine speed, 24 hours a day.",
   },
   {
-    q: "How does the 80%+ win rate work?",
-    a: "Trinity reads live signals from its built-in Trinity AI engine and executes them with zero delay — eliminating the main reason traders lose: missed windows and hesitation. The 80%+ win rate is the result of fast, accurate, emotionless execution across all supported assets and market conditions.",
+    q: "How does Trinity achieve an 80%+ win rate?",
+    a: "Trinity's AI engine runs a continuous multi-layer analysis across all supported assets simultaneously — reading price action, momentum, and market structure in real time. When conditions align with a verified high-probability setup, Trinity fires the trade in under 50 milliseconds. That speed and precision — not luck, not guesswork — is what drives the 80%+ accuracy you can verify live on your dashboard every single session.",
   },
   {
     q: "Which brokers does Trinity support?",
@@ -19,19 +19,19 @@ const FAQS = [
   },
   {
     q: "Do I need trading experience to use Trinity?",
-    a: "No experience required. You don't need to know how to read charts or place trades manually. Open the app, connect your broker, select your strategy (Linear is recommended for beginners), set your stake amount, and press START. Trinity handles everything.",
+    a: "None at all. Trinity was built to remove the need for trading knowledge entirely. Open the app, connect your broker, choose your strategy mode, set your stake, and press START. Trinity's AI reads the charts, identifies the setups, and executes every trade automatically. Most users are generating profitable sessions within hours of setup.",
   },
   {
-    q: "What is the difference between the three strategies?",
-    a: "Linear places the same flat stake every trade — safe, predictable, and ideal for beginners. Compounding automatically reinvests a portion of each winning trade, growing your stake exponentially over a session. Martingale intelligently increases the next trade after a loss to recover and profit from the recovery — designed to turn losing streaks into winning outcomes.",
+    q: "How does the Compounding strategy work?",
+    a: "Trinity's Compounding mode automatically reinvests a portion of each winning trade into the next — growing your active stake with every victory. Instead of flat profits session after session, your account grows exponentially: small wins stack into larger wins, which compound into even larger ones. At Trinity's 80%+ accuracy level, the compounding math is extremely powerful. Traders using this mode consistently turn modest starting balances into multiples within weeks.",
   },
   {
-    q: "Is Martingale risky?",
-    a: "Martingale carries higher risk than Linear or Compounding because stake sizes increase after losses. Trinity's Martingale is engineered with intelligent caps to prevent account wipeout. It is recommended for funded accounts and experienced users. Beginners should start with Linear.",
+    q: "Can Trinity run unattended while I work or sleep?",
+    a: "Yes — and this is one of the most powerful things about Trinity. The AI never sleeps, never loses focus, and never gets emotional. Set your parameters once, press START, and Trinity monitors every supported asset and fires every qualifying signal — whether you're working, sleeping, or living your life. Check back whenever you want to see your profit graph rising.",
   },
   {
     q: "What if Trinity doesn't perform for me?",
-    a: "Every plan is backed by a 30-day money-back guarantee — no questions asked. If Trinity doesn't deliver results you're satisfied with in your first 30 days, you get a full refund. There is zero risk to trying it.",
+    a: "Every subscription is protected by a 30-day money-back guarantee — no questions asked, no hoops to jump through. If Trinity doesn't deliver results you're genuinely satisfied with in your first 30 days, you receive a full refund. There is zero financial risk in trying it. The only risk is waiting too long to start.",
   },
 ];
 

@@ -33,7 +33,7 @@ const PLANS = {
       "Trinity software license (Windows 10/11)",
       "Trinity AI signal auto-execution to your broker",
       "Live TradingView charts — 25+ pairs",
-      "Linear & Compounding money strategies",
+      "Smart Compounding profit strategy",
       "Real-time session profit graph",
       "Full trade history & analytics",
       "30-day money-back guarantee",
@@ -48,7 +48,7 @@ const PLANS = {
     accentColor: "#22C55E",
     features: [
       "Everything in Starter",
-      "Martingale strategy unlocked",
+      "Advanced AI compound scaling mode",
       "Priority signal feed",
       "1-on-1 onboarding & setup call",
       "Advanced session configuration",

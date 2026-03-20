@@ -58,7 +58,7 @@ const TESTIMONIALS = [
     period: "This Month",
     stars: 5,
     quote:
-      "Had a rough patch — 5 losses in a row. The Martingale mode kicked in and by trade 9 I was not only recovered but ahead. That's when I understood this is engineered differently.",
+      "I started with $300 and turned compounding on from day one. By end of month I had $2,100. Every win rolled straight into the next trade and the growth was exponential. Trinity just kept stacking gains — genuinely life-changing.",
     color: "#f59e0b",
   },
   {
@@ -71,7 +71,7 @@ const TESTIMONIALS = [
     period: "Day One",
     stars: 5,
     quote:
-      "Connected Trinity to Deriv, selected Linear strategy, pressed START. Didn't touch it for 4 hours. Came back to $440 profit. I'm a complete believer now.",
+      "Connected Trinity to Deriv, enabled Compounding mode, pressed START. Didn't touch it for 4 hours. Came back to $440 profit. I'm a complete believer now.",
     color: "#22c55e",
   },
 ];

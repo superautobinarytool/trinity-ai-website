@@ -74,7 +74,7 @@ const PLANS = [
       "Trinity software license (Windows 10/11)",
       "Trinity AI signal auto-execution to your broker",
       "Live TradingView charts — 25+ pairs",
-      "Linear & Compounding strategies",
+      "Smart Compounding profit strategy",
       "Real-time session profit graph",
       "Full trade history & analytics",
     ],
@@ -95,7 +95,7 @@ const PLANS = [
     ctaHref: "/checkout?plan=pro",
     featuresLabel: "Everything in Starter, plus:",
     features: [
-      "Martingale strategy unlocked",
+      "Advanced AI compound scaling mode",
       "Priority signal feed",
       "1-on-1 onboarding & setup call",
       "Advanced session configuration",
@@ -127,7 +127,7 @@ export default function PricingSection() {
             </span>
           </h2>
           <p className="mt-3 sm:mt-4 text-gray-400 text-base sm:text-lg font-light max-w-xl mx-auto">
-            10 trades at 80% win rate with a $100 stake — <strong className="text-white">$440 net profit</strong>. Trinity pays for itself in the first session.
+            10 trades at 80% win rate with a $100 stake returns <strong className="text-white">$440 net profit</strong>. Add compounding and every session grows larger than the last. Trinity pays for itself in the first hour.
           </p>
         </motion.div>
 

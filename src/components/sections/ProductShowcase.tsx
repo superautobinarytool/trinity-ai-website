@@ -16,10 +16,10 @@ const up: Variants = {
 
 const PRODUCTS = [
   {
-    category: "Auto-Execution",
+    category: "AI Signal Precision",
     title: "The trade window is 3 seconds. Trinity fires in 47ms.",
     description:
-      "Every binary options trade has a tiny execution window. If you click a second late, you lose the edge. Trinity AI generates the signal and executes on your broker in under 50 milliseconds — at machine speed, every single time. You will never miss a window again. Not one.",
+      "Every high-probability signal has a precise execution window. Miss it by a second and the edge is gone. Trinity's AI identifies the setup and fires the trade on your broker in under 50 milliseconds — at machine speed, without fail, every single time. You will never miss a window again. Not one.",
     cta: "See How It Works",
     href: "#pricing",
     accent: "#22c55e",
@@ -59,10 +59,10 @@ const PRODUCTS = [
     ),
   },
   {
-    category: "Live Trading Charts",
-    title: "25+ live charts. No browser. No subscriptions. Just one window.",
+    category: "Live Market Intelligence",
+    title: "25+ live charts. Zero subscriptions. One powerful window.",
     description:
-      "Professional-grade live charts for EUR/USD, GBP/USD, BTC/USD, ETH/USD and 22 more pairs stream directly inside Trinity — while the bot trades simultaneously. No switching tabs. No extra tools. Everything in one place, running in real time.",
+      "Institutional-grade live market data for EUR/USD, GBP/USD, BTC/USD, ETH/USD, and 22 more pairs streams directly inside Trinity — while the AI executes trades simultaneously. One platform. Every asset. Real-time intelligence, always on.",
     cta: "Explore the Dashboard",
     href: "#pricing",
     accent: "#16a34a",
@@ -87,10 +87,10 @@ const PRODUCTS = [
     ),
   },
   {
-    category: "Trade Analytics",
-    title: "Your profit curve, updating in real time. No spreadsheets. Ever.",
+    category: "Compound Growth Analytics",
+    title: "Watch your account compound — trade by trade, session by session.",
     description:
-      "Every trade Trinity fires is logged the instant it closes — asset, direction, entry, result, P&L. Your live session graph plots cumulative performance trade by trade. You always know exactly where you stand. No guessing, no logging, no spreadsheets. Just a rising curve.",
+      "Every trade Trinity fires is logged the instant it closes — asset, direction, entry, result, P&L. Your live compound growth graph maps every win as it stacks onto the last, showing exactly how your balance accelerates over a session. Compounding doesn't just add. It multiplies. No spreadsheets. Just a rising curve that gets steeper with time.",
     cta: "View Analytics Demo",
     href: "#pricing",
     accent: "#10b981",
@@ -201,11 +201,11 @@ export default function ProductShowcase() {
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-white">
             Everything inside one{" "}
             <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#22c55e,#16a34a)" }}>
-              private platform.
+              elite AI platform.
             </span>
           </h2>
           <p className="mt-3 sm:mt-5 text-gray-400 text-base sm:text-lg leading-7 sm:leading-8 font-light max-w-xl mx-auto">
-            Auto-execution. Live charts. Real-time analytics. All working together, all exclusive to verified Trinity users.
+            AI signal precision. Live market intelligence. Compound growth analytics. All working together — exclusive to verified Trinity members.
           </p>
         </motion.div>
 

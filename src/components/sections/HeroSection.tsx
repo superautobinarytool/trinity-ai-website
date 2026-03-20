@@ -281,7 +281,7 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
       >
         <motion.div variants={up} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/40 bg-green-500/10 text-green-300 text-sm font-semibold mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-          The World&apos;s #1 Binary Options AI — 80%+ Win Rate Verified
+          Proprietary AI Signals · 80%+ Verified Accuracy · 11,000+ Traders Compounding Daily
         </motion.div>
 
         <motion.h1
@@ -299,10 +299,10 @@ export default function HeroSection({ headerHeight = 110 }: { headerHeight?: num
         </motion.h1>
 
         <motion.p variants={up} className="text-base sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-10 sm:mb-12 font-light">
-          90% of binary options traders lose — because they&apos;re slower, less disciplined, and less informed than the market.
-          Trinity is the <strong className="text-white font-semibold">AI-powered binary options bot</strong> that eliminates all three:
-          reading 25+ assets, firing high-probability CALL&nbsp;&amp;&nbsp;PUT signals, and executing on your broker in milliseconds.
-          You press START. Trinity does the rest.
+          90% of binary options traders lose — because they&apos;re slower, less precise, and outgunned by the market.
+          Trinity is the <strong className="text-white font-semibold">AI-powered trading engine</strong> built to change that permanently:
+          scanning 25+ live assets around the clock, generating high-probability CALL&nbsp;&amp;&nbsp;PUT signals with institutional precision, executing on your broker in under 50&nbsp;milliseconds, and compounding every winning trade into the next.
+          You press START. Trinity handles everything else.
         </motion.p>
 
         <motion.div variants={up} className="flex flex-wrap items-center justify-center gap-3 px-2">

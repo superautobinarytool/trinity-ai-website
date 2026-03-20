@@ -29,8 +29,8 @@ const REVIEWS = [
     color: "#10b981",
   },
   {
-    title: "Martingale recovered 3 losing streaks in one session",
-    body: "Had a rough patch — 5 losses in a row. The Martingale mode kicked in and by trade 9 I was not only recovered but ahead. That's when I understood this thing is engineered differently.",
+    title: "Compounding mode turned $300 into $2,100 in a single week",
+    body: "I started with $300 and switched compounding on from day one. By the end of the week I had $2,100. Every win rolled into the next trade and the growth was exponential — I didn't change a setting once. Trinity just kept stacking. Genuinely life-changing.",
     author: "Priya D.",
     role: "Pocket Option Trader",
     initials: "PD",
@@ -38,7 +38,7 @@ const REVIEWS = [
   },
   {
     title: "Set it up in 10 minutes. Profitable the same day.",
-    body: "Literally connected Trinity AI to Deriv, selected Linear strategy, pressed START. Didn't touch it for 4 hours. Came back to a $244 profit. I'm a believer now.",
+    body: "Literally connected Trinity to Deriv, enabled Compounding mode, pressed START. Didn't touch it for 4 hours. Came back to $244 profit. I'm a believer now.",
     author: "Marcus R.",
     role: "Deriv Trader",
     initials: "MR",
