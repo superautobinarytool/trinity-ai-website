@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
@@ -7,7 +8,7 @@ import logoWhite from "@/assets/logo-long-white.png";
 
 const NAV_LINKS = [
   { label: "Features",     href: "#features"     },
-  { label: "Products",     href: "#products"      },
+  { label: "Download",     href: "/download"      },
   { label: "Pricing",      href: "#pricing"       },
   { label: "Results",      href: "#testimonials"  },
   { label: "FAQ",          href: "#faq"           },
@@ -31,10 +32,15 @@ export default function Navbar({ topOffset = 0 }: { topOffset?: number }) {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  const navigate = useNavigate();
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (href.startsWith("/")) {
+      navigate(href);
+    } else {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (

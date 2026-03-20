@@ -134,7 +134,7 @@ const PLANS = [
 export default function PricingSection() {
   const ref            = useRef<HTMLDivElement>(null);
   const inView         = useInView(ref, { once: true, amount: 0.1 });
-  const [billAnnually, setBillAnnually] = useState(false);
+  const [billAnnually, setBillAnnually] = useState(true);
 
   return (
     <Section id="pricing" className="bg-[#080d1a]">
@@ -163,48 +163,41 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="flex items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12"
+          className="flex justify-center mb-10 sm:mb-12"
         >
-          <button
-            onClick={() => setBillAnnually(false)}
-            className={`text-sm font-bold px-4 py-2 rounded-full transition-all duration-200 ${
-              !billAnnually
-                ? "text-white bg-white/10 border border-white/20"
-                : "text-gray-500 hover:text-gray-300"
-            }`}
+          <div
+            role="group"
+            aria-label="Billing period"
+            className="inline-flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/[0.08]"
           >
-            Monthly
-          </button>
-
-          {/* Toggle pill */}
-          <button
-            onClick={() => setBillAnnually((v) => !v)}
-            aria-pressed={billAnnually}
-            aria-label="Toggle annual billing"
-            className={`relative w-12 h-6 rounded-full transition-colors duration-300 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E] ${
-              billAnnually ? "bg-[#22C55E]" : "bg-white/15"
-            }`}
-          >
-            <span
-              className="absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-300"
-              style={{ left: billAnnually ? "calc(100% - 20px)" : "4px" }}
-              aria-hidden="true"
-            />
-          </button>
-
-          <button
-            onClick={() => setBillAnnually(true)}
-            className={`flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-full transition-all duration-200 ${
-              billAnnually
-                ? "text-white bg-white/10 border border-white/20"
-                : "text-gray-500 hover:text-gray-300"
-            }`}
-          >
-            Annual
-            <span className="px-2 py-0.5 rounded-full bg-[#22C55E] text-[9px] font-black text-white tracking-wide">
-              SAVE UP TO 62%
-            </span>
-          </button>
+            <button
+              onClick={() => setBillAnnually(false)}
+              aria-pressed={!billAnnually}
+              className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 ${
+                !billAnnually
+                  ? "bg-white/[0.11] text-white border border-white/[0.15] shadow-sm"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setBillAnnually(true)}
+              aria-pressed={billAnnually}
+              className={`flex items-center gap-2.5 px-6 py-2 rounded-full text-sm font-bold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]/30 ${
+                billAnnually
+                  ? "bg-[#22C55E]/[0.13] text-[#22C55E] border border-[#22C55E]/[0.22]"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              Annual
+              <span className={`px-2 py-0.5 rounded-full text-[9px] font-black tracking-wide transition-all duration-200 ${
+                billAnnually ? "bg-[#22C55E] text-white" : "bg-white/[0.08] text-gray-500"
+              }`}>
+                SAVE UP TO 62%
+              </span>
+            </button>
+          </div>
         </motion.div>
 
         {/* ── Plan cards ── */}
