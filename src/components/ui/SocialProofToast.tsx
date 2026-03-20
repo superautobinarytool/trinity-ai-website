@@ -79,7 +79,7 @@ const NOTIFICATIONS: Notification[] = [
 ];
 
 // ── Timing constants ──────────────────────────────────────────────────────────
-const VISIBLE_MS      = 5_500;          // how long each toast is on screen
+const VISIBLE_MS      = 7_500;          // how long each toast is on screen
 const INITIAL_MIN_MS  = 5_000;          // earliest first-appearance
 const INITIAL_MAX_MS  = 9_000;          // latest first-appearance
 const GAP_MIN_MS      = 18_000;         // shortest gap between toasts
@@ -218,17 +218,30 @@ export default function SocialProofToast() {
             {/* Content row */}
             <div className="flex items-center gap-3 pl-5 pr-4 py-3">
 
-              {/* Avatar with initials */}
-              <div
-                className="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center text-[11px] font-black leading-none"
-                style={{
-                  background: "rgba(34,197,94,0.12)",
-                  border:     "1px solid rgba(34,197,94,0.22)",
-                  color:      "#22C55E",
-                }}
-                aria-hidden="true"
-              >
-                {initials(active.name)}
+              {/* Avatar with flag overlay */}
+              <div className="relative flex-shrink-0" aria-hidden="true">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-black leading-none"
+                  style={{
+                    background: "rgba(34,197,94,0.12)",
+                    border:     "1px solid rgba(34,197,94,0.22)",
+                    color:      "#22C55E",
+                  }}
+                >
+                  {initials(active.name)}
+                </div>
+                {/* Flag badge in bottom-right corner of avatar */}
+                <span
+                  className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center w-5 h-5 rounded-full text-[13px] leading-none"
+                  style={{
+                    background: "#0c0c14",
+                    border:     "1.5px solid rgba(255,255,255,0.08)",
+                    fontSize:   "13px",
+                    lineHeight: 1,
+                  }}
+                >
+                  {active.flag}
+                </span>
               </div>
 
               {/* Text block */}
@@ -257,9 +270,9 @@ export default function SocialProofToast() {
                   </span>
                 </p>
 
-                {/* Location + time */}
+                {/* Location + time — flag removed from here, shown on avatar */}
                 <p className="text-[11px] text-gray-600 mt-[3px] truncate">
-                  {active.location} {active.flag}
+                  {active.location}
                   <span className="text-gray-700 mx-1">·</span>
                   {timeLabel(active.minutesAgo)}
                 </p>
