@@ -23,9 +23,9 @@ export async function sendLicenseEmail(payload: LicenseEmailPayload): Promise<vo
   const planLabel = payload.plan === "pro" ? "Pro" : "Starter";
 
   const { error } = await resend.emails.send({
-    from:     EMAIL_FROM,
-    reply_to: EMAIL_REPLY,
-    to:       payload.to,
+    from:    EMAIL_FROM,
+    replyTo: EMAIL_REPLY,
+    to:      payload.to,
     subject:  `🔑 Your Trinity ${planLabel} license key is ready`,
     html:     buildHtml(payload),
     text:     buildPlainText(payload),
