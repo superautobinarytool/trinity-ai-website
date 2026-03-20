@@ -12,6 +12,8 @@ import VideoTestimonialsSection from "@/components/sections/VideoTestimonialsSec
 import PricingSection from "@/components/sections/PricingSection";
 import FAQSection from "@/components/sections/FAQSection";
 import CTASection from "@/components/sections/CTASection";
+import SocialProofToast from "@/components/ui/SocialProofToast";
+import DiscountPopup from "@/components/ui/DiscountPopup";
 
 /**
  * Home page — assembles all sections in logical marketing funnel order.
@@ -55,6 +57,10 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      {/* Fixed overlays — rendered outside main flow */}
+      <SocialProofToast />
+      <DiscountPopup />
     </>
   );
 }
