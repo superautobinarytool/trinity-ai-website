@@ -54,7 +54,27 @@ function GreenCheck() {
     </svg>
   );
 }
-
+/* ── Gift icon (no emoji) ── */
+function GiftIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <polyline points="20 12 20 22 4 22 4 12" />
+      <rect x="2" y="7" width="20" height="5" />
+      <line x1="12" y1="22" x2="12" y2="7" />
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+    </svg>
+  );
+}
 /* ─────────────────────────────────────────────────────────────────────────────
    Plan catalogue — monthly prices + annual deal data
    ───────────────────────────────────────────────────────────────────────────── */
@@ -68,12 +88,12 @@ const PLANS = [
     light: false,
     featuresLabel: "Everything included:",
     features: [
-      "Trinity software license (Windows 10/11)",
-      "Trinity AI signal auto-execution to your broker",
-      "Live TradingView charts — 25+ pairs",
+      "Trinity AI Trading Tool license (Windows 10/11)",
+      "AI signal auto-execution — up to 78% verified accuracy",
+      "25+ live trading pairs via TradingView integration",
       "Smart Compounding profit strategy",
-      "Real-time session profit graph",
-      "Full trade history & analytics",
+      "Real-time session profit graph & trade analytics",
+      "Standard signal refresh & processing speed",
     ],
     monthly: {
       price: 99,
@@ -103,12 +123,13 @@ const PLANS = [
     light: true,
     featuresLabel: "Everything in Starter, plus:",
     features: [
-      "Advanced AI compound scaling mode",
-      "Priority signal feed",
-      "1-on-1 onboarding & setup call",
-      "Advanced session configuration",
-      "Exclusive pro-only settings",
-      "Early access to every new feature",
+      "87%+ verified AI signal accuracy — highest available in any plan",
+      "Priority signal feed — 2× faster execution speed",
+      "60+ trading pairs — expanded cross-asset market coverage",
+      "Advanced AI compound scaling engine",
+      "Exclusive algorithm parameters & advanced stability controls",
+      "Dedicated 1-on-1 onboarding & live setup call",
+      "Early access to all new features & beta releases",
     ],
     monthly: {
       price: 199,
@@ -234,8 +255,9 @@ export default function PricingSection() {
                     </span>
                   )}
                   {billAnnually && (
-                    <span className="text-[11px] font-black px-3 py-1 rounded-full bg-[#22C55E] text-white tracking-wide">
-                      🎁 {ann.monthsFree} MONTHS FREE
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-black px-3 py-1 rounded-full bg-[#22C55E] text-white tracking-wide">
+                      <GiftIcon className="w-3 h-3" />
+                      {ann.monthsFree} MONTHS FREE
                     </span>
                   )}
                 </div>

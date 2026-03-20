@@ -154,7 +154,7 @@ function buildHtml(p: LicenseEmailPayload): string {
               </p>
 
               ${[
-                ["1", "Download the Trinity software", "Find the download link pinned in our Discord #downloads channel."],
+                ["1", "Download Trinity AI Trading Tool", "Get the latest build at <a href=\"https://trinitytradingai.com/download\" style=\"color:#22C55E;text-decoration:none;font-weight:600;\">trinitytradingai.com/download</a> — your license key activates the software on first launch."],
                 ["2", "Launch &amp; enter your key", "Open Trinity, click <strong style=\"color:#e5e7eb;\">Activate License</strong>, and paste the key above."],
                 ["3", "Connect your broker", "Follow the setup wizard to link your broker account via the Trinity AI interface."],
                 ["4", "Join our Discord", "Get 1-on-1 onboarding support and access to the member-only trading signals."],
@@ -248,7 +248,7 @@ Billing type: ${billingDesc} subscription
 
 HOW TO ACTIVATE
 ---------------
-1. Download Trinity from the #downloads channel in our Discord.
+1. Download Trinity AI Trading Tool from: https://trinitytradingai.com/download
 2. Open Trinity → Activate License → paste the key above.
 3. Connect your broker via the Trinity AI setup wizard.
 4. Join Discord for onboarding support: https://discord.gg/titansalgo
