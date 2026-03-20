@@ -1,0 +1,1 @@
+INSERT INTO "public"."licenses" ("id", "customer_name", "email", "license_key", "start_date", "expiry_date", "is_active", "created_at", "updated_at") VALUES ('c0680174-618f-455d-a42b-857aab37a5b5', 'Tester', 'test@example.com', 'ABCD1234EFGH5677', '2026-02-25 05:35:12+00', '2026-03-22 04:23:02.273202+00', 'true', '2026-02-26 03:01:04.690843+00', '2026-02-26 04:23:02.273202+00');

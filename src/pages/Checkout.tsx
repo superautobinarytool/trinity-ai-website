@@ -60,17 +60,9 @@ const PLANS = {
 } as const;
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   DUMMY COUPON CODES
-   Replace/extend with real server-side validation once backend is wired.
-   All validation should be re-confirmed on the backend before charging.
+   COUPON TYPE — validated server-side via /api/payments/validate-coupon
    ───────────────────────────────────────────────────────────────────────────── */
-type CouponDef = { label: string; type: "percent" | "fixed"; value: number };
-
-const VALID_COUPONS: Record<string, CouponDef> = {
-  TRINITY20: { label: "TRINITY20 — 20% off your first month", type: "percent", value: 20 },
-  LAUNCH10:  { label: "LAUNCH10 — 10% off your first month",  type: "percent", value: 10 },
-  WELCOME5:  { label: "WELCOME5 — $5.00 off your order",      type: "fixed",   value: 5  },
-};
+type AppliedCoupon = { code: string; discount_percent: number; label: string };
 
 /* ─────────────────────────────────────────────────────────────────────────────
    NOWPAYMENTS — LIVE INTEGRATION
@@ -217,8 +209,8 @@ export default function Checkout() {
   const [touched, setTouched] = useState<{ name?: boolean; email?: boolean }>({});
 
   /* ── Coupon state ────────────────────────────────────────────────────────── */
-  const [appliedCoupon, setAppliedCoupon] = useState<(CouponDef & { code: string }) | null>(null);
-  const [couponState, setCouponState]     = useState<"idle" | "valid" | "invalid">("idle");
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(null);
+  const [couponState, setCouponState]     = useState<"idle" | "valid" | "invalid" | "checking">("idle");
 
   /* ── Submission state ────────────────────────────────────────────────────── */
   const [submitState, setSubmitState] = useState<"idle" | "loading" | "error">("idle");
@@ -229,9 +221,7 @@ export default function Checkout() {
 
   /* ── Computed pricing ────────────────────────────────────────────────────── */
   const discount = appliedCoupon
-    ? appliedCoupon.type === "percent"
-      ? parseFloat((plan.price * appliedCoupon.value / 100).toFixed(2))
-      : Math.min(appliedCoupon.value, plan.price)
+    ? parseFloat((plan.price * appliedCoupon.discount_percent / 100).toFixed(2))
     : 0;
   const total = parseFloat(Math.max(0, plan.price - discount).toFixed(2));
 
@@ -271,14 +261,33 @@ export default function Checkout() {
   }
 
   /* ── Coupon handler ──────────────────────────────────────────────────────── */
-  function handleApplyCoupon() {
+  async function handleApplyCoupon() {
     const code = coupon.trim().toUpperCase();
     if (!code) return;
-    const match = VALID_COUPONS[code];
-    if (match) {
-      setAppliedCoupon({ ...match, code });
-      setCouponState("valid");
-    } else {
+    setCouponState("checking");
+    try {
+      const res = await fetch("/api/payments/validate-coupon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json().catch(() => ({})) as {
+        valid?: boolean;
+        discount_percent?: number;
+        label?: string;
+      };
+      if (data.valid && data.discount_percent != null) {
+        setAppliedCoupon({
+          code,
+          discount_percent: data.discount_percent,
+          label: data.label ?? `${code} — ${data.discount_percent}% off`,
+        });
+        setCouponState("valid");
+      } else {
+        setAppliedCoupon(null);
+        setCouponState("invalid");
+      }
+    } catch {
       setAppliedCoupon(null);
       setCouponState("invalid");
     }
@@ -407,7 +416,7 @@ export default function Checkout() {
               <span className="text-gray-400 font-medium">${total.toFixed(2)}/mo</span>
               {appliedCoupon && (
                 <span className="text-[11px] font-bold text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full border border-[#22C55E]/20">
-                  -{appliedCoupon.type === "percent" ? `${appliedCoupon.value}%` : `$${discount.toFixed(2)}`}
+                  -{appliedCoupon.discount_percent}%
                 </span>
               )}
             </div>
@@ -560,10 +569,10 @@ export default function Checkout() {
                       <button
                         type="button"
                         onClick={handleApplyCoupon}
-                        disabled={!coupon.trim()}
+                        disabled={!coupon.trim() || couponState === "checking"}
                         className="px-4 py-3 rounded-xl text-sm font-bold border border-white/[0.12] bg-white/[0.05] hover:bg-white/[0.10] text-white transition-all disabled:opacity-35 disabled:cursor-not-allowed flex-shrink-0"
                       >
-                        Apply
+                        {couponState === "checking" ? "Checking…" : "Apply"}
                       </button>
                     </div>
 
@@ -722,7 +731,7 @@ function OrderSummaryCard({
   total,
 }: {
   plan: (typeof PLANS)[PlanId];
-  appliedCoupon: (CouponDef & { code: string }) | null;
+  appliedCoupon: AppliedCoupon | null;
   discount: number;
   total: number;
 }) {
