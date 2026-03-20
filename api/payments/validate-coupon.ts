@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { supabaseAdmin } from "../lib/supabase-admin";
+import { getSupabaseAdmin } from "../lib/supabase-admin";
 
 export default async function handler(
   req: VercelRequest,
@@ -17,7 +17,7 @@ export default async function handler(
     return;
   }
 
-  const { data: coupon } = await supabaseAdmin
+  const { data: coupon } = await getSupabaseAdmin()
     .from("coupons")
     .select("code, discount_percent, is_active, max_uses, times_used, expires_at")
     .eq("code", code.trim().toUpperCase())

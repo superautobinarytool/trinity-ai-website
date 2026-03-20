@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createHmac, timingSafeEqual } from "crypto";
-import { supabaseAdmin } from "../lib/supabase-admin";
+import { getSupabaseAdmin } from "../lib/supabase-admin";
 import { generateLicenseKey } from "../lib/license-key";
 import { sendLicenseEmail } from "../lib/email";
 
@@ -76,7 +76,7 @@ export default async function handler(
   }
 
   // ── 3. Look up the pending order ──────────────────────────────────────────
-  const { data: order, error: orderFetchError } = await supabaseAdmin
+  const { data: order, error: orderFetchError } = await getSupabaseAdmin()
     .from("orders")
     .select("*")
     .eq("order_id", order_id)
@@ -112,7 +112,7 @@ export default async function handler(
 
     // Ensure uniqueness against existing keys (collision is astronomically rare
     // but we check anyway for correctness)
-    const { data: existing } = await supabaseAdmin
+    const { data: existing } = await getSupabaseAdmin()
       .from("licenses")
       .select("id")
       .eq("license_key", licenseKey)
@@ -131,7 +131,7 @@ export default async function handler(
   const expiry = new Date(now);
   expiry.setDate(expiry.getDate() + 30); // 30-day subscription cycle
 
-  const { data: license, error: licenseError } = await supabaseAdmin
+  const { data: license, error: licenseError } = await getSupabaseAdmin()
     .from("licenses")
     .insert({
       customer_name: order.customer_name,
@@ -151,7 +151,7 @@ export default async function handler(
   }
 
   // ── 7. Mark the order as confirmed ────────────────────────────────────────
-  const { error: updateError } = await supabaseAdmin
+  const { error: updateError } = await getSupabaseAdmin()
     .from("orders")
     .update({
       status:                   "confirmed",

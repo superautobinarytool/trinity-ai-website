@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { supabaseAdmin } from "../lib/supabase-admin";
+import { getSupabaseAdmin } from "../lib/supabase-admin";
 
 /* ─── Plan catalogue (single source of truth server-side) ───────────────────
    Mirror any price changes here AND in the frontend PLANS constant.          */
@@ -49,7 +49,7 @@ export default async function handler(
   if (coupon && typeof coupon === "string") {
     const code = coupon.trim().toUpperCase();
 
-    const { data: couponRow } = await supabaseAdmin
+    const { data: couponRow } = await getSupabaseAdmin()
       .from("coupons")
       .select("id, discount_percent, is_active, max_uses, times_used, expires_at")
       .eq("code", code)
@@ -74,7 +74,7 @@ export default async function handler(
         appliedCouponCode = code;
 
         // Increment usage counter (non-blocking — fire and forget)
-        supabaseAdmin
+        getSupabaseAdmin()
           .from("coupons")
           .update({ times_used: couponRow.times_used + 1 })
           .eq("id", couponRow.id)
@@ -84,7 +84,7 @@ export default async function handler(
   }
 
   // ── 3. Persist a pending order (idempotency guard) ────────────────────────
-  const { error: orderError } = await supabaseAdmin.from("orders").insert({
+  const { error: orderError } = await getSupabaseAdmin().from("orders").insert({
     order_id:     orderId,
     customer_name: name.trim(),
     email:        email.trim().toLowerCase(),

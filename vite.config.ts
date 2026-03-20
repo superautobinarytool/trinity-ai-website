@@ -22,5 +22,10 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    proxy: {
+      // Forward /api/* to the Vercel dev server when running `vercel dev`
+      // (vercel dev runs on port 3000 by default)
+      "/api": "http://localhost:3000",
+    },
   },
 });
