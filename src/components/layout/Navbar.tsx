@@ -91,9 +91,6 @@ export default function Navbar({ topOffset = 0 }: { topOffset?: number }) {
 
         {/* Desktop CTA */}
         <div className="hidden lg:flex items-center gap-3">
-          <Button variant="ghost" size="sm" href="#">
-            Sign In
-          </Button>
           <Button variant="primary" size="sm" href="#pricing">
             Get Started
             <ArrowRightIcon className="w-4 h-4" />
@@ -156,9 +153,6 @@ export default function Navbar({ topOffset = 0 }: { topOffset?: number }) {
                 </button>
               ))}
               <div className="pt-3 flex flex-col gap-2">
-                <Button variant="secondary" size="md" href="#">
-                  Sign In
-                </Button>
                 <Button variant="primary" size="md" href="#pricing">
                   Get Started Free
                 </Button>

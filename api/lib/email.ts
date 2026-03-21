@@ -157,7 +157,7 @@ function buildHtml(p: LicenseEmailPayload): string {
                 ["1", "Download Trinity AI Trading Tool", "Get the latest build at <a href=\"https://trinitytradingai.com/download\" style=\"color:#22C55E;text-decoration:none;font-weight:600;\">trinitytradingai.com/download</a> — your license key activates the software on first launch."],
                 ["2", "Launch &amp; enter your key", "Open Trinity, click <strong style=\"color:#e5e7eb;\">Activate License</strong>, and paste the key above."],
                 ["3", "Connect your broker", "Follow the setup wizard to link your broker account via the Trinity AI interface."],
-                ["4", "Join our Discord", "Get 1-on-1 onboarding support and access to the member-only trading signals."],
+                ["4", "Join our Telegram Community", "Connect with our trading community and get onboarding support at <a href=\"https://t.me/trinitytradingai\" style=\"color:#22C55E;text-decoration:none;font-weight:600;\">t.me/trinitytradingai</a>."],
               ].map(([num, title, body]) => `
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
                 <tr>
@@ -180,13 +180,13 @@ function buildHtml(p: LicenseEmailPayload): string {
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:32px;">
                 <tr>
                   <td align="center">
-                    <a href="https://discord.gg/titansalgo"
+                    <a href="https://t.me/trinitytradingai"
                        style="display:inline-block;padding:14px 32px;
                               background:linear-gradient(135deg,#22C55E,#16A34A);
                               color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;
                               border-radius:12px;letter-spacing:0.02em;
                               box-shadow:0 4px 24px rgba(34,197,94,0.35);">
-                      Join our Discord →
+                      Join our Telegram →
                     </a>
                   </td>
                 </tr>
@@ -206,8 +206,8 @@ function buildHtml(p: LicenseEmailPayload): string {
                     </p>
                     <p style="margin:0;font-size:11px;color:#374151;line-height:1.5;">
                       Didn't receive your key or need help?
-                      <a href="https://discord.gg/titansalgo"
-                         style="color:#22C55E;text-decoration:none;">Message us on Discord</a>
+                      <a href="https://t.me/tti_mark_support"
+                         style="color:#22C55E;text-decoration:none;">Message us on Telegram</a>
                       with your order reference and we'll resolve it immediately.
                     </p>
                   </td>
@@ -251,12 +251,12 @@ HOW TO ACTIVATE
 1. Download Trinity AI Trading Tool from: https://trinitytradingai.com/download
 2. Open Trinity → Activate License → paste the key above.
 3. Connect your broker via the Trinity AI setup wizard.
-4. Join Discord for onboarding support: https://discord.gg/titansalgo
+4. Join our Telegram community: https://t.me/trinitytradingai
 
 Order reference: ${p.orderId}
 
 Didn't receive your key or need help?
-Message us on Discord with your order reference.
+Message us on Telegram: https://t.me/tti_mark_support
 
 — The Trinity Trading Team
 `.trim();
