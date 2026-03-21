@@ -154,6 +154,28 @@ export default async function handler(
     .single();
 
   if (licenseError || !license) {
+    // 23505 = unique_violation — most likely the email uniqueness constraint that
+    // was incorrectly present before migration 004.  A second purchase by the same
+    // customer should always succeed once migration 004 has been run.
+    // We detect it here and log clearly so it is easy to diagnose if it ever
+    // reappears through a schema regression.
+    if (licenseError?.code === "23505") {
+      console.error(
+        "[webhook] Duplicate key on licenses insert — check that migration 004 " +
+        "(drop licenses_email_unique) has been run in Supabase.",
+        licenseError
+      );
+      // Return 200 so NOWPayments stops retrying — the payment IS confirmed,
+      // but we could not write the license.  The order row stays 'pending' so
+      // it can be resolved manually or re-processed.
+      res.status(200).json({
+        received:    true,
+        error:       "license_constraint_violation",
+        order_id,
+        description: "Migration 004 may not have been applied. License not issued.",
+      });
+      return;
+    }
     console.error("[webhook] Failed to insert license:", licenseError);
     res.status(500).json({ error: "License write failed" });
     return;
