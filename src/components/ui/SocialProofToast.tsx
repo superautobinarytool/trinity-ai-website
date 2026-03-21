@@ -22,7 +22,7 @@ interface Notification {
   plan:     string;
 }
 
-type ActiveNotification = Notification & { minutesAgo: number; uid: number };
+type ActiveNotification = Notification & { hoursAgo: number; uid: number };
 
 // ── Data — 50 entries, diverse geography, skewed toward Pro Annual ─────────────
 const NOTIFICATIONS: Notification[] = [
@@ -117,10 +117,9 @@ function initials(name: string): string {
     .slice(0, 2);
 }
 
-function timeLabel(minutesAgo: number): string {
-  if (minutesAgo === 0) return "just now";
-  if (minutesAgo === 1) return "1 minute ago";
-  return `${minutesAgo} minutes ago`;
+function timeLabel(hoursAgo: number): string {
+  if (hoursAgo === 1) return "1 hour ago";
+  return `${hoursAgo} hours ago`;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -151,7 +150,7 @@ export default function SocialProofToast() {
       const idx = shuffledRef.current[posRef.current++];
       setActive({
         ...NOTIFICATIONS[idx],
-        minutesAgo: rnd(0, 12),
+        hoursAgo: rnd(1, 23),
         uid: ++uidRef.current,
       });
 
@@ -281,7 +280,7 @@ export default function SocialProofToast() {
                 <p className="text-[11px] text-gray-600 mt-[3px] truncate">
                   {active.location}
                   <span className="text-gray-700 mx-1">·</span>
-                  {timeLabel(active.minutesAgo)}
+                  {timeLabel(active.hoursAgo)}
                 </p>
               </div>
             </div>
