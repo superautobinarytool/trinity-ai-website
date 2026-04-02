@@ -64,44 +64,13 @@ function Stars() {
   );
 }
 
-function TrustpilotCard() {
-  return (
-    <div className="h-full flex flex-col items-center justify-center gap-5 rounded-2xl bg-white p-8 shadow-lg">
-      {/* Trustpilot star */}
-      <div className="w-14 h-14 rounded-xl bg-[#00b67a] flex items-center justify-center">
-        <svg viewBox="0 0 24 24" fill="white" className="w-8 h-8" aria-hidden="true">
-          <path d="M12 2l2.9 8.9H23l-7.4 5.4 2.8 8.7-7.4-5.4-7.4 5.4 2.8-8.7L1 10.9h8.1z" />
-        </svg>
-      </div>
-      <div className="text-center">
-        <p className="font-black text-xl text-gray-900">Trustpilot</p>
-        <div className="flex justify-center gap-0.5 mt-1 text-[#00b67a]">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <StarIcon key={i} className="w-5 h-5" />
-          ))}
-        </div>
-        <p className="mt-3 text-gray-600 text-sm leading-snug">Check out our other reviews and see what real traders are saying</p>
-      </div>
-      <a
-        href="https://www.trustpilot.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="px-5 py-2 rounded-full border-2 border-gray-900 text-gray-900 font-semibold text-sm hover:bg-gray-900 hover:text-white transition-colors duration-200"
-      >
-        See More Reviews
-      </a>
-    </div>
-  );
-}
-
-const CARDS_PER_PAGE = 4 as const; // 4 review cards + 1 Trustpilot = show 4 at once on desktop
+const CARDS_PER_PAGE = 3 as const;
 
 export default function TestimonialsSection() {
   const ref    = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
-  // We show CARDS_PER_PAGE-1 reviews + Trustpilot card = 4 visible; total pages based on REVIEWS length
-  const VISIBLE = 3; // review cards per page
+  const VISIBLE = CARDS_PER_PAGE; // review cards per page
   const totalPages = Math.ceil(REVIEWS.length / VISIBLE);
   const [page, setPage] = useState(0);
   const [dir, setDir]   = useState(1);
@@ -162,7 +131,7 @@ export default function TestimonialsSection() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
               >
                 {pageReviews.map((r) => (
                   <div
@@ -186,8 +155,7 @@ export default function TestimonialsSection() {
                     </div>
                   </div>
                 ))}
-                {/* Always show Trustpilot as 4th card */}
-                <TrustpilotCard />
+
               </motion.div>
             </AnimatePresence>
           </div>
