@@ -62,7 +62,6 @@ function VideoArea({ demo, playing, onPlay, onUserPause }: { demo: Demo; playing
         src={demo.videoUrl}
         autoPlay
         muted
-        controls
         playsInline
         title={demo.title}
         onPause={(e) => { if (!e.currentTarget.ended) onUserPause(); }}
