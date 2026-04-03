@@ -11,7 +11,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@/components/ui/Icons";
 const DEMOS = [
   {
     id: 0,
-    videoUrl: "https://videotourl.com/videos/1773935023130-278c04c1-7eba-433d-bece-0b83ff5ce6ac.mp4",
+    videoUrl: "https://videotourl.com/videos/1775192315208-7a9f7b37-a4be-41e5-b82b-c6db41482d69.mp4",
     badge: "Live Signal Capture",
     accent: "#00e5be",
     title: "AI flags the winning trade before your eyes even register it.",
@@ -21,7 +21,7 @@ const DEMOS = [
   },
   {
     id: 1,
-    videoUrl: "https://videotourl.com/videos/1773935156030-47640820-6d0a-4d6d-95c5-060180fe16bc.mp4",
+    videoUrl: "https://videotourl.com/videos/1775192315208-7a9f7b37-a4be-41e5-b82b-c6db41482d69.mp4",
     badge: "Zero-Delay Auto Execution",
     accent: "#22c55e",
     title: "47ms. Signal fires. Trade executes. You didn't touch anything.",
@@ -31,7 +31,7 @@ const DEMOS = [
   },
   {
     id: 2,
-    videoUrl: "https://videotourl.com/videos/1773935176730-8b12e855-acbc-43b7-9c4b-f7275c85e57d.mp4",
+    videoUrl: "https://videotourl.com/videos/1775192315208-7a9f7b37-a4be-41e5-b82b-c6db41482d69.mp4",
     badge: "Compounding Growth — 30 Days",
     accent: "#4ade80",
     title: "$200 in. $1,100 out. Not one manual trade placed.",
@@ -41,7 +41,7 @@ const DEMOS = [
   },
   {
     id: 3,
-    videoUrl: "https://videotourl.com/videos/1773935195345-00e350ab-510c-48d9-9613-c2c53f8e2aa1.mp4",
+    videoUrl: "https://videotourl.com/videos/1775192315208-7a9f7b37-a4be-41e5-b82b-c6db41482d69.mp4",
     badge: "Compound Recovery — Real Session",
     accent: "#f59e0b",
     title: "Compounding turned a rough patch into the session's biggest win.",
