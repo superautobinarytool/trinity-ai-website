@@ -166,7 +166,7 @@ export default function VideoDemoSection() {
       setActiveIdx(next);
       setPlaying(false);
       setTimeout(() => setPlaying(true), 560);
-    }, 3000);
+    }, 10000);
     return () => clearInterval(id);
   }, [inView]);
 
