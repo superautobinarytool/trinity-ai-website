@@ -11,46 +11,7 @@ import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from "@/components/ui/Ico
 const TESTIMONIALS = [
   {
     id: 0,
-    videoUrl: "https://videotourl.com/videos/1773935023130-278c04c1-7eba-433d-bece-0b83ff5ce6ac.mp4",
-    name: "Alex M.",
-    role: "Binary Options Trader",
-    flag: "🇺🇸",
-    profit: "+$1,240",
-    period: "Week 1",
-    stars: 5,
-    quote:
-      "I was manually trading binary options for 2 years and never hit consistent profit. First week with Trinity on Quotex I was up $1,240. The bot literally does not hesitate. It's insane.",
-    color: "#22c55e",
-  },
-  {
-    id: 1,
-    videoUrl: "https://videotourl.com/videos/1773935156030-47640820-6d0a-4d6d-95c5-060180fe16bc.mp4",
-    name: "Sarah K.",
-    role: "Full-Time Trader",
-    flag: "🇬🇧",
-    profit: "+$3,200",
-    period: "30 Days",
-    stars: 5,
-    quote:
-      "847 trades tracked over 30 days. 82.4% winners. The compounding strategy turned my $200 starting balance into $1,100 in a month. I've never seen anything like it.",
-    color: "#16a34a",
-  },
-  {
-    id: 2,
-    videoUrl: "https://videotourl.com/videos/1773935176730-8b12e855-acbc-43b7-9c4b-f7275c85e57d.mp4",
-    name: "James T.",
-    role: "IQ Option Trader",
-    flag: "🇦🇺",
-    profit: "+$890",
-    period: "First Session",
-    stars: 5,
-    quote:
-      "Trinity removed every emotional decision from my hands. No more chasing losses, no overtrading, no revenge trades. Now I just watch the profit graph rise.",
-    color: "#10b981",
-  },
-  {
-    id: 3,
-    videoUrl: "https://videotourl.com/videos/1773935195345-00e350ab-510c-48d9-9613-c2c53f8e2aa1.mp4",
+    videoUrl: "https://videotourl.com/videos/1775188956797-5b0db00b-7038-48e7-837c-c2f2bc978f39.mp4",
     name: "Priya D.",
     role: "Pocket Option Trader",
     flag: "🇮🇳",
@@ -62,8 +23,34 @@ const TESTIMONIALS = [
     color: "#f59e0b",
   },
   {
-    id: 4,
-    videoUrl: "https://videotourl.com/videos/1773935023130-278c04c1-7eba-433d-bece-0b83ff5ce6ac.mp4",
+    id: 1,
+    videoUrl: "https://videotourl.com/videos/1775188104760-21e0434f-14ec-4ed9-ba67-f72f58456861.mp4",
+    name: "Nour A.",
+    role: "Binary Options Trader",
+    flag: "🇪🇬",
+    profit: "+$1,580",
+    period: "Week 2",
+    stars: 5,
+    quote:
+      "I never believed a bot could do this consistently. Trinity proved me wrong. Every session I just set it up, walk away, and come back to green. It's completely changed how I trade.",
+    color: "#22c55e",
+  },
+  {
+    id: 2,
+    videoUrl: "https://videotourl.com/videos/1775188909408-77078c81-6220-4a73-ba05-dbd4307525f8.mp4",
+    name: "Valentina R.",
+    role: "Quotex Trader",
+    flag: "🇨🇴",
+    profit: "+$890",
+    period: "First Session",
+    stars: 5,
+    quote:
+      "Trinity removed every emotional decision from my hands. No more chasing losses, no overtrading, no revenge trades. Now I just watch the profit graph rise.",
+    color: "#10b981",
+  },
+  {
+    id: 3,
+    videoUrl: "https://videotourl.com/videos/1775189451449-00222357-cce8-4ce1-aaca-110836ed66f5.mp4",
     name: "Marcus R.",
     role: "Deriv Trader",
     flag: "🇿🇦",
@@ -73,6 +60,32 @@ const TESTIMONIALS = [
     quote:
       "Connected Trinity to Deriv, enabled Compounding mode, pressed START. Didn't touch it for 4 hours. Came back to $440 profit. I'm a complete believer now.",
     color: "#22c55e",
+  },
+  {
+    id: 4,
+    videoUrl: "https://videotourl.com/videos/1775189939337-d9b205e1-041b-4b43-a38c-7ce406777880.mp4",
+    name: "James T.",
+    role: "IQ Option Trader",
+    flag: "🇳🇬",
+    profit: "+$3,200",
+    period: "30 Days",
+    stars: 5,
+    quote:
+      "847 trades tracked over 30 days. 82.4% winners. The compounding strategy turned my $200 starting balance into $1,100 in a month. I've never seen anything like it.",
+    color: "#16a34a",
+  },
+  {
+    id: 5,
+    videoUrl: "https://videotourl.com/videos/1775191242938-9a5a57ac-96c6-4098-845c-d9954336ceaf.mp4",
+    name: "Carlos M.",
+    role: "Full-Time Trader",
+    flag: "🇪🇸",
+    profit: "+$1,240",
+    period: "Week 1",
+    stars: 5,
+    quote:
+      "I was manually trading binary options for 2 years and never hit consistent profit. First week with Trinity on Quotex I was up $1,240. The bot literally does not hesitate. It's insane.",
+    color: "#4ade80",
   },
 ];
 
