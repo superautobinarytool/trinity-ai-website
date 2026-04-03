@@ -12,7 +12,7 @@ const TESTIMONIALS = [
   {
     id: 0,
     videoUrl: "https://videotourl.com/videos/1775188956797-5b0db00b-7038-48e7-837c-c2f2bc978f39.mp4",
-    name: "Priya D.",
+    name: "Aman D.",
     role: "Pocket Option Trader",
     flag: "🇮🇳",
     profit: "+$2,100",
@@ -38,7 +38,7 @@ const TESTIMONIALS = [
   {
     id: 2,
     videoUrl: "https://videotourl.com/videos/1775188909408-77078c81-6220-4a73-ba05-dbd4307525f8.mp4",
-    name: "Valentina R.",
+    name: "AntinR.",
     role: "Quotex Trader",
     flag: "🇨🇴",
     profit: "+$890",
@@ -322,14 +322,14 @@ export default function VideoTestimonialsSection() {
   // Keep ref in sync with state
   useEffect(() => { activeIdxRef.current = activeIdx; }, [activeIdx]);
 
-  // 3-second looping auto-advance when section enters viewport
+  // 5-second looping auto-advance when section enters viewport
   useEffect(() => {
     if (!inView) return;
     const id = setInterval(() => {
       if (!autoScrollRef.current) return;
       const next = (activeIdxRef.current + 1) % TESTIMONIALS.length;
       setActiveIdx(next);
-    }, 3000);
+    }, 5000);
     return () => clearInterval(id);
   }, [inView]);
 
