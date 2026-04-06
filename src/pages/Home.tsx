@@ -24,10 +24,10 @@ import DiscountPopup from "@/components/ui/DiscountPopup";
  * 3. HeroSection      — headline, dashboard mock, stats
  * 4. LogoBar          — scrolling platform compatibility ticker
  * 5. FeaturesSection  — 3 feature pillars (signals, automation, analytics)
- * 6. VideoDemoSection — horizontal video demo slider (4 platform sessions)
- * 7. ProductShowcase  — deep-dive alternating product sections
- * 8. TestimonialsSection — masonry review cards
- * 9. VideoTestimonialsSection — 9:16 portrait video testimonials (blur-side focus)
+ * 6. VideoTestimonialsSection — 9:16 portrait video testimonials (blur-side focus)
+ * 7. VideoDemoSection — horizontal video demo slider (4 platform sessions)
+ * 8. ProductShowcase  — deep-dive alternating product sections
+ * 9. TestimonialsSection — masonry review cards
  * 10. PricingSection  — monthly/yearly toggle, Starter & Pro cards
  * 11. FAQSection      — animated accordion
  * 12. CTASection      — final conversion push
@@ -47,10 +47,10 @@ export default function Home() {
         <HeroSection headerHeight={barHeight + 64} />
         <LogoBar />
         <FeaturesSection />
+        <VideoTestimonialsSection />
         <VideoDemoSection />
         <ProductShowcase />
         <TestimonialsSection />
-        <VideoTestimonialsSection />
         <PricingSection />
         <FAQSection />
         <CTASection />

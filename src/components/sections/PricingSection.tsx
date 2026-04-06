@@ -89,10 +89,10 @@ const PLANS = [
     featuresLabel: "Everything included:",
     features: [
       "Trinity AI Trading Tool license (Windows 10/11)",
-      "AI signal auto-execution — up to 78% verified accuracy",
-      "25+ live trading pairs via TradingView integration",
+      "AI signal auto-execution — up to 70% verified accuracy",
+      "25+ live trading pairs — real-time OTC & Forex market access",
       "Smart Compounding profit strategy",
-      "Real-time session profit graph & trade analytics",
+      "Real-time profit tracking & intelligent money management suite",
       "Standard signal refresh & processing speed",
     ],
     monthly: {
@@ -123,13 +123,13 @@ const PLANS = [
     light: true,
     featuresLabel: "Everything in Starter, plus:",
     features: [
-      "87%+ verified AI signal accuracy — highest available in any plan",
-      "Priority signal feed — 2× faster execution speed",
-      "60+ trading pairs — expanded cross-asset market coverage",
+      "60+ trading pairs with exclusive OTC market coverage",
+      "80%+ verified AI signal accuracy — highest in any plan",
+      "Priority signal feed — 1.8× faster execution speed",
       "Advanced AI compound scaling engine",
-      "Exclusive algorithm parameters & advanced stability controls",
       "Dedicated 1-on-1 onboarding & live setup call",
       "Early access to all new features & beta releases",
+      "Full OTC chart suite — trade after-hours markets unavailable elsewhere",
     ],
     monthly: {
       price: 199,
