@@ -35,108 +35,108 @@ interface Scene {
 const SCENES: Scene[] = [
   {
     image: "/avatar/narration-neutral.png",
-    dialogue: "Auto-execution on 25+ live pairs, 24/7. No charts to watch — Trinity handles everything.",
+    dialogue: "You're STILL watching charts manually? Sir, this is a Wendy's.",
   },
   {
     image: "/avatar/authority-arm-raised.png",
-    dialogue: "I've traded manually for years. Trinity made me more profitable in 3 days than 3 months alone.",
+    dialogue: "Let me get this straight — you have a chance to automate profits and you're... scrolling Instagram?",
   },
   {
     image: "/avatar/thinking-chin-rest.png",
-    dialogue: "80% win rate. $100/stake. 10 trades. That's $440 net profit — one session. Do the math.",
+    dialogue: "Bro is calculating his losses manually while Trinity runs the numbers in milliseconds. Respect, I guess.",
   },
   {
     image: "/avatar/energy-excited.png",
-    dialogue: "The AI hit 9 out of 10 signals this morning. Before my coffee was even done. ☕",
+    dialogue: "GUYS. 9/10 signals green this morning. I literally didn't touch a single button. NOT ONE. 🔥",
   },
   {
     image: "/avatar/reaction-shocked.png",
-    dialogue: "30-day money-back guarantee, zero questions asked. You're literally taking ZERO risk right now.",
+    dialogue: "WAIT. You haven't subscribed yet?! I genuinely thought that was a joke.",
   },
   {
     image: "/avatar/screen-pointing-chart.png",
-    dialogue: "It spotted the reversal 3 candles early and executed the trade before I moved my mouse.",
+    dialogue: "See this candle? Trinity called the reversal 3 candles early. You were still eating breakfast.",
   },
   {
     image: "/avatar/narration-presenting.png",
-    dialogue: "Risk-free for 30 days. If Trinity doesn't deliver, full refund. No catch — that's the offer.",
+    dialogue: "30-day money-back guarantee. Zero questions. You're basically stress-testing us for free. Go ahead.",
   },
   {
     image: "/avatar/authority-arms-crossed.png",
-    dialogue: "I use Trinity every day. $99/mo paid back in the first session alone. That's not hype — that's math.",
+    dialogue: "$99/mo. You spend more on coffee and Netflix. Neither of those compound.",
   },
   {
     image: "/avatar/energy-celebrating.png",
-    dialogue: "Someone in our Discord just posted +310% ROI this week. This happens almost every single week.",
+    dialogue: "+310% ROI in one week. Discord was on fire. This is just... a Tuesday for Pro users.",
   },
   {
     image: "/avatar/thinking-explains.png",
-    dialogue: "The compound engine auto-scales position size. Every winning trade funds the next even bigger one.",
+    dialogue: "The compound engine turns your wins into bigger wins. It's basic math. Painfully basic math.",
   },
   {
     image: "/avatar/screen-reading.png",
-    dialogue: "80%+ signal accuracy — verified across 3 months of live data. Consistent. Not cherry-picked.",
+    dialogue: "80%+ accuracy. 3 months of live data. Not backtested. Not cherry-picked. L-I-V-E.",
   },
   {
     image: "/avatar/narration-pointing-right.png",
-    dialogue: "Pro users run 60+ pairs with OTC coverage and 1.8× faster execution. The edge is very real.",
+    dialogue: "Pro users get 60+ pairs and 1.8× faster execution. You're on the free plan of life rn.",
   },
   {
     image: "/avatar/reaction-suspicious.png",
-    dialogue: "Still looking for the catch? 30-day full refund, no questions asked. That IS the whole offer.",
+    dialogue: "Still hunting for the catch? Bro. There isn't one. I checked. Twice. Looked under the couch too.",
   },
   {
     image: "/avatar/reaction-confused.png",
-    dialogue: "Trading manually against millisecond AI execution... in 2025? Why are you still doing this?",
+    dialogue: "Trading in 2026 without AI automation is like bringing a calculator to a NASA launch.",
   },
   {
     image: "/avatar/energy-motivation.png",
-    dialogue: "One plan. One click. Automated profit sessions. What are you actually waiting for?",
+    dialogue: "One click. Zero manual work. Automated profit sessions every day. What are you DOING?",
   },
   {
     image: "/avatar/narration-double-hand.png",
-    dialogue: "25+ live pairs, OTC markets open, Smart Compounding active — all from a single dashboard.",
+    dialogue: "25 pairs. OTC markets. Smart compounding. All on... one... dashboard. Just. One.",
   },
   {
     image: "/avatar/thinking-looking-up.png",
-    dialogue: "Think about what 6 more months without Trinity is actually costing you in missed profits.",
+    dialogue: "Imagine where you'd be right now if you'd started 3 months ago. Painful, isn't it.",
   },
   {
     image: "/avatar/reaction-facepalm.png",
-    dialogue: "Setting SL/TP manually while Trinity executes in microseconds... I genuinely can't watch.",
+    dialogue: "You're placing SL/TP manually while Trinity executes in microseconds? I physically cannot.",
   },
   {
     image: "/avatar/screen-looking.png",
-    dialogue: "Every trade logged, timestamped, and tracked. The real-time dashboard never lies.",
+    dialogue: "Every trade. Every timestamp. Every profit. Right there on the dash. No Excel sheet. No crying.",
   },
   {
     image: "/avatar/authority-serious.png",
-    dialogue: "Every session someone else automates, the performance gap between you and them widens.",
+    dialogue: "Every hour you wait is an hour someone else is running sessions. The gap is widening. Right now.",
   },
   {
     image: "/avatar/narration-one-hand.png",
-    dialogue: "Compounding makes this self-funding fast. The first winning session covers the subscription.",
+    dialogue: "First winning session covers the subscription. Usually day one. I'm not doing math — that's just what happens.",
   },
   {
     image: "/avatar/narration-pointing-left.png",
-    dialogue: "$99/mo Starter plan. Average session return well above that. It pays for itself in hours.",
+    dialogue: "$99/mo. Same price as two DoorDash orders. One of those compounds. One of those doesn't.",
   },
   {
     image: "/avatar/reaction-laughing.png",
-    dialogue: "The algo called a reversal while I was making lunch. Came back to a banked profit. Love this.",
+    dialogue: "Trinity called a move while I was on the phone with my mom. Came back to a banked trade. LMAO.",
   },
   {
     image: "/avatar/screen-writing.png",
-    dialogue: "Month 1 compound growth: 23%. Month 2: 31%. Month 3: 44%. The curve only goes one direction.",
+    dialogue: "Month 1: +23%. Month 2: +31%. Month 3: +44%. Compound math is genuinely unfair.",
   },
   {
     image: "/avatar/thinking.png",
-    dialogue: "$99/mo. $440 typical session profit. ROI clears before day two. Starter plan. Go.",
+    dialogue: "You've been on this page for a while now. Just saying. The subscribe button is right there. 👆",
   },
 ];
 
 const SHOW_DELAY_MS    = 4000;  // initial appearance delay
-const CYCLE_MS         = 9500;  // time between pose/dialogue cycles
+const CYCLE_MS         = 13000; // time between pose/dialogue cycles
 const TYPING_MS        = 950;   // how long the typing dots show before dialogue
 
 // Site background colour — used for the gradient overlays that blend
@@ -213,7 +213,7 @@ export default function AvatarCharacter() {
           animate={{ y: 0 }}
           exit={{ y: "110%" }}
           transition={{ type: "spring", damping: 26, stiffness: 170, mass: 1.1 }}
-          className="fixed bottom-0 left-0 z-[9998] flex items-end"
+          className="fixed bottom-0 left-0 z-[49] flex items-end"
           style={{ userSelect: "none" }}
           aria-hidden="true"
         >
@@ -227,8 +227,8 @@ export default function AvatarCharacter() {
           <div
             className="relative flex-shrink-0 overflow-hidden"
             style={{
-              width:  "clamp(118px, 13.5vw, 188px)",
-              height: "clamp(112px, 12.5vw, 178px)",
+              width:  "clamp(140px, 16vw, 215px)",
+              height: "clamp(132px, 15vw, 202px)",
             }}
           >
             {/* Pose crossfade */}
@@ -334,22 +334,24 @@ export default function AvatarCharacter() {
                       height: 0,
                       borderTop:    "8px solid transparent",
                       borderBottom: "8px solid transparent",
-                      borderRight:  "10px solid white",
-                      filter: "drop-shadow(-2px 0 3px rgba(0,0,0,0.08))",
+                      borderRight:  "10px solid #0d1b2e",
+                      filter: "drop-shadow(-2px 0 3px rgba(0,0,0,0.4))",
                     }}
                   />
 
                   {/* Bubble card */}
                   <div
                     className="
-                      bg-white rounded-2xl
-                      shadow-[0_6px_28px_rgba(0,0,0,0.26)]
-                      border border-gray-100
+                      rounded-2xl
+                      shadow-[0_8px_32px_rgba(0,0,0,0.55)]
+                      border
                     "
                     style={{
-                      padding:  "clamp(8px, 1.1vw, 12px) clamp(10px, 1.4vw, 16px)",
-                      maxWidth: "clamp(158px, 19vw, 220px)",
-                      minWidth: "138px",
+                      background: "#0d1b2e",
+                      borderColor: "rgba(34,197,94,0.28)",
+                      padding:  "clamp(7px, 0.9vw, 10px) clamp(9px, 1.2vw, 14px)",
+                      maxWidth: "clamp(130px, 15vw, 185px)",
+                      minWidth: "120px",
                     }}
                   >
                     {isTyping ? (
@@ -358,7 +360,7 @@ export default function AvatarCharacter() {
                         {[0, 1, 2].map(i => (
                           <motion.span
                             key={i}
-                            className="block rounded-full bg-gray-400"
+                            className="block rounded-full bg-green-400"
                             style={{ width: 7, height: 7 }}
                             animate={{
                               y:       [0, -5, 0],
@@ -376,8 +378,8 @@ export default function AvatarCharacter() {
                     ) : (
                       /* ── Dialogue text ───────────────────────────────── */
                       <p
-                        className="text-gray-800 font-semibold leading-snug"
-                        style={{ fontSize: "clamp(11px, 1.15vw, 13px)" }}
+                        className="text-white font-semibold leading-snug"
+                        style={{ fontSize: "clamp(10.5px, 1.05vw, 12.5px)" }}
                       >
                         {scene.dialogue}
                       </p>
