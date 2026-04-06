@@ -11,7 +11,7 @@
  * • pointerEvents:none on root so the widget never blocks page interaction.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Scene {
@@ -66,6 +66,19 @@ const SCENES: Scene[] = [
 // Deduplicated image list for preloading
 const ALL_IMAGES = [...new Set(SCENES.map(s => s.image))];
 
+// All scene indices — used to build shuffled playback order
+const ALL_INDICES = Array.from({ length: SCENES.length }, (_, i) => i);
+
+/** Fisher-Yates shuffle — returns a new shuffled array */
+function shuffle(arr: number[]): number[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 const SHOW_DELAY_MS = 4500;
 const CYCLE_MS      = 13000;
 const SITE_BG       = "#080d1a";
@@ -89,7 +102,10 @@ function useIsMobile() {
 
 export default function AvatarCharacter() {
   const [visible,  setVisible]  = useState(false);
-  const [sceneIdx, setSceneIdx] = useState(0);
+  // Shuffled playback: orderRef holds the randomised scene index list;
+  // orderPos advances through it, reshuffling when exhausted.
+  const orderRef  = useRef<number[]>(shuffle(ALL_INDICES));
+  const [orderPos, setOrderPos] = useState(0);
   const isMobile = useIsMobile();
 
   // ── Preload ALL images immediately on mount ───────────────────────────────
@@ -108,14 +124,25 @@ export default function AvatarCharacter() {
     return () => clearTimeout(t);
   }, []);
 
-  // ── Cycle scenes ──────────────────────────────────────────────────────────
+  // ── Cycle scenes (shuffled) ─────────────────────────────────────────────
   useEffect(() => {
     if (!visible) return;
-    const id = setInterval(() => setSceneIdx(i => (i + 1) % SCENES.length), CYCLE_MS);
+    const id = setInterval(() => {
+      setOrderPos(pos => {
+        const next = pos + 1;
+        if (next >= SCENES.length) {
+          // Exhausted the current shuffle — reshuffle for next round
+          orderRef.current = shuffle(ALL_INDICES);
+          return 0;
+        }
+        return next;
+      });
+    }, CYCLE_MS);
     return () => clearInterval(id);
   }, [visible]);
 
-  const scene = SCENES[sceneIdx];
+  const sceneIdx = orderRef.current[orderPos];
+  const scene    = SCENES[sceneIdx];
 
   // ── Sizing ────────────────────────────────────────────────────────────────
   // Both mobile and desktop use overflow:hidden — no gradients on mobile,
@@ -157,7 +184,7 @@ export default function AvatarCharacter() {
           >
             <AnimatePresence mode="wait">
               <motion.img
-                key={scene.image}
+                key={orderPos}
                 src={scene.image}
                 alt=""
                 draggable={false}
@@ -211,7 +238,7 @@ export default function AvatarCharacter() {
           >
             <AnimatePresence mode="wait">
               <motion.div
-                key={sceneIdx}
+                key={orderPos}
                 initial={{ scale: 0.6, opacity: 0, y: 8 }}
                 animate={{ scale: 1,   opacity: 1, y: 0 }}
                 exit={{    scale: 0.8, opacity: 0, y: -5 }}
