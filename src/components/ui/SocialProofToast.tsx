@@ -189,7 +189,7 @@ export default function SocialProofToast() {
     <div
       aria-live="polite"
       aria-atomic="true"
-      className="fixed bottom-[100px] left-4 right-4 sm:bottom-6 sm:left-auto sm:right-6 sm:w-80 z-50 pointer-events-none select-none"
+      className="fixed bottom-[150px] left-4 right-4 sm:bottom-6 sm:left-auto sm:right-6 sm:w-80 z-50 pointer-events-none select-none"
     >
       <AnimatePresence>
         {active && (

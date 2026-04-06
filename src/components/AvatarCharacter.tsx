@@ -1,37 +1,24 @@
 /**
- * AvatarCharacter — animated brand mascot widget
+ * AvatarCharacter — animated mascot widget
  *
- * Rises from the bottom-left corner. Shows the top ~65% of the character
- * (head through waist) with dark gradient overlays blending the white PNG
- * background seamlessly into the site's dark theme. A speech bubble with
- * a typing indicator cycles through 25 persuasive sales messages.
- *
- * • White-background PNGs are blended via gradient overlays (no CSS blend
- *   modes needed — works on every browser/device).
- * • Dismissed state persists in sessionStorage so it respects the user's
- *   choice for the current tab session.
- * • Fully responsive: character + bubble scale fluidly via CSS clamp().
+ * • Fixed bottom-left corner. Shows upper body (head → waist).
+ * • Image transitions use spring-powered y+scale transform (not a flat crossfade).
+ * • Speech bubble auto-cycles: typing dots → text reveal → glow pulse.
+ * • No dismiss button — loops forever, never blocks interaction
+ *   (pointerEvents: none on root; z-index below all modals/toasts).
+ * • Mobile: side gradients removed to prevent visible vignette banding.
+ *   Desktop: larger avatar, slightly narrower bubble.
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-// Inline X icon — no external icon library required
-function XIcon() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-      <path d="M1 1l8 8M9 1L1 9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 interface Scene {
   image: string;
   dialogue: string;
 }
 
-// ─── Scene catalogue ──────────────────────────────────────────────────────────
-// Each scene pairs a character pose with a sales-driven one-liner.
-// Ordered so the first few establish credibility before turning up urgency.
+// ─── Scene catalogue — meme / sarcastic / hook-based ────────────────────────
 const SCENES: Scene[] = [
   {
     image: "/avatar/narration-neutral.png",
@@ -39,15 +26,15 @@ const SCENES: Scene[] = [
   },
   {
     image: "/avatar/authority-arm-raised.png",
-    dialogue: "Let me get this straight — you have a chance to automate profits and you're... scrolling Instagram?",
+    dialogue: "Let me get this straight — you could automate profits and you're... scrolling Instagram?",
   },
   {
     image: "/avatar/thinking-chin-rest.png",
-    dialogue: "Bro is calculating his losses manually while Trinity runs the numbers in milliseconds. Respect, I guess.",
+    dialogue: "Bro is calculating losses manually while Trinity runs numbers in milliseconds. Respect, I guess.",
   },
   {
     image: "/avatar/energy-excited.png",
-    dialogue: "GUYS. 9/10 signals green this morning. I literally didn't touch a single button. NOT ONE. 🔥",
+    dialogue: "GUYS. 9/10 signals green this morning. I didn't touch a single button. NOT ONE. 🔥",
   },
   {
     image: "/avatar/reaction-shocked.png",
@@ -59,7 +46,7 @@ const SCENES: Scene[] = [
   },
   {
     image: "/avatar/narration-presenting.png",
-    dialogue: "30-day money-back guarantee. Zero questions. You're basically stress-testing us for free. Go ahead.",
+    dialogue: "30-day money-back. Zero questions. You're stress-testing us for free. Go ahead.",
   },
   {
     image: "/avatar/authority-arms-crossed.png",
@@ -83,7 +70,7 @@ const SCENES: Scene[] = [
   },
   {
     image: "/avatar/reaction-suspicious.png",
-    dialogue: "Still hunting for the catch? Bro. There isn't one. I checked. Twice. Looked under the couch too.",
+    dialogue: "Still hunting for the catch? There isn't one. I checked. Twice. Looked under the couch too.",
   },
   {
     image: "/avatar/reaction-confused.png",
@@ -91,15 +78,15 @@ const SCENES: Scene[] = [
   },
   {
     image: "/avatar/energy-motivation.png",
-    dialogue: "One click. Zero manual work. Automated profit sessions every day. What are you DOING?",
+    dialogue: "One click. Zero manual work. Automated sessions every day. What are you actually DOING?",
   },
   {
     image: "/avatar/narration-double-hand.png",
-    dialogue: "25 pairs. OTC markets. Smart compounding. All on... one... dashboard. Just. One.",
+    dialogue: "25 pairs. OTC markets. Smart compounding. All on ONE dashboard. Just. One.",
   },
   {
     image: "/avatar/thinking-looking-up.png",
-    dialogue: "Imagine where you'd be right now if you'd started 3 months ago. Painful, isn't it.",
+    dialogue: "Imagine where you'd be right now if you'd started 3 months ago. Painful thought, isn't it.",
   },
   {
     image: "/avatar/reaction-facepalm.png",
@@ -107,23 +94,23 @@ const SCENES: Scene[] = [
   },
   {
     image: "/avatar/screen-looking.png",
-    dialogue: "Every trade. Every timestamp. Every profit. Right there on the dash. No Excel sheet. No crying.",
+    dialogue: "Every trade. Every timestamp. Every profit. Right there on the dash. No Excel. No crying.",
   },
   {
     image: "/avatar/authority-serious.png",
-    dialogue: "Every hour you wait is an hour someone else is running sessions. The gap is widening. Right now.",
+    dialogue: "Every hour you wait, someone else banks a session. The gap widens. Right now.",
   },
   {
     image: "/avatar/narration-one-hand.png",
-    dialogue: "First winning session covers the subscription. Usually day one. I'm not doing math — that's just what happens.",
+    dialogue: "First session usually covers the sub. Day one. I'm not doing math — that's just what happens.",
   },
   {
     image: "/avatar/narration-pointing-left.png",
-    dialogue: "$99/mo. Same price as two DoorDash orders. One of those compounds. One of those doesn't.",
+    dialogue: "$99/mo. Same price as two DoorDash orders. One of those compounds. Spoiler: it's not the noodles.",
   },
   {
     image: "/avatar/reaction-laughing.png",
-    dialogue: "Trinity called a move while I was on the phone with my mom. Came back to a banked trade. LMAO.",
+    dialogue: "Trinity called a move while I was on the phone with my mom. Came back to profits. LMAO.",
   },
   {
     image: "/avatar/screen-writing.png",
@@ -131,244 +118,265 @@ const SCENES: Scene[] = [
   },
   {
     image: "/avatar/thinking.png",
-    dialogue: "You've been on this page for a while now. Just saying. The subscribe button is right there. 👆",
+    dialogue: "You've been on this page a while. The subscribe button is right there. 👆 Just saying.",
+  },
+  {
+    image: "/avatar/narration-neutral.png",
+    dialogue: "Your account isn't going to fund itself. Unless you use Trinity. Then... it kind of does.",
+  },
+  {
+    image: "/avatar/energy-excited.png",
+    dialogue: "POV: you subscribed 3 months ago. You're not reading websites anymore. You're counting profits.",
+  },
+  {
+    image: "/avatar/reaction-shocked.png",
+    dialogue: "Someone woke up to green trades this morning. That someone is a Trinity subscriber. Not you. Yet.",
+  },
+  {
+    image: "/avatar/authority-arms-crossed.png",
+    dialogue: "Manual trading is a hobby. Trinity is a business. You're here to make money, right?",
+  },
+  {
+    image: "/avatar/thinking-explains.png",
+    dialogue: "The AI doesn't sleep, doesn't panic, doesn't revenge trade. Wish I could say the same about anyone.",
+  },
+  {
+    image: "/avatar/narration-presenting.png",
+    dialogue: "Skip one Uber Eats week. Subscription covered. Profit unlocked. Math checks out. Go.",
+  },
+  {
+    image: "/avatar/reaction-confused.png",
+    dialogue: "Bro typed 'best trading strategy' into Google instead of just clicking Subscribe. 💀",
+  },
+  {
+    image: "/avatar/screen-pointing-chart.png",
+    dialogue: "Some traders stare at charts 8 hrs/day. Trinity users spend those 8 hrs doing literally anything else.",
+  },
+  {
+    image: "/avatar/energy-motivation.png",
+    dialogue: "You're one click from sessions running while you sleep. ONE CLICK. That's it.",
+  },
+  {
+    image: "/avatar/authority-serious.png",
+    dialogue: "The people actually winning this market right now? They automated months ago. Just facts.",
+  },
+  {
+    image: "/avatar/reaction-suspicious.png",
+    dialogue: "Tell me you don't need Trinity without telling me: 'I prefer manual trading.' Classic cope.",
+  },
+  {
+    image: "/avatar/thinking-looking-up.png",
+    dialogue: "6 months from now you'll either have started today or wish you had. Pick your future.",
+  },
+  {
+    image: "/avatar/narration-double-hand.png",
+    dialogue: "I'm not saying Trinity will change your life. I'm saying it'll change your balance. Which IS your life.",
+  },
+  {
+    image: "/avatar/screen-reading.png",
+    dialogue: "Plot twist: the 'too good to be true' thing IS true. The 30-day refund just removes all your risk.",
+  },
+  {
+    image: "/avatar/reaction-laughing.png",
+    dialogue: "Real talk: if $99/mo is stopping you, the FIRST SESSION solves that problem. Think about that.",
   },
 ];
 
-const SHOW_DELAY_MS    = 4000;  // initial appearance delay
-const CYCLE_MS         = 13000; // time between pose/dialogue cycles
-const TYPING_MS        = 950;   // how long the typing dots show before dialogue
+const SHOW_DELAY_MS = 4500;   // initial appearance delay (ms)
+const CYCLE_MS      = 13000;  // ms per scene
+const TYPING_MS     = 900;    // typing dots duration before text appears
 
-// Site background colour — used for the gradient overlays that blend
-// the white PNG backgrounds into the dark site seamlessly.
-const SITE_BG = "#080d1a";
+const SITE_BG = "#080d1a"; // must match body background
+
+// ── Responsive breakpoint hook ────────────────────────────────────────────────
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" ? window.innerWidth < 640 : false
+  );
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 639px)");
+    const handle = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", handle);
+    setIsMobile(mql.matches);
+    return () => mql.removeEventListener("change", handle);
+  }, []);
+  return isMobile;
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function AvatarCharacter() {
-  const [dismissed, setDismissed] = useState(false);
   const [visible,   setVisible]   = useState(false);
   const [sceneIdx,  setSceneIdx]  = useState(0);
-  const [bubbleKey, setBubbleKey] = useState(0);   // forces bubble AnimatePresence re-run
+  const [bubbleKey, setBubbleKey] = useState(0);
   const [isTyping,  setIsTyping]  = useState(false);
   const [showText,  setShowText]  = useState(false);
+  const isMobile = useIsMobile();
 
-  // ── Read dismiss flag on mount ────────────────────────────────────────────
+  // Appear after initial delay
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem("trinityAvatarDismissed") === "1") {
-        setDismissed(true);
-      }
-    } catch {
-      // sessionStorage unavailable (private mode etc.)
-    }
-  }, []);
-
-  // ── Appear after delay ────────────────────────────────────────────────────
-  useEffect(() => {
-    if (dismissed) return;
     const t = setTimeout(() => setVisible(true), SHOW_DELAY_MS);
     return () => clearTimeout(t);
-  }, [dismissed]);
+  }, []);
 
-  // ── Typing → dialogue transition on each scene change ────────────────────
+  // Typing dots → text on each scene change
   useEffect(() => {
     if (!visible) return;
     setIsTyping(true);
     setShowText(false);
     setBubbleKey(k => k + 1);
-
-    const t = setTimeout(() => {
-      setIsTyping(false);
-      setShowText(true);
-    }, TYPING_MS);
+    const t = setTimeout(() => { setIsTyping(false); setShowText(true); }, TYPING_MS);
     return () => clearTimeout(t);
   }, [visible, sceneIdx]);
 
-  // ── Cycle through scenes ──────────────────────────────────────────────────
+  // Cycle through scenes
   useEffect(() => {
     if (!visible) return;
-    const id = setInterval(
-      () => setSceneIdx(i => (i + 1) % SCENES.length),
-      CYCLE_MS,
-    );
+    const id = setInterval(() => setSceneIdx(i => (i + 1) % SCENES.length), CYCLE_MS);
     return () => clearInterval(id);
   }, [visible]);
 
-  const dismiss = useCallback(() => {
-    try { sessionStorage.setItem("trinityAvatarDismissed", "1"); } catch { /* ignore */ }
-    setDismissed(true);
-  }, []);
-
-  if (dismissed) return null;
-
   const scene = SCENES[sceneIdx];
+
+  // ── Responsive sizing ──────────────────────────────────────────────────────
+  const avatarW        = isMobile ? 128 : 242;
+  const avatarH        = isMobile ? 120 : 226;
+  const bubbleMaxWidth = isMobile ? "150px" : "174px";
+  const bubbleMinWidth = isMobile ? "118px" : "138px";
+  const bubblePadding  = isMobile ? "6px 9px" : "8px 12px";
+  const fontSize       = isMobile ? "9.5px" : "12px";
+  const bubbleMarginTop = isMobile ? "7px" : "20px";
 
   return (
     <AnimatePresence>
       {visible && (
-        // ── Root wrapper slides up from the bottom ────────────────────────
         <motion.div
           initial={{ y: "110%" }}
           animate={{ y: 0 }}
           exit={{ y: "110%" }}
-          transition={{ type: "spring", damping: 26, stiffness: 170, mass: 1.1 }}
+          transition={{ type: "spring", damping: 28, stiffness: 160, mass: 1.05 }}
+          // z-[49]: below the SocialProofToast (z-50) on every viewport
           className="fixed bottom-0 left-0 z-[49] flex items-end"
-          style={{ userSelect: "none" }}
+          style={{ userSelect: "none", pointerEvents: "none" }}
           aria-hidden="true"
         >
-          {/* ── Character image container ──────────────────────────────── */}
-          {/*
-            width  / height via CSS clamp() for smooth responsive scaling.
-            overflow: hidden clips the bottom of the image so only the
-            upper body (head → waist) is visible — the character appears
-            to "stand" behind the bottom edge of the viewport.
-          */}
+          {/* ── Character container ─────────────────────────────────────── */}
           <div
             className="relative flex-shrink-0 overflow-hidden"
-            style={{
-              width:  "clamp(140px, 16vw, 215px)",
-              height: "clamp(132px, 15vw, 202px)",
-            }}
+            style={{ width: avatarW, height: avatarH }}
           >
-            {/* Pose crossfade */}
+            {/* Image swap: exits UP, new image bounces in from BELOW */}
             <AnimatePresence mode="wait">
               <motion.img
                 key={scene.image}
                 src={scene.image}
                 alt=""
                 draggable={false}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.38 }}
+                initial={{ y: 26, scale: 0.87, opacity: 0 }}
+                animate={{ y: 0,  scale: 1,    opacity: 1 }}
+                exit={{    y: -16, scale: 0.9,  opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22, mass: 0.75 }}
                 className="w-full h-auto block"
-                style={{ objectPosition: "top center" }}
                 loading="eager"
               />
             </AnimatePresence>
 
-            {/*
-              Gradient overlays — blend the white PNG background into the
-              site's dark colour so the character looks native to the page.
-
-              Bottom overlay  → hides legs / creates "rising from ground" look.
-              Left + right overlays → hide white margins on image sides.
-            */}
+            {/* Bottom gradient — blends legs into dark background, always shown */}
             <div
               aria-hidden="true"
               className="absolute inset-x-0 bottom-0 pointer-events-none"
               style={{
-                height: "50%",
-                background: `linear-gradient(to top, ${SITE_BG} 0%, ${SITE_BG}cc 25%, transparent 100%)`,
+                height: "55%",
+                background: `linear-gradient(to top, ${SITE_BG} 0%, ${SITE_BG}e8 18%, ${SITE_BG}80 42%, transparent 100%)`,
               }}
             />
-            <div
-              aria-hidden="true"
-              className="absolute inset-y-0 left-0 pointer-events-none"
-              style={{
-                width: "16%",
-                background: `linear-gradient(to right, ${SITE_BG} 0%, transparent 100%)`,
-              }}
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-y-0 right-0 pointer-events-none"
-              style={{
-                width: "16%",
-                background: `linear-gradient(to left, ${SITE_BG} 0%, transparent 100%)`,
-              }}
-            />
+
+            {/*
+              Side gradients: DESKTOP only.
+              On mobile these create visible dark banding / vignette against
+              the narrow container — omitting them entirely on mobile.
+            */}
+            {!isMobile && (
+              <>
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 pointer-events-none"
+                  style={{
+                    width: "11%",
+                    background: `linear-gradient(to right, ${SITE_BG} 0%, transparent 100%)`,
+                  }}
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-y-0 right-0 pointer-events-none"
+                  style={{
+                    width: "11%",
+                    background: `linear-gradient(to left, ${SITE_BG} 0%, transparent 100%)`,
+                  }}
+                />
+              </>
+            )}
           </div>
 
-          {/* ── Speech bubble + close button ──────────────────────────────── */}
+          {/* ── Speech bubble ──────────────────────────────────────────── */}
           <div
             className="relative flex-shrink-0"
             style={{
               alignSelf: "flex-start",
-              marginTop: "clamp(10px, 2.2vw, 26px)",
+              marginTop: bubbleMarginTop,
               marginLeft: "2px",
+              pointerEvents: "auto",
             }}
           >
-            {/* Dismiss button — always visible once character is shown */}
-            <button
-              onClick={dismiss}
-              className="
-                absolute -top-3 -right-3 z-10
-                w-[22px] h-[22px] rounded-full
-                bg-gray-700/95 hover:bg-gray-500
-                text-white flex items-center justify-center
-                transition-colors duration-150 shadow-lg
-                cursor-pointer pointer-events-auto
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40
-              "
-              aria-label="Dismiss mascot"
-            >
-              <XIcon />
-            </button>
-
-            {/* Bubble AnimatePresence */}
             <AnimatePresence mode="wait">
               {(isTyping || showText) && (
                 <motion.div
                   key={bubbleKey}
-                  initial={{ scale: 0.55, opacity: 0, y: 12, originX: 0, originY: 1 }}
+                  initial={{ scale: 0.58, opacity: 0, y: 10 }}
                   animate={{ scale: 1,    opacity: 1, y: 0  }}
-                  exit={{    scale: 0.75, opacity: 0, y: -6 }}
-                  transition={{
-                    type: "spring",
-                    damping: 18,
-                    stiffness: 280,
-                    mass: 0.85,
-                  }}
+                  exit={{    scale: 0.78, opacity: 0, y: -5 }}
+                  transition={{ type: "spring", damping: 19, stiffness: 290, mass: 0.8 }}
                   className="relative"
+                  style={{ transformOrigin: "left bottom" }}
                 >
-                  {/* Triangle tail — points LEFT toward the character's head */}
+                  {/* Tail — points left toward character head */}
                   <div
                     aria-hidden="true"
                     className="absolute pointer-events-none"
                     style={{
                       left: "-9px",
-                      top:  "14px",
+                      top: "12px",
                       width: 0,
                       height: 0,
-                      borderTop:    "8px solid transparent",
-                      borderBottom: "8px solid transparent",
+                      borderTop:    "7px solid transparent",
+                      borderBottom: "7px solid transparent",
                       borderRight:  "10px solid #0d1b2e",
-                      filter: "drop-shadow(-2px 0 3px rgba(0,0,0,0.4))",
+                      filter: "drop-shadow(-2px 0 4px rgba(0,0,0,0.5))",
                     }}
                   />
 
                   {/* Bubble card */}
                   <div
-                    className="
-                      rounded-2xl
-                      shadow-[0_8px_32px_rgba(0,0,0,0.55)]
-                      border
-                    "
+                    className="rounded-2xl shadow-[0_8px_36px_rgba(0,0,0,0.64)]"
                     style={{
-                      background: "#0d1b2e",
-                      borderColor: "rgba(34,197,94,0.28)",
-                      padding:  "clamp(7px, 0.9vw, 10px) clamp(9px, 1.2vw, 14px)",
-                      maxWidth: "clamp(130px, 15vw, 185px)",
-                      minWidth: "120px",
+                      background:  "#0d1b2e",
+                      border:      "1px solid rgba(34,197,94,0.28)",
+                      padding:     bubblePadding,
+                      maxWidth:    bubbleMaxWidth,
+                      minWidth:    bubbleMinWidth,
                     }}
                   >
                     {isTyping ? (
-                      /* ── Typing indicator ────────────────────────────── */
-                      <div className="flex items-center gap-[5px] py-[3px] px-[2px]">
+                      <div className="flex items-center gap-[5px] py-[2px] px-[1px]">
                         {[0, 1, 2].map(i => (
                           <motion.span
                             key={i}
-                            className="block rounded-full bg-green-400"
-                            style={{ width: 7, height: 7 }}
-                            animate={{
-                              y:       [0, -5, 0],
-                              opacity: [0.45, 1, 0.45],
-                            }}
+                            className="block rounded-full"
+                            style={{ width: 6, height: 6, background: "#22c55e" }}
+                            animate={{ y: [0, -5, 0], opacity: [0.35, 1, 0.35] }}
                             transition={{
-                              duration: 0.65,
-                              delay: i * 0.17,
+                              duration: 0.58,
+                              delay: i * 0.16,
                               repeat: Infinity,
                               ease: "easeInOut",
                             }}
@@ -376,25 +384,24 @@ export default function AvatarCharacter() {
                         ))}
                       </div>
                     ) : (
-                      /* ── Dialogue text ───────────────────────────────── */
                       <p
                         className="text-white font-semibold leading-snug"
-                        style={{ fontSize: "clamp(10.5px, 1.05vw, 12.5px)" }}
+                        style={{ fontSize }}
                       >
                         {scene.dialogue}
                       </p>
                     )}
                   </div>
 
-                  {/* Green accent glow pulse on each new dialogue */}
+                  {/* On-reveal glow ring */}
                   {showText && (
                     <motion.div
                       aria-hidden="true"
                       className="absolute inset-0 rounded-2xl pointer-events-none"
-                      initial={{ opacity: 0.45, scale: 1 }}
-                      animate={{ opacity: 0,    scale: 1.12 }}
-                      transition={{ duration: 0.65, ease: "easeOut" }}
-                      style={{ boxShadow: "0 0 0 3px #22c55e55", borderRadius: 16 }}
+                      initial={{ opacity: 0.5, scale: 1 }}
+                      animate={{ opacity: 0,   scale: 1.14 }}
+                      transition={{ duration: 0.72, ease: "easeOut" }}
+                      style={{ boxShadow: "0 0 0 3px rgba(34,197,94,0.45)", borderRadius: 16 }}
                     />
                   )}
                 </motion.div>

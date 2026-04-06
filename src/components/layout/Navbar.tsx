@@ -38,8 +38,13 @@ export default function Navbar({ topOffset = 0 }: { topOffset?: number }) {
     if (href.startsWith("/")) {
       navigate(href);
     } else {
-      const el = document.querySelector(href);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      // Delay scroll until the mobile menu close animation (250 ms) completes.
+      // Without this delay the page may scroll but the menu visually overlaps
+      // the destination for the duration of the close animation.
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 280);
     }
   };
 
@@ -153,7 +158,7 @@ export default function Navbar({ topOffset = 0 }: { topOffset?: number }) {
                 </button>
               ))}
               <div className="pt-3 flex flex-col gap-2">
-                <Button variant="primary" size="md" href="#pricing">
+                <Button variant="primary" size="md" onClick={() => handleNavClick("#pricing")}>
                   Get Started Free
                 </Button>
               </div>
