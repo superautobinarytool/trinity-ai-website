@@ -239,13 +239,17 @@ export default function AvatarCharacter() {
   const scene = SCENES[sceneIdx];
 
   // ── Responsive sizing ──────────────────────────────────────────────────────
+  // Mobile: no fixed height + no overflow:hidden — the full-body PNG is rendered
+  // at natural size anchored to viewport bottom. Legs/feet simply scroll below
+  // the viewport edge with zero CSS clipping or gradient banding.
+  // Desktop: fixed cropped height with overflow:hidden shows head → waist only.
   const avatarW        = isMobile ? 128 : 242;
-  const avatarH        = isMobile ? 120 : 226;
+  const avatarH        = isMobile ? undefined : 226;  // undefined = no height constraint
   const bubbleMaxWidth = isMobile ? "150px" : "174px";
   const bubbleMinWidth = isMobile ? "118px" : "138px";
   const bubblePadding  = isMobile ? "6px 9px" : "8px 12px";
   const fontSize       = isMobile ? "9.5px" : "12px";
-  const bubbleMarginTop  = isMobile ? "7px" : "20px";
+  const bubbleMarginTop  = isMobile ? "12px" : "20px";
   const bubbleMarginLeft  = isMobile ? "-12px" : "-22px";
 
   return (
@@ -262,9 +266,16 @@ export default function AvatarCharacter() {
           aria-hidden="true"
         >
           {/* ── Character container ─────────────────────────────────────── */}
+          {/*
+            Mobile:  overflow visible, no fixed height — image renders at full
+                     natural height (≈ 227 px at 128 px wide for these PNGs),
+                     anchored to bottom-0 by the parent flex row. The viewport
+                     edge acts as the natural crop — completely gradient-free.
+            Desktop: overflow-hidden + fixed height crops at waist level.
+          */}
           <div
-            className="relative flex-shrink-0 overflow-hidden"
-            style={{ width: avatarW, height: avatarH }}
+            className={`relative flex-shrink-0 ${isMobile ? "" : "overflow-hidden"}`}
+            style={{ width: avatarW, ...(avatarH !== undefined ? { height: avatarH } : {}) }}
           >
             {/* Image swap: exits UP, new image bounces in from BELOW */}
             <AnimatePresence mode="wait">
@@ -282,15 +293,18 @@ export default function AvatarCharacter() {
               />
             </AnimatePresence>
 
-            {/* Bottom gradient — blends legs into dark background, always shown */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-x-0 bottom-0 pointer-events-none"
-              style={{
-                height: "55%",
-                background: `linear-gradient(to top, ${SITE_BG} 0%, ${SITE_BG}e8 18%, ${SITE_BG}80 42%, transparent 100%)`,
-              }}
-            />
+            {/* Bottom gradient — desktop only. Mobile has no gradient; viewport
+                edge naturally clips the image with zero banding risk. */}
+            {!isMobile && (
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 pointer-events-none"
+                style={{
+                  height: "55%",
+                  background: `linear-gradient(to top, ${SITE_BG} 0%, ${SITE_BG}e8 18%, ${SITE_BG}80 42%, transparent 100%)`,
+                }}
+              />
+            )}
 
             {/*
               Side gradients: DESKTOP only.
