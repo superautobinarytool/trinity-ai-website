@@ -239,18 +239,19 @@ export default function AvatarCharacter() {
   const scene = SCENES[sceneIdx];
 
   // ── Responsive sizing ──────────────────────────────────────────────────────
-  // Mobile: no fixed height + no overflow:hidden — the full-body PNG is rendered
-  // at natural size anchored to viewport bottom. Legs/feet simply scroll below
-  // the viewport edge with zero CSS clipping or gradient banding.
-  // Desktop: fixed cropped height with overflow:hidden shows head → waist only.
-  const avatarW        = isMobile ? 128 : 242;
-  const avatarH        = isMobile ? undefined : 226;  // undefined = no height constraint
-  const bubbleMaxWidth = isMobile ? "150px" : "174px";
-  const bubbleMinWidth = isMobile ? "118px" : "138px";
-  const bubblePadding  = isMobile ? "6px 9px" : "8px 12px";
-  const fontSize       = isMobile ? "9.5px" : "12px";
+  // Mobile strategy: give the container a fixed height (upper-body window).
+  // The image is absolutely positioned at top:0 inside that container so its
+  // bottom (legs) overflows DOWNWARD, past the container and below the viewport
+  // bottom edge — NO overflow:hidden needed, NO gradient, zero artefacts.
+  // Desktop: overflow-hidden + fixed height + gradients, unchanged.
+  const avatarW         = isMobile ? 128 : 242;
+  const avatarH         = isMobile ? 160 : 226; // px — upper-body window height
+  const bubbleMaxWidth  = isMobile ? "150px" : "174px";
+  const bubbleMinWidth  = isMobile ? "118px" : "138px";
+  const bubblePadding   = isMobile ? "6px 9px" : "8px 12px";
+  const fontSize        = isMobile ? "9.5px" : "12px";
   const bubbleMarginTop  = isMobile ? "12px" : "20px";
-  const bubbleMarginLeft  = isMobile ? "-12px" : "-22px";
+  const bubbleMarginLeft = isMobile ? "-12px" : "-22px";
 
   return (
     <AnimatePresence>
@@ -267,17 +268,17 @@ export default function AvatarCharacter() {
         >
           {/* ── Character container ─────────────────────────────────────── */}
           {/*
-            Mobile:  overflow visible, no fixed height — image renders at full
-                     natural height (≈ 227 px at 128 px wide for these PNGs),
-                     anchored to bottom-0 by the parent flex row. The viewport
-                     edge acts as the natural crop — completely gradient-free.
-            Desktop: overflow-hidden + fixed height crops at waist level.
+            Mobile: fixed-height window (head → waist), NO overflow:hidden.
+              Image is absolute top:0 so legs spill downward past the
+              container and below the viewport edge — naturally hidden,
+              no CSS cropping or gradient required.
+            Desktop: overflow-hidden + fixed height + gradients.
           */}
           <div
             className={`relative flex-shrink-0 ${isMobile ? "" : "overflow-hidden"}`}
-            style={{ width: avatarW, ...(avatarH !== undefined ? { height: avatarH } : {}) }}
+            style={{ width: avatarW, height: avatarH }}
           >
-            {/* Image swap: exits UP, new image bounces in from BELOW */}
+            {/* Image swap: exits UP, enters from BELOW with spring */}
             <AnimatePresence mode="wait">
               <motion.img
                 key={scene.image}
@@ -288,7 +289,9 @@ export default function AvatarCharacter() {
                 animate={{ y: 0,  scale: 1,    opacity: 1 }}
                 exit={{    y: -16, scale: 0.9,  opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 22, mass: 0.75 }}
-                className="w-full h-auto block"
+                // Mobile: absolute top:0 so overflow goes downward (legs below viewport)
+                // Desktop: static flow inside overflow-hidden container
+                className={isMobile ? "absolute top-0 left-0 w-full h-auto" : "w-full h-auto block"}
                 loading="eager"
               />
             </AnimatePresence>
