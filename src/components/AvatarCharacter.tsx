@@ -245,7 +245,8 @@ export default function AvatarCharacter() {
   const bubbleMinWidth = isMobile ? "118px" : "138px";
   const bubblePadding  = isMobile ? "6px 9px" : "8px 12px";
   const fontSize       = isMobile ? "9.5px" : "12px";
-  const bubbleMarginTop = isMobile ? "7px" : "20px";
+  const bubbleMarginTop  = isMobile ? "7px" : "20px";
+  const bubbleMarginLeft  = isMobile ? "-12px" : "-22px";
 
   return (
     <AnimatePresence>
@@ -324,7 +325,7 @@ export default function AvatarCharacter() {
             style={{
               alignSelf: "flex-start",
               marginTop: bubbleMarginTop,
-              marginLeft: "2px",
+              marginLeft: bubbleMarginLeft,
               pointerEvents: "auto",
             }}
           >
