@@ -14,6 +14,7 @@ import FAQSection from "@/components/sections/FAQSection";
 import CTASection from "@/components/sections/CTASection";
 import SocialProofToast from "@/components/ui/SocialProofToast";
 import DiscountPopup from "@/components/ui/DiscountPopup";
+import AvatarCharacter from "@/components/AvatarCharacter";
 
 /**
  * Home page — assembles all sections in logical marketing funnel order.
@@ -61,6 +62,7 @@ export default function Home() {
       {/* Fixed overlays — rendered outside main flow */}
       <SocialProofToast />
       <DiscountPopup />
+      <AvatarCharacter />
     </>
   );
 }
